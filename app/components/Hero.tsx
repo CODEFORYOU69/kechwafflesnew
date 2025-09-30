@@ -165,23 +165,15 @@ export default function Hero({
             variants={fadeUpVariants}
             initial="hidden"
             animate="visible"
-            className="flex flex-col items-center"
+            className="flex flex-col items-center relative"
           >
-            <Image
-              src="/images/menu-items/TransparentWhite.png"
-              alt="marrakech"
-              width={600}
-              height={600}
-              className="tracking-tight mx-auto w-[200px] sm:w-[250px] md:w-[300px] lg:w-[600px] shiny-img"
-            />
-
-            {/* Gradient bars and Sparkles */}
-            <div className="w-full max-w-[40rem] h-40 relative">
+            {/* Gradient bars and Sparkles - Behind the logo */}
+            <div className="absolute inset-0 w-full max-w-[40rem] mx-auto -z-10">
               {/* Gradients */}
-              <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-              <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-              <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-              <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+              <div className="absolute inset-x-20 top-20 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
+              <div className="absolute inset-x-20 top-20 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+              <div className="absolute inset-x-60 top-20 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+              <div className="absolute inset-x-60 top-20 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
 
               {/* Core component */}
               <SparklesCore
@@ -194,6 +186,14 @@ export default function Hero({
                 particleColor="#FFFFFF"
               />
             </div>
+
+            <Image
+              src="/images/menu-items/TransparentWhite.png"
+              alt="marrakech"
+              width={600}
+              height={600}
+              className="tracking-tight mx-auto w-[200px] sm:w-[250px] md:w-[300px] lg:w-[600px] shiny-img relative z-10"
+            />
           </motion.div>
           <motion.div
             custom={2}
