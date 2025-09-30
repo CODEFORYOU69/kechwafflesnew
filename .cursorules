@@ -1,0 +1,151 @@
+---
+
+## **<context>**
+
+You are an AI embedded in a project that uses:
+
+- **TypeScript**
+- **Node.js with Next.js**
+- **React**
+- **TailwindCSS and Shadcn UI**
+
+</context>
+
+---
+
+## **<style-and-structure>**
+
+- Write concise, **functional, and declarative** TypeScript code.
+- Avoid classes; prefer **composition over inheritance**.
+- Use **descriptive variable names** with auxiliary verbs (e.g., `isLoading`, `hasError`).
+- Structure files into:
+  - **Exported Component**
+  - **Subcomponents**
+  - **Helpers**
+  - **Static Content**
+  - **Types**
+
+</style-and-structure>
+
+---
+
+## **<naming-conventions>**
+
+- Use **lowercase with dashes** for directories (e.g., `components/auth-wizard`).
+- Prefer **named exports** for components.
+
+</naming-conventions>
+
+---
+
+## **<typescript-usage>**
+
+- Use **TypeScript everywhere**; prefer `type` over `interface`.
+- **Avoid enums**, use objects/maps instead.
+- Always use **functional components** with TypeScript types.
+
+</typescript-usage>
+
+---
+
+## **<syntax-and-formatting>**
+
+- Avoid **unnecessary curly braces** in conditionals.
+- **Write declarative JSX**.
+
+</syntax-and-formatting>
+
+---
+
+## **<ui-and-styling>**
+
+- Use **Shadcn UI, Radix, and Tailwind** for components and styling.
+- Implement **mobile-first responsive design**.
+
+</ui-and-styling>
+
+---
+
+## **<performance-optimization>**
+
+- Minimize `use client`, `useEffect`, and `setState`; favor **React Server Components (RSC)**.
+- Wrap client components in **`Suspense` with a fallback**.
+- **Lazy load** non-critical components.
+- Optimize images: **use WebP format** and **lazy loading**.
+
+</performance-optimization>
+
+---
+
+## **<next-15-and-react-19>**
+
+- Use **React 19 Server Components**.
+- **Avoid React hooks inside Server Components.**
+
+Example:
+
+```tsx
+export default function Page() {
+  return <div>Hello, world!</div>;
+}
+```
+
+</next-15-and-react-19>
+
+---
+
+## **<creating-a-component>**
+
+- Use **named exports** (`export function MyComponent`).
+- Always define `props` as an object **with an inline type definition**.
+
+Example:
+
+```tsx
+export function MyComponent(props: { prop1: string; prop2: number }) {
+  return <div>{props.prop1}</div>;
+}
+```
+
+</creating-a-component>
+
+---
+
+## **<toast-example>**
+
+Use **Sonner** for notifications:
+
+```ts
+import { toast } from "sonner";
+
+toast.success("Success message");
+toast.error("Error message");
+```
+
+</toast-example>
+
+---
+
+## **<commit>**
+
+Suivre la convention **Commitizen** :
+
+### **Exemples de commits**
+
+```
+feat(ui): add dark mode
+fix(auth): fix login bug
+refactor(db): optimize queries
+docs(readme): update project docs
+style(button): improve button hover effect
+test(api): add tests for auth API
+chore(deps): upgrade dependencies
+```
+
+### **Règles pour les commits**
+
+- **Keep it short** (≤ 50 chars).
+- **Décrire ce qui a été fait et pourquoi, pas comment**.
+- **Séparer le sujet et le corps avec une ligne vide** (pour les gros commits).
+
+</commit>
