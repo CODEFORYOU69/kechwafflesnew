@@ -211,7 +211,7 @@ export default function Hero({
             animate="visible"
           >
             <p className="text-base sm:text-lg md:text-xl text-white/40 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
-              L'alliance parfaite entre tradition et gourmandise pour des
+              L&apos;alliance parfaite entre tradition et gourmandise pour des
               moments uniques à chaque bouchée
             </p>
           </motion.div>
