@@ -167,24 +167,33 @@ export default function Hero({
             animate="visible"
             className="flex flex-col items-center relative"
           >
-            {/* Gradient bars and Sparkles - Behind the logo */}
+            {/* Sparkles - Behind the logo */}
             <div className="absolute inset-0 w-full max-w-[40rem] mx-auto -z-10">
-              {/* Gradients */}
-              <div className="absolute inset-x-20 top-20 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-              <div className="absolute inset-x-20 top-20 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-              <div className="absolute inset-x-60 top-20 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-              <div className="absolute inset-x-60 top-20 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+              {/* Golden Sparkles - Top half */}
+              <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden">
+                <SparklesCore
+                  id="sparkles-gold-top"
+                  background="transparent"
+                  minSize={0.6}
+                  maxSize={1.4}
+                  particleDensity={100}
+                  className="w-full h-full"
+                  particleColor="#FFD700"
+                />
+              </div>
 
-              {/* Core component */}
-              <SparklesCore
-                id="tsparticlesfullpage"
-                background="transparent"
-                minSize={0.6}
-                maxSize={1.4}
-                particleDensity={100}
-                className="w-full h-full"
-                particleColor="#FFFFFF"
-              />
+              {/* White Sparkles - Bottom half */}
+              <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden">
+                <SparklesCore
+                  id="sparkles-white-bottom"
+                  background="transparent"
+                  minSize={0.6}
+                  maxSize={1.4}
+                  particleDensity={100}
+                  className="w-full h-full"
+                  particleColor="#FFFFFF"
+                />
+              </div>
             </div>
 
             <Image
@@ -202,9 +211,24 @@ export default function Hero({
             animate="visible"
           >
             <p className="text-base sm:text-lg md:text-xl text-white/40 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
-              L’alliance parfaite entre tradition et gourmandise pour des
+              L'alliance parfaite entre tradition et gourmandise pour des
               moments uniques à chaque bouchée
             </p>
+          </motion.div>
+
+          {/* Gradient bars - Below the text */}
+          <motion.div
+            custom={3}
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate="visible"
+            className="w-full max-w-[40rem] h-20 relative mx-auto mt-4"
+          >
+            {/* Gradients */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 md:w-3/4 blur-sm" />
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4 md:w-3/4" />
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/2 md:w-1/4 blur-sm" />
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/2 md:w-1/4" />
           </motion.div>
         </div>
       </div>
