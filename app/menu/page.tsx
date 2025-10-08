@@ -1,27 +1,15 @@
 "use client";
 
 import FloatingBackground from "@/app/components/FloatingBackground";
-import { FlickeringGrid } from "@/components/magicui/flickering-grid";
+import { SparklesCore } from "@/components/ui/sparkles";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { menuProducts, type Product } from "@/lib/menu-data";
 
-interface MenuItemProps {
-  name: string;
-  price?: number;
-  image: string;
-}
-
-interface Recipe {
-  name: string;
-  description: string;
-  image: string;
-  price?: number;
-}
-
-interface RecipeCardProps {
-  recipe: Recipe;
+interface ProductCardProps {
+  product: Product;
 }
 
 const fadeInUp = {
@@ -35,77 +23,48 @@ const cardHover = {
   transition: { duration: 0.2 },
 };
 
-const imageHover = {
-  scale: 1.1,
-  transition: { duration: 0.3 },
-};
-
-// Menu Items Components
-const MenuItem = ({
-  name,
-  price,
-  image,
-}: MenuItemProps) => (
-  <motion.div
-    variants={fadeInUp}
-    whileHover={cardHover}
-    className="p-4 border rounded-lg text-center bg-white/80 backdrop-blur-sm hover:shadow-lg transition-shadow"
-  >
-    <div className="relative w-full h-32 mb-2 overflow-hidden rounded-md">
-      <motion.div whileHover={imageHover} className="h-full">
-        <Image
-          src={`/images/menu-items/${image}`}
-          alt={name}
-          fill
-          className="object-cover"
-        />
-      </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-    </div>
-    <motion.p className="font-semibold" whileHover={{ scale: 1.05 }}>
-      {name}
-    </motion.p>
-    {price && (
-      <motion.p
-        className="text-sm text-gray-600"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      >
-        {price} Dh
-      </motion.p>
-    )}
-  </motion.div>
-);
-
-const RecipeCard = ({ recipe }: RecipeCardProps) => (
+// Product Card Component
+const ProductCard = ({ product }: ProductCardProps) => (
   <motion.div
     variants={fadeInUp}
     whileHover={cardHover}
     className="p-4 border rounded-lg bg-white/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300"
   >
-    <div className="relative w-full h-40 mb-3 overflow-hidden rounded-md">
-      <motion.div whileHover={imageHover} className="h-full">
-        <Image
-          src={`/images/menu-items/${recipe.image}`}
-          alt={recipe.name}
-          fill
-          className="object-cover"
-        />
-      </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-    </div>
-    <motion.p className="font-semibold" whileHover={{ scale: 1.02 }}>
-      {recipe.name}
-    </motion.p>
-    <motion.p
-      className="text-sm text-gray-600"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.1 }}
-    >
-      {recipe.description}
-    </motion.p>
+    {product.image && (
+      <div className="relative w-full h-32 mb-3 overflow-hidden rounded-md">
+        <motion.div whileHover={{ scale: 1.1 }} className="h-full">
+          <Image
+            src={`/images/menu-items/${product.image}`}
+            alt={product.name}
+            fill
+            className="object-cover"
+          />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+      </div>
+    )}
+    <motion.div whileHover={{ scale: 1.02 }}>
+      <h3 className="font-semibold text-lg mb-1">{product.name}</h3>
+      {product.description && (
+        <p className="text-sm text-gray-600 mb-2">{product.description}</p>
+      )}
+
+      {product.variants && product.variants.length > 0 ? (
+        <div className="space-y-1">
+          {product.variants.map((variant, index) => (
+            <div key={index} className="flex justify-between text-sm">
+              <span className="text-gray-700">
+                {variant.option1Value}
+                {variant.option2Value && ` - ${variant.option2Value}`}
+              </span>
+              <span className="font-medium">{variant.price} Dh</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-lg font-medium text-green-600">{product.price} Dh</p>
+      )}
+    </motion.div>
   </motion.div>
 );
 
@@ -119,141 +78,76 @@ export default function MenuPage() {
       },
     },
   };
-  const sweetBases = [
-    { name: "Gaufres", price: 35, image: "gaufres.jpg" },
-    { name: "Bubbles", price: 40, image: "bubbles.jpg" },
-    { name: "Waffles", price: 35, image: "waffles.jpg" },
-    { name: "Crauffles", price: 45, image: "crauffles.jpg" },
-    { name: "Stuffed Brioche", price: 45, image: "brioche.jpg" },
-    { name: "Ti Can Misu", price: 50, image: "ticanmisu.jpg" },
-  ];
 
-  const sauces = [
-    { name: "Pistachio", price: 10, image: "sauce-pistache.jpg" },
-    { name: "Strawberry", price: 10, image: "sauce-fraise.jpg" },
-    { name: "Salted Caramel", price: 10, image: "sauce-caramel.jpg" },
-    { name: "Hazelnut", price: 10, image: "sauce-noisette.jpg" },
-    { name: "Speculoos", price: 10, image: "sauce-speculoos.jpg" },
-    { name: "Ferrero", price: 10, image: "sauce-ferrero.jpg" },
-    { name: "Milk Chocolate", price: 10, image: "sauce-chocolat-lait.jpg" },
-    { name: "White Chocolate", price: 10, image: "sauce-chocolat-blanc.jpg" },
-    { name: "Dark Chocolate", price: 10, image: "sauce-chocolat-noir.jpg" },
-    { name: "Mango", price: 10, image: "sauce-mangue.jpg" },
-  ];
+  // Organiser les produits par catégorie
+  const cafes = menuProducts.filter((p) => p.category === "Boissons - Cafés");
+  const boissonsLactees = menuProducts.filter(
+    (p) => p.category === "Boissons - Boissons Lactées"
+  );
+  const milkshakes = menuProducts.filter(
+    (p) => p.category === "Boissons - Milkshakes"
+  );
+  const boissonsSpeciales = menuProducts.filter(
+    (p) => p.category === "Boissons - Spécialisées"
+  );
 
-  const toppings = [
-    { name: "Kunefe", price: 10, image: "topping-kunefe.jpg" },
-    { name: "Kinder", price: 10, image: "topping-kinder.jpg" },
-    { name: "Oreo", price: 10, image: "topping-oreo.jpg" },
-    { name: "Speculoos", price: 10, image: "topping-speculoos.jpg" },
-    { name: "Coconut", price: 10, image: "topping-coco.jpg" },
-    { name: "Fresh Strawberry", price: 10, image: "topping-fraise.jpg" },
-    { name: "KitKat", price: 10, image: "topping-kitkat.jpg" },
-    { name: "Bueno", price: 10, image: "topping-bueno.jpg" },
-  ];
+  const desserts = menuProducts.filter((p) => p.category === "Desserts");
+  const dessertsCans = menuProducts.filter(
+    (p) => p.category === "Desserts - Cans"
+  );
 
-  const iceCream = [
-    { name: "Vanilla", price: 15, image: "glace-vanille.jpg" },
-    { name: "Chocolate", price: 15, image: "glace-chocolat.jpg" },
-    { name: "Strawberry", price: 15, image: "glace-fraise.jpg" },
-    { name: "Coffee", price: 15, image: "glace-cafe.jpg" },
-    { name: "Pistachio", price: 15, image: "glace-pistache.jpg" },
-    { name: "Caramel", price: 15, image: "glace-caramel.jpg" },
-    { name: "Hazelnut", price: 15, image: "glace-noisette.jpg" },
-    { name: "Rum Raisin", price: 15, image: "glace-rhum-raisin.jpg" },
-  ];
+  const briodogsSales = menuProducts.filter(
+    (p) => p.category === "Briodogs Salés"
+  );
+  const briodogsSucres = menuProducts.filter(
+    (p) => p.category === "Briodogs Sucrés"
+  );
 
-  const savoryBases = [
-    { name: "Stuffed Brioche", price: 40, image: "brioche-salee.jpg" },
-    { name: "Soft Bread", price: 40, image: "pain-moelleux.jpg" },
-    { name: "Naan", price: 40, image: "naan.jpg" },
-    { name: "Flatbread", price: 40, image: "galette.jpg" },
-  ];
+  const modificateurs = menuProducts.filter(
+    (p) => p.category === "Modificateurs"
+  );
 
-  const proteins = [
-    { name: "Chicken", image: "poulet.jpg", price: 10 },
-    { name: "Beef", image: "boeuf.jpg", price: 10 },
-    { name: "Kefta", image: "kefta.jpg", price: 10 },
-    { name: "Tuna", image: "thon.jpg", price: 10 },
-    { name: "Vegetarian", image: "vegetarien.jpg", price: 10 },
-  ];
-
-  const recipes = [
-    {
-      name: "Cheddar",
-      description: "Melted cheddar sauce, caramelized onions, mild mustard",
-      image: "recette-cheddar.jpg",
-      price: 10,
-    },
-    {
-      name: "Indian Goat Cheese",
-      description: "Curry sauce, cashews, marinated red onions",
-      image: "recette-chevre.jpg",
-      price: 10,
-    },
-    {
-      name: "Savoyard",
-      description: "Raclette cheese, potatoes, onions, mushrooms",
-      image: "recette-savoyard.jpg",
-      price: 10,
-    },
-    {
-      name: "Thai",
-      description:
-        "Sweet-salty soy sauce, sautéed vegetables, spicy coconut sauce",
-      image: "recette-thai.jpg",
-      price: 10,
-    },
-    {
-      name: "Moroccan",
-      description: "Traditional spices, candied onions, mild harissa",
-      image: "recette-marocain.jpg",
-      price: 10,
-    },
-  ];
-
-  const extras = [
-    { name: "Extra Cheese", price: 8, image: "extra-fromage.jpg" },
-    { name: "Fried Egg", price: 8, image: "extra-oeuf.jpg" },
-    { name: "Avocado", price: 8, image: "extra-avocat.jpg" },
-    { name: "Mushrooms", price: 8, image: "extra-champignons.jpg" },
-    { name: "Jalapenos", price: 8, image: "extra-jalapenos.jpg" },
-    { name: "Bacon", price: 8, image: "extra-bacon.jpg" },
-  ];
-
-  const drinks = {
-    softDrinks: [
-      { name: "Coca-Cola", price: 15, image: "coca.jpg" },
-      { name: "Sprite", price: 15, image: "sprite.jpg" },
-      { name: "Fanta", price: 15, image: "fanta.jpg" },
-      { name: "Schweppes", price: 15, image: "schweppes.jpg" },
-    ],
-    coffees: [
-      { name: "Espresso", price: 18, image: "espresso.jpg" },
-      { name: "Americano", price: 20, image: "americano.jpg" },
-      { name: "Cappuccino", price: 25, image: "cappuccino.jpg" },
-      { name: "Café Latte", price: 25, image: "latte.jpg" },
-      { name: "Mocha", price: 28, image: "moka.jpg" },
-    ],
-    dairyDrinks: [
-      { name: "Hot Chocolate", price: 25, image: "chocolat-chaud.jpg" },
-      { name: "Chai Latte", price: 28, image: "chai-latte.jpg" },
-      { name: "Matcha Latte", price: 30, image: "matcha-latte.jpg" },
-    ],
-    milkshakes: [
-      { name: "Vanilla", price: 35, image: "milkshake-vanille.jpg" },
-      { name: "Chocolate", price: 35, image: "milkshake-chocolat.jpg" },
-      { name: "Strawberry", price: 35, image: "milkshake-fraise.jpg" },
-      { name: "Oreo", price: 38, image: "milkshake-oreo.jpg" },
-      { name: "Nutella", price: 38, image: "milkshake-nutella.jpg" },
-      { name: "Caramel", price: 35, image: "milkshake-caramel.jpg" },
-    ],
-  };
+  const shotsVitamines = menuProducts.filter(
+    (p) => p.category === "Shots Vitaminés"
+  );
+  const eauxSoftDrinks = menuProducts.filter(
+    (p) => p.category === "Eaux & Soft Drinks"
+  );
+  const jusFrais = menuProducts.filter(
+    (p) => p.category === "Jus Frais Pressés"
+  );
+  const boissonsIceLactees = menuProducts.filter(
+    (p) => p.category === "Boissons Ice Lactées"
+  );
 
   return (
     <FloatingBackground>
       <div className="relative min-h-screen">
-        <FlickeringGrid className="absolute inset-0" />
+        {/* Green Sparkles - Full screen */}
+        <div className="absolute inset-0 overflow-hidden">
+          <SparklesCore
+            id="sparkles-green-menu"
+            background="transparent"
+            minSize={1.5}
+            maxSize={3.5}
+            particleDensity={60}
+            className="w-full h-full"
+            particleColor="#22c55e"
+          />
+        </div>
+
+        {/* Red Sparkles - Full screen */}
+        <div className="absolute inset-0 overflow-hidden">
+          <SparklesCore
+            id="sparkles-red-menu"
+            background="transparent"
+            minSize={1.5}
+            maxSize={3.5}
+            particleDensity={60}
+            className="w-full h-full"
+            particleColor="#ef4444"
+          />
+        </div>
 
         <motion.main
           initial={{ opacity: 0 }}
@@ -266,35 +160,40 @@ export default function MenuPage() {
             transition={{ delay: 0.2 }}
             className="relative z-10 max-w-4xl mx-auto"
           >
-            <Tabs defaultValue="sweet" className="w-full">
+            <Tabs defaultValue="boissons" className="w-full">
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <TabsList className="w-full mb-6">
-                  <TabsTrigger value="sweet" className="flex-1">
+                <TabsList className="w-full mb-6 grid grid-cols-2 md:grid-cols-4">
+                  <TabsTrigger value="boissons" className="flex-1">
                     <motion.span whileHover={{ scale: 1.05 }}>
-                      Sweet Delights
+                      Boissons
                     </motion.span>
                   </TabsTrigger>
-                  <TabsTrigger value="savory" className="flex-1">
+                  <TabsTrigger value="desserts" className="flex-1">
                     <motion.span whileHover={{ scale: 1.05 }}>
-                      Savory Delights
+                      Desserts
                     </motion.span>
                   </TabsTrigger>
-                  <TabsTrigger value="drinks" className="flex-1">
+                  <TabsTrigger value="briodogs" className="flex-1">
                     <motion.span whileHover={{ scale: 1.05 }}>
-                      Drinks
+                      Briodogs
+                    </motion.span>
+                  </TabsTrigger>
+                  <TabsTrigger value="extras" className="flex-1">
+                    <motion.span whileHover={{ scale: 1.05 }}>
+                      Extras
                     </motion.span>
                   </TabsTrigger>
                 </TabsList>
               </motion.div>
 
               <AnimatePresence mode="wait">
-                {/* SWEET SECTION */}
+                {/* BOISSONS SECTION */}
                 <TabsContent
-                  value="sweet"
+                  value="boissons"
                   className="bg-white/90 rounded-lg p-6"
                 >
                   <motion.h2
@@ -302,7 +201,7 @@ export default function MenuPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-2xl font-bold mb-6"
                   >
-                    Create your sweet delight
+                    Nos Boissons
                   </motion.h2>
 
                   <motion.div
@@ -315,22 +214,12 @@ export default function MenuPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>1. Choose your base</CardTitle>
+                            <CardTitle>Cafés</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {sweetBases.map((base, index) => (
-                            <motion.div
-                              key={`sweet-base-${base.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={base.name}
-                                price={base.price}
-                                image={base.image}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {cafes.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
@@ -340,22 +229,12 @@ export default function MenuPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>2. Choose your sauce (10 Dh)</CardTitle>
+                            <CardTitle>Boissons Lactées</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {sauces.map((sauce, index) => (
-                            <motion.div
-                              key={`sauce-${sauce.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={sauce.name}
-                                image={sauce.image}
-                                price={sauce.price}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {boissonsLactees.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
@@ -365,24 +244,12 @@ export default function MenuPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>
-                              3. Add your toppings (10 Dh each)
-                            </CardTitle>
+                            <CardTitle>Milkshakes</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {toppings.map((topping, index) => (
-                            <motion.div
-                              key={`topping-${topping.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={topping.name}
-                                image={topping.image}
-                                price={topping.price}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {milkshakes.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
@@ -392,24 +259,72 @@ export default function MenuPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>
-                              4. Artisanal Ice Cream (15 Dh/scoop)
-                            </CardTitle>
+                            <CardTitle>Boissons Spécialisées</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {iceCream.map((item, index) => (
-                            <motion.div
-                              key={`ice-cream-${item.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={item.name}
-                                image={item.image}
-                                price={item.price}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {boissonsSpeciales.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
+                          ))}
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+
+                    <motion.div variants={fadeInUp}>
+                      <Card className="hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                          <motion.div whileHover={{ scale: 1.01 }}>
+                            <CardTitle>Boissons Ice Lactées</CardTitle>
+                          </motion.div>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {boissonsIceLactees.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
+                          ))}
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+
+                    <motion.div variants={fadeInUp}>
+                      <Card className="hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                          <motion.div whileHover={{ scale: 1.01 }}>
+                            <CardTitle>Eaux & Soft Drinks</CardTitle>
+                          </motion.div>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {eauxSoftDrinks.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
+                          ))}
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+
+                    <motion.div variants={fadeInUp}>
+                      <Card className="hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                          <motion.div whileHover={{ scale: 1.01 }}>
+                            <CardTitle>Jus Frais Pressés</CardTitle>
+                          </motion.div>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {jusFrais.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
+                          ))}
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+
+                    <motion.div variants={fadeInUp}>
+                      <Card className="hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                          <motion.div whileHover={{ scale: 1.01 }}>
+                            <CardTitle>Shots Vitaminés</CardTitle>
+                          </motion.div>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {shotsVitamines.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
@@ -417,9 +332,9 @@ export default function MenuPage() {
                   </motion.div>
                 </TabsContent>
 
-                {/* SAVORY SECTION */}
+                {/* DESSERTS SECTION */}
                 <TabsContent
-                  value="savory"
+                  value="desserts"
                   className="bg-white/90 rounded-lg p-6"
                 >
                   <motion.h2
@@ -427,7 +342,7 @@ export default function MenuPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-2xl font-bold mb-6"
                   >
-                    Create your savory delight
+                    Nos Desserts
                   </motion.h2>
 
                   <motion.div
@@ -440,22 +355,12 @@ export default function MenuPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>1. Choose your base (40 Dh)</CardTitle>
+                            <CardTitle>Desserts</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {savoryBases.map((base, index) => (
-                            <motion.div
-                              key={`savory-base-${base.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={base.name}
-                                image={base.image}
-                                price={base.price}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {desserts.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
@@ -465,70 +370,12 @@ export default function MenuPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>
-                              2. Choose your protein (included)
-                            </CardTitle>
+                            <CardTitle>Cans</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {proteins.map((protein, index) => (
-                            <motion.div
-                              key={`protein-${protein.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={protein.name}
-                                image={protein.image}
-                                price={protein.price}
-                              />
-                            </motion.div>
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>3. Choose your recipe (10 Dh)</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          {recipes.map((recipe, index) => (
-                            <motion.div
-                              key={`recipe-${recipe.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <RecipeCard recipe={recipe} />
-                            </motion.div>
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>4. Extras (8 Dh each)</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {extras.map((extra, index) => (
-                            <motion.div
-                              key={`extra-${extra.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={extra.name}
-                                image={extra.image}
-                                price={extra.price}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {dessertsCans.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
@@ -536,9 +383,9 @@ export default function MenuPage() {
                   </motion.div>
                 </TabsContent>
 
-                {/* DRINKS SECTION */}
+                {/* BRIODOGS SECTION */}
                 <TabsContent
-                  value="drinks"
+                  value="briodogs"
                   className="bg-white/90 rounded-lg p-6"
                 >
                   <motion.h2
@@ -546,7 +393,7 @@ export default function MenuPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-2xl font-bold mb-6"
                   >
-                    Our Drinks
+                    Nos Briodogs
                   </motion.h2>
 
                   <motion.div
@@ -559,22 +406,12 @@ export default function MenuPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Soft Drinks</CardTitle>
+                            <CardTitle>Briodogs Salés</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {drinks.softDrinks.map((drink, index) => (
-                            <motion.div
-                              key={`soft-drink-${drink.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={drink.name}
-                                image={drink.image}
-                                price={drink.price}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {briodogsSales.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
@@ -584,72 +421,48 @@ export default function MenuPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Coffees</CardTitle>
+                            <CardTitle>Briodogs Sucrés</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {drinks.coffees.map((coffee, index) => (
-                            <motion.div
-                              key={`coffee-${coffee.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={coffee.name}
-                                image={coffee.image}
-                                price={coffee.price}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {briodogsSucres.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
                     </motion.div>
+                  </motion.div>
+                </TabsContent>
 
+                {/* EXTRAS SECTION */}
+                <TabsContent
+                  value="extras"
+                  className="bg-white/90 rounded-lg p-6"
+                >
+                  <motion.h2
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="text-2xl font-bold mb-6"
+                  >
+                    Extras & Modificateurs
+                  </motion.h2>
+
+                  <motion.div
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="show"
+                    className="space-y-6"
+                  >
                     <motion.div variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Special Drinks</CardTitle>
+                            <CardTitle>Toppings, Sauces & Extras</CardTitle>
                           </motion.div>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {drinks.dairyDrinks.map((drink, index) => (
-                            <motion.div
-                              key={`dairy-drink-${drink.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={drink.name}
-                                image={drink.image}
-                                price={drink.price}
-                              />
-                            </motion.div>
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Homemade Milkshakes</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {drinks.milkshakes.map((shake, index) => (
-                            <motion.div
-                              key={`milkshake-${shake.name}`}
-                              variants={fadeInUp}
-                              custom={index}
-                            >
-                              <MenuItem
-                                name={shake.name}
-                                image={shake.image}
-                                price={shake.price}
-                              />
-                            </motion.div>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {modificateurs.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>
                       </Card>
