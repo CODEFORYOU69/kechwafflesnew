@@ -28,6 +28,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Cafés",
     description: "Café espresso classique",
     price: 15,
+    image: "espresso.png",
   },
   {
     handle: "espresso-double",
@@ -36,6 +37,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Cafés",
     description: "Double dose d'espresso",
     price: 20,
+    image: "double-espresso.png",
   },
   {
     handle: "ristretto",
@@ -44,6 +46,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Cafés",
     description: "Espresso court et concentré",
     price: 18,
+    image: "ristretto.png",
   },
   {
     handle: "lungo",
@@ -52,6 +55,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Cafés",
     description: "Espresso allongé",
     price: 20,
+    image: "lungo.png",
   },
   {
     handle: "americano-chaud",
@@ -60,6 +64,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Cafés",
     description: "Espresso allongé eau chaude",
     price: 20,
+    image: "AMERICANOCHAUD.png",
   },
   {
     handle: "americano-froid",
@@ -68,6 +73,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Cafés",
     description: "Espresso servi froid",
     price: 30,
+    image: "americanofroid.png",
   },
   {
     handle: "cafe-glace",
@@ -76,6 +82,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Cafés",
     description: "Café froid avec glaçons",
     price: 30,
+    image: "cafeglace.png",
   },
 
   // Boissons - Boissons Lactées
@@ -86,6 +93,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Espresso avec lait froid",
     price: 35,
+    image: "icedlatté.png",
   },
   {
     handle: "latte",
@@ -93,6 +101,7 @@ export const menuProducts: Product[] = [
     name: "Latte",
     category: "Boissons - Boissons Lactées",
     description: "Espresso avec lait chaud",
+    image: "latte.png",
     variants: [
       { option1Name: "Taille", option1Value: "Small", price: 20 },
       { option1Name: "Taille", option1Value: "Medium", price: 30 },
@@ -105,6 +114,7 @@ export const menuProducts: Product[] = [
     name: "Cappuccino",
     category: "Boissons - Boissons Lactées",
     description: "Espresso avec mousse de lait",
+    image: "cappuccino.png",
     variants: [
       { option1Name: "Taille", option1Value: "Small", price: 25 },
       { option1Name: "Taille", option1Value: "Medium", price: 35 },
@@ -118,6 +128,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Espresso micro-mousse",
     price: 30,
+    image: "flatwhite.png",
   },
   {
     handle: "macchiato",
@@ -126,6 +137,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Espresso marqué lait",
     price: 22,
+    image: "espressomachiatto.png",
   },
   {
     handle: "cortado",
@@ -134,6 +146,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Espresso coupé lait",
     price: 25,
+    image: "cortado.png",
   },
   {
     handle: "cafe-au-lait",
@@ -142,6 +155,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Café avec lait",
     price: 25,
+    image: "caféaulait.png",
   },
   {
     handle: "cold-brew",
@@ -150,6 +164,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Café infusé froid",
     price: 35,
+    image: "coldbrew.png",
   },
   {
     handle: "frappe-cafe",
@@ -158,6 +173,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Café mixé glace",
     price: 40,
+    image: "frappé.png",
   },
   {
     handle: "lait-chaud",
@@ -165,6 +181,7 @@ export const menuProducts: Product[] = [
     name: "Lait Chaud Simple",
     category: "Boissons - Boissons Lactées",
     description: "Lait chaud nature",
+    image: "laitchaud.png",
     variants: [
       { option1Name: "Taille", option1Value: "Small", price: 20 },
       { option1Name: "Taille", option1Value: "Medium", price: 30 },
@@ -176,6 +193,7 @@ export const menuProducts: Product[] = [
     name: "Lait Chaud Aromatisé",
     category: "Boissons - Boissons Lactées",
     description: "Lait chaud sirop",
+    image: "laitaromtisé.png",
     variants: [
       { option1Name: "Taille", option1Value: "Small", price: 25 },
       { option1Name: "Taille", option1Value: "Medium", price: 35 },
@@ -188,6 +206,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Lait froid nature",
     price: 30,
+    image: "laitfroid.png",
   },
   {
     handle: "lait-froid-arome",
@@ -196,6 +215,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Lait froid sirop",
     price: 35,
+    image: "laitaromtiséfroidchaud.png",
   },
 
   // Boissons - Milkshakes
@@ -206,6 +226,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Milkshakes",
     description: "Milkshake vanille",
     price: 45,
+    image: "milkshakevanille.png",
   },
   {
     handle: "milkshake-chocolat",
@@ -214,6 +235,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Milkshakes",
     description: "Milkshake chocolat",
     price: 45,
+    image: "milkshakechocolat.png",
   },
   {
     handle: "milkshake-fraise",
@@ -222,6 +244,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Milkshakes",
     description: "Milkshake fraise",
     price: 50,
+    image: "milkshakefraise.png",
   },
 
   // Boissons - Spécialisées
@@ -232,6 +255,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Spécialisées",
     description: "Chocolat chaud",
     price: 30,
+    image: "chocolatchaud.png",
   },
   {
     handle: "chocolat-froid",
@@ -240,6 +264,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Spécialisées",
     description: "Chocolat froid",
     price: 35,
+    image: "chocolat froidice.png",
   },
   {
     handle: "chocolat-blanc",
@@ -247,6 +272,7 @@ export const menuProducts: Product[] = [
     name: "Chocolat Blanc",
     category: "Boissons - Spécialisées",
     description: "Chocolat blanc",
+    image: "chocolat blanc.png",
     variants: [
       { option1Name: "Température", option1Value: "Chaud", price: 35 },
       { option1Name: "Température", option1Value: "Froid", price: 35 },
@@ -258,6 +284,7 @@ export const menuProducts: Product[] = [
     name: "Matcha Latte",
     category: "Boissons - Spécialisées",
     description: "Latte matcha",
+    image: "matchahot.png",
     variants: [
       { option1Name: "Température", option1Value: "Chaud", price: 40 },
       { option1Name: "Température", option1Value: "Froid", price: 40 },
@@ -269,6 +296,7 @@ export const menuProducts: Product[] = [
     name: "Chai Latte",
     category: "Boissons - Spécialisées",
     description: "Latte chai",
+    image: "chailatté.png",
     variants: [
       { option1Name: "Température", option1Value: "Chaud", price: 40 },
       { option1Name: "Température", option1Value: "Froid", price: 40 },
@@ -281,6 +309,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Spécialisées",
     description: "Latte chocolat blanc",
     price: 45,
+    image: "whitemocha.png",
   },
 
   // Desserts
@@ -291,6 +320,7 @@ export const menuProducts: Product[] = [
     category: "Desserts",
     description: "Gaufre croustillante",
     price: 35,
+    image: "waffles.png",
   },
   {
     handle: "gaufre-tiramisu",
@@ -299,6 +329,7 @@ export const menuProducts: Product[] = [
     category: "Desserts",
     description: "Gaufre tiramisu",
     price: 55,
+    image: "wafflestiramisu.png",
   },
   {
     handle: "pancake-tiramisu",
@@ -307,6 +338,7 @@ export const menuProducts: Product[] = [
     category: "Desserts",
     description: "Pancakes tiramisu",
     price: 55,
+    image: "pancakestiramisu.png",
   },
   {
     handle: "brioche-tiramisu",
@@ -315,6 +347,7 @@ export const menuProducts: Product[] = [
     category: "Desserts",
     description: "Brioche tiramisu",
     price: 60,
+    image: "brioche.jpg",
   },
   {
     handle: "bubble-tiramisu",
@@ -323,6 +356,7 @@ export const menuProducts: Product[] = [
     category: "Desserts",
     description: "Bubble tiramisu",
     price: 65,
+    image: "BUBBLETIRA.png",
   },
   {
     handle: "craffle-tiramisu",
@@ -331,6 +365,7 @@ export const menuProducts: Product[] = [
     category: "Desserts",
     description: "Craffle tiramisu",
     price: 60,
+    image: "crauffles.jpg",
   },
 
   // Desserts - Cans
@@ -341,6 +376,7 @@ export const menuProducts: Product[] = [
     category: "Desserts - Cans",
     description: "Canette Dubai",
     price: 60,
+    image: "dubaichocolatecan.png",
   },
   {
     handle: "can-fraise-choco",
@@ -349,23 +385,106 @@ export const menuProducts: Product[] = [
     category: "Desserts - Cans",
     description: "Canette trio",
     price: 65,
+    image: "canstrawchocpist.png",
   },
   {
-    handle: "ticanmisu",
-    sku: "TIC",
-    name: "Ticanmisu",
+    handle: "ticanmisu-oreo",
+    sku: "TIC-ORE",
+    name: "Ticanmisu Oreo",
     category: "Desserts - Cans",
-    description: "Canette tiramisu",
-    variants: [
-      { option1Name: "Saveur", option1Value: "Oreo", price: 55 },
-      { option1Name: "Saveur", option1Value: "Caramel", price: 55 },
-      { option1Name: "Saveur", option1Value: "Daim", price: 55 },
-      { option1Name: "Saveur", option1Value: "M&M's", price: 55 },
-      { option1Name: "Saveur", option1Value: "Kinder Bueno", price: 60 },
-      { option1Name: "Saveur", option1Value: "Nutella", price: 60 },
-      { option1Name: "Saveur", option1Value: "Mangue", price: 55 },
-      { option1Name: "Saveur", option1Value: "Fraise", price: 55 },
-    ],
+    description: "Canette tiramisu Oreo",
+    price: 55,
+    image: "ticanoreo.png",
+  },
+  {
+    handle: "ticanmisu-caramel",
+    sku: "TIC-CAR",
+    name: "Ticanmisu Caramel",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu caramel",
+    price: 55,
+    image: "ticancaramel.png",
+  },
+  {
+    handle: "ticanmisu-daim",
+    sku: "TIC-DAI",
+    name: "Ticanmisu Daim",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu Daim",
+    price: 55,
+    image: "ticandaim.png",
+  },
+  {
+    handle: "ticanmisu-mms",
+    sku: "TIC-MMS",
+    name: "Ticanmisu M&M's",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu M&M's",
+    price: 55,
+    image: "ticanmms.png",
+  },
+  {
+    handle: "ticanmisu-bueno",
+    sku: "TIC-BUE",
+    name: "Ticanmisu Kinder Bueno",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu Kinder Bueno",
+    price: 60,
+    image: "ticanbueno.png",
+  },
+  {
+    handle: "ticanmisu-nutella",
+    sku: "TIC-NUT",
+    name: "Ticanmisu Nutella",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu Nutella",
+    price: 60,
+    image: "ticannutella.png",
+  },
+  {
+    handle: "ticanmisu-mangue",
+    sku: "TIC-MAN",
+    name: "Ticanmisu Mangue",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu mangue",
+    price: 55,
+    image: "ticanmangue.png",
+  },
+  {
+    handle: "ticanmisu-fraise",
+    sku: "TIC-FRA",
+    name: "Ticanmisu Fraise",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu fraise",
+    price: 55,
+    image: "ticanfraise.png",
+  },
+  {
+    handle: "ticanmisu-amlou",
+    sku: "TIC-AML",
+    name: "Ticanmisu Amlou - Moroccan Touch",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu amlou - Touche marocaine",
+    price: 60,
+    image: "ticanamlou.png",
+  },
+  {
+    handle: "ticanmisu-chebakia",
+    sku: "TIC-CHE",
+    name: "Ticanmisu Chebakia - Moroccan Touch",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu chebakia - Touche marocaine",
+    price: 60,
+    image: "ticanchebakia.png",
+  },
+  {
+    handle: "ticanmisu-corne",
+    sku: "TIC-COR",
+    name: "Ticanmisu Corne de Gazelle - Moroccan Touch",
+    category: "Desserts - Cans",
+    description: "Canette tiramisu corne de gazelle - Touche marocaine",
+    price: 60,
+    image: "ticancorne.png",
   },
 
   // Briodogs Salés
@@ -376,6 +495,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Salés",
     description: "Briodog saucisse",
     price: 60,
+    image: "briodogsalé.png",
   },
   {
     handle: "brio-savoyard",
@@ -384,6 +504,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Salés",
     description: "Briodog Reblochon",
     price: 65,
+    image: "briodogsalé.png",
   },
   {
     handle: "brio-lyonnais",
@@ -392,6 +513,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Salés",
     description: "Briodog Saint-Marcellin",
     price: 65,
+    image: "briodogsalé.png",
   },
   {
     handle: "brio-veggie",
@@ -400,6 +522,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Salés",
     description: "Briodog végétarien",
     price: 60,
+    image: "briodogsalé.png",
   },
   {
     handle: "brio-italiano",
@@ -408,6 +531,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Salés",
     description: "Briodog mozzarella",
     price: 65,
+    image: "briodogsalé.png",
   },
   {
     handle: "brio-malay",
@@ -416,6 +540,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Salés",
     description: "Briodog rendang",
     price: 70,
+    image: "briodogsalé.png",
   },
   {
     handle: "brio-indien",
@@ -424,6 +549,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Salés",
     description: "Briodog tandoori",
     price: 70,
+    image: "briodogsalé.png",
   },
   {
     handle: "brio-falafel",
@@ -432,6 +558,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Salés",
     description: "Briodog falafels",
     price: 60,
+    image: "briodogsalé.png",
   },
 
   // Briodogs Sucrés
@@ -442,6 +569,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Sucrés",
     description: "Briodog caramel",
     price: 50,
+    image: "briodogsucree.jpg",
   },
   {
     handle: "brio-choco-banane",
@@ -450,6 +578,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Sucrés",
     description: "Briodog chocolat",
     price: 50,
+    image: "briodogsucree.jpg",
   },
   {
     handle: "brio-pomme",
@@ -458,6 +587,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Sucrés",
     description: "Briodog pommes",
     price: 50,
+    image: "briodogsucree.jpg",
   },
   {
     handle: "brio-fraises",
@@ -466,6 +596,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Sucrés",
     description: "Briodog fraises",
     price: 50,
+    image: "briodogsucree.jpg",
   },
   {
     handle: "brio-amlou",
@@ -474,6 +605,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Sucrés",
     description: "Briodog Amlou",
     price: 50,
+    image: "briodogsucree.jpg",
   },
   {
     handle: "brio-coco",
@@ -482,6 +614,7 @@ export const menuProducts: Product[] = [
     category: "Briodogs Sucrés",
     description: "Briodog coco",
     price: 50,
+    image: "briodogsucree.jpg",
   },
 
   // Modificateurs - Toppings Sucrés
@@ -493,6 +626,7 @@ export const menuProducts: Product[] = [
     description: "Sauce chocolat",
     price: 8,
     isModifier: true,
+    image: "topchoc.png",
   },
   {
     handle: "topping-caramel",
@@ -502,6 +636,7 @@ export const menuProducts: Product[] = [
     description: "Sauce caramel",
     price: 8,
     isModifier: true,
+    image: "topcar.png",
   },
   {
     handle: "topping-oreo",
@@ -511,6 +646,7 @@ export const menuProducts: Product[] = [
     description: "Biscuits Oreo",
     price: 10,
     isModifier: true,
+    image: "TOPOREO.png",
   },
   {
     handle: "topping-amandes",
@@ -520,6 +656,7 @@ export const menuProducts: Product[] = [
     description: "Amandes",
     price: 10,
     isModifier: true,
+    image: "topamandes.png",
   },
   {
     handle: "topping-noisettes",
@@ -529,6 +666,7 @@ export const menuProducts: Product[] = [
     description: "Noisettes",
     price: 10,
     isModifier: true,
+    image: "topnoisette.png",
   },
   {
     handle: "topping-speculoos",
@@ -538,6 +676,7 @@ export const menuProducts: Product[] = [
     description: "Biscuits speculoos",
     price: 10,
     isModifier: true,
+    image: "TOPSPECULOOS.png",
   },
   {
     handle: "topping-fruits",
@@ -547,6 +686,7 @@ export const menuProducts: Product[] = [
     description: "Fruits rouges",
     price: 12,
     isModifier: true,
+    image: "topfruitsrouges.png",
   },
   {
     handle: "topping-fraises",
@@ -556,6 +696,7 @@ export const menuProducts: Product[] = [
     description: "Fraises",
     price: 12,
     isModifier: true,
+    image: "topfraises.png",
   },
   {
     handle: "topping-banane",
@@ -565,6 +706,7 @@ export const menuProducts: Product[] = [
     description: "Banane",
     price: 8,
     isModifier: true,
+    image: "topbanane.png",
   },
   {
     handle: "topping-kiwi",
@@ -574,6 +716,7 @@ export const menuProducts: Product[] = [
     description: "Kiwi",
     price: 10,
     isModifier: true,
+    image: "topkiwi.png",
   },
   {
     handle: "topping-smarties",
@@ -583,6 +726,7 @@ export const menuProducts: Product[] = [
     description: "Smarties",
     price: 8,
     isModifier: true,
+    image: "TOPSMARTIES.png",
   },
   {
     handle: "topping-mnm",
@@ -592,6 +736,7 @@ export const menuProducts: Product[] = [
     description: "M&M's",
     price: 10,
     isModifier: true,
+    image: "TOPM&ms.png",
   },
   {
     handle: "topping-nutella",
@@ -601,6 +746,7 @@ export const menuProducts: Product[] = [
     description: "Nutella",
     price: 12,
     isModifier: true,
+    image: "topnut.png",
   },
   {
     handle: "topping-lotus",
@@ -610,6 +756,7 @@ export const menuProducts: Product[] = [
     description: "Lotus",
     price: 12,
     isModifier: true,
+    image: "toplot.png",
   },
   {
     handle: "topping-miel",
@@ -619,6 +766,7 @@ export const menuProducts: Product[] = [
     description: "Miel",
     price: 8,
     isModifier: true,
+    image: "TOPMIEL.png",
   },
   {
     handle: "topping-coco",
@@ -628,6 +776,7 @@ export const menuProducts: Product[] = [
     description: "Coco râpée",
     price: 8,
     isModifier: true,
+    image: "topcoco.png",
   },
   {
     handle: "topping-pistache",
@@ -637,6 +786,7 @@ export const menuProducts: Product[] = [
     description: "Pistaches",
     price: 12,
     isModifier: true,
+    image: "toppistache.png",
   },
   {
     handle: "topping-framboises",
@@ -646,6 +796,7 @@ export const menuProducts: Product[] = [
     description: "Framboises",
     price: 12,
     isModifier: true,
+    image: "topframboise.png",
   },
 
   // Modificateurs - Sauces
@@ -657,6 +808,7 @@ export const menuProducts: Product[] = [
     description: "Moutarde miel",
     price: 5,
     isModifier: true,
+    image: "saucemoutardemiel.png",
   },
   {
     handle: "sauce-ketchup",
@@ -666,6 +818,7 @@ export const menuProducts: Product[] = [
     description: "Ketchup",
     price: 3,
     isModifier: true,
+    image: "sauceketchup.png",
   },
   {
     handle: "sauce-mayo",
@@ -675,6 +828,7 @@ export const menuProducts: Product[] = [
     description: "Mayo",
     price: 3,
     isModifier: true,
+    image: "saucemayo.png",
   },
   {
     handle: "sauce-bbq",
@@ -684,6 +838,7 @@ export const menuProducts: Product[] = [
     description: "BBQ",
     price: 5,
     isModifier: true,
+    image: "saucebbq.png",
   },
   {
     handle: "sauce-pesto",
@@ -693,6 +848,7 @@ export const menuProducts: Product[] = [
     description: "Pesto",
     price: 8,
     isModifier: true,
+    image: "saucepesto.png",
   },
   {
     handle: "sauce-harissa",
@@ -702,6 +858,7 @@ export const menuProducts: Product[] = [
     description: "Harissa",
     price: 5,
     isModifier: true,
+    image: "sauceharissa.png",
   },
   {
     handle: "sauce-andalouse",
@@ -711,6 +868,7 @@ export const menuProducts: Product[] = [
     description: "Andalouse",
     price: 5,
     isModifier: true,
+    image: "saucandalou.png",
   },
 
   // Modificateurs - Fromages
@@ -722,6 +880,7 @@ export const menuProducts: Product[] = [
     description: "Cheddar",
     price: 8,
     isModifier: true,
+    image: "cheddar.png",
   },
   {
     handle: "fromage-mozzarella",
@@ -731,6 +890,7 @@ export const menuProducts: Product[] = [
     description: "Mozzarella",
     price: 8,
     isModifier: true,
+    image: "mozzarella.png",
   },
 
   // Modificateurs - Extras
@@ -742,6 +902,7 @@ export const menuProducts: Product[] = [
     description: "Oignons",
     price: 5,
     isModifier: true,
+    image: "oignoncaramelisé.png",
   },
   {
     handle: "extra-saucisse",
@@ -751,6 +912,7 @@ export const menuProducts: Product[] = [
     description: "Saucisse extra",
     price: 15,
     isModifier: true,
+    image: "saucisseextra.png",
   },
   {
     handle: "extra-falafel",
@@ -760,6 +922,7 @@ export const menuProducts: Product[] = [
     description: "Falafel extra",
     price: 10,
     isModifier: true,
+    image: "falafel.png",
   },
   {
     handle: "shot-espresso",
@@ -769,6 +932,7 @@ export const menuProducts: Product[] = [
     description: "Shot espresso",
     price: 8,
     isModifier: true,
+    image: "espresso.png",
   },
   {
     handle: "lait-vegetal",
@@ -777,6 +941,7 @@ export const menuProducts: Product[] = [
     category: "Modificateurs",
     description: "Lait végétal",
     isModifier: true,
+    image: "laitvegetal.png",
     variants: [
       { option1Name: "Type", option1Value: "Soja", price: 5 },
       { option1Name: "Type", option1Value: "Amande", price: 5 },
@@ -792,6 +957,7 @@ export const menuProducts: Product[] = [
     description: "Crème fouettée",
     price: 8,
     isModifier: true,
+    image: "FOUETTE.png",
   },
 
   // Modificateurs - Glaces
@@ -803,6 +969,7 @@ export const menuProducts: Product[] = [
     description: "Glace vanille",
     price: 10,
     isModifier: true,
+    image: "glacevanille.png",
   },
   {
     handle: "glace-choco-lait",
@@ -812,6 +979,7 @@ export const menuProducts: Product[] = [
     description: "Glace choco lait",
     price: 10,
     isModifier: true,
+    image: "glacechocolatlait.png",
   },
   {
     handle: "glace-choco-noir",
@@ -821,6 +989,7 @@ export const menuProducts: Product[] = [
     description: "Glace choco noir",
     price: 10,
     isModifier: true,
+    image: "glacechocolatnoir.png",
   },
   {
     handle: "glace-fraise",
@@ -830,6 +999,7 @@ export const menuProducts: Product[] = [
     description: "Glace fraise",
     price: 12,
     isModifier: true,
+    image: "glacefraise.png",
   },
   {
     handle: "glace-pistache",
@@ -839,6 +1009,7 @@ export const menuProducts: Product[] = [
     description: "Glace pistache",
     price: 15,
     isModifier: true,
+    image: "glacepistache.png",
   },
   {
     handle: "glace-ruby",
@@ -848,6 +1019,7 @@ export const menuProducts: Product[] = [
     description: "Glace ruby",
     price: 15,
     isModifier: true,
+    image: "glacerubyframboise.png",
   },
   {
     handle: "glace-mangue",
@@ -857,6 +1029,7 @@ export const menuProducts: Product[] = [
     description: "Glace mangue",
     price: 12,
     isModifier: true,
+    image: "glacemangue.png",
   },
   {
     handle: "glace-raffaelo",
@@ -866,6 +1039,7 @@ export const menuProducts: Product[] = [
     description: "Glace Raffaelo",
     price: 15,
     isModifier: true,
+    image: "glaceraffaelo.png",
   },
   {
     handle: "option-chantilly",
@@ -875,25 +1049,18 @@ export const menuProducts: Product[] = [
     description: "Chantilly",
     price: 8,
     isModifier: true,
-  },
-  {
-    handle: "option-fraise",
-    sku: "OPT-FRA",
-    name: "Option Fraise Can",
-    category: "Modificateurs",
-    description: "Ajout fraise",
-    price: 10,
-    isModifier: true,
+    image: "chantilly.png",
   },
 
-  // Boissons - Extras (Sirops)
+  // Modificateurs - Sirops
   {
     handle: "sirop-extra",
     sku: "SIR",
     name: "Sirop Supplément",
-    category: "Boissons - Extras",
+    category: "Modificateurs",
     description: "Shot sirop",
     isModifier: true,
+    image: "sirops.png",
     variants: [
       { option1Name: "Parfum", option1Value: "Vanille", price: 5 },
       { option1Name: "Parfum", option1Value: "Caramel", price: 5 },
@@ -910,7 +1077,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Boost immunitaire : pomme citron gingembre miel",
     price: 25,
-    image: "shot-gingembre.jpg",
+    image: "shotginmenthecitron.png",
   },
   {
     handle: "shot-lait-or",
@@ -919,7 +1086,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Golden milk : lait coco curcuma gingembre cannelle",
     price: 28,
-    image: "shot-lait-or.jpg",
+    image: "shotlaidor.png",
   },
   {
     handle: "shot-wheatgrass",
@@ -928,7 +1095,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Détox : herbe de blé pomme citron spiruline",
     price: 30,
-    image: "shot-wheatgrass.jpg",
+    image: "SHOTWHEATGRASS.png",
   },
   {
     handle: "shot-orange-curcuma",
@@ -937,7 +1104,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Vitamine C : orange carotte curcuma gingembre",
     price: 25,
-    image: "shot-orange-curcuma.jpg",
+    image: "shotorangecurcar.png",
   },
   {
     handle: "shot-acai",
@@ -946,7 +1113,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Antioxydants : açaí myrtilles grenade",
     price: 32,
-    image: "shot-acai.jpg",
+    image: "shotacai.png",
   },
   {
     handle: "shot-vert-detox",
@@ -955,7 +1122,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Détox : concombre céleri citron menthe spiruline",
     price: 28,
-    image: "shot-vert-detox.jpg",
+    image: "shotvertdetox.png",
   },
   {
     handle: "shot-betterave",
@@ -964,7 +1131,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Énergie : betterave pomme citron gingembre",
     price: 26,
-    image: "shot-betterave.jpg",
+    image: "shotbetterave.png",
   },
   {
     handle: "shot-coco-ananas",
@@ -973,7 +1140,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Immunité : eau coco ananas citron gingembre",
     price: 27,
-    image: "shot-coco-ananas.jpg",
+    image: "shotananascoco.png",
   },
   {
     handle: "shot-cayenne",
@@ -982,7 +1149,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Métabolisme : citron sirop érable cayenne",
     price: 24,
-    image: "shot-cayenne.jpg",
+    image: "shotcayenne.png",
   },
   {
     handle: "shot-proteine",
@@ -991,7 +1158,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Protéines : lait amande spiruline épinards chia",
     price: 35,
-    image: "shot-proteine.jpg",
+    image: "shotspiruline.png",
   },
   {
     handle: "shot-citron-menthe",
@@ -1000,7 +1167,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Digestion : citron gingembre menthe miel",
     price: 22,
-    image: "shot-citron-menthe.jpg",
+    image: "shotcitmentgin.png",
   },
   {
     handle: "shot-mangue-curcuma",
@@ -1009,7 +1176,7 @@ export const menuProducts: Product[] = [
     category: "Shots Vitaminés",
     description: "Tropical : mangue orange curcuma lait coco",
     price: 28,
-    image: "shot-mangue-curcuma.jpg",
+    image: "shotcurcumamangue.png",
   },
 
   // Eaux & Soft Drinks
@@ -1019,7 +1186,7 @@ export const menuProducts: Product[] = [
     name: "Oulmes",
     category: "Eaux & Soft Drinks",
     description: "Eau minérale naturellement gazeuse",
-    image: "oulmes.jpg",
+    image: "oulmes33.png",
     variants: [
       { option1Name: "Format", option1Value: "25cl verre", price: 10 },
       { option1Name: "Format", option1Value: "33cl", price: 8 },
@@ -1033,7 +1200,7 @@ export const menuProducts: Product[] = [
     category: "Eaux & Soft Drinks",
     description: "Eau gazeuse jus orange naturel 25cl verre",
     price: 12,
-    image: "oulmes-orange.jpg",
+    image: "oukmesfruitee.png",
   },
   {
     handle: "oulmes-citron",
@@ -1042,7 +1209,7 @@ export const menuProducts: Product[] = [
     category: "Eaux & Soft Drinks",
     description: "Eau gazeuse jus citron naturel 25cl verre",
     price: 12,
-    image: "oulmes-citron.jpg",
+    image: "oukmesfruitee.png",
   },
   {
     handle: "oulmes-tropical",
@@ -1051,7 +1218,7 @@ export const menuProducts: Product[] = [
     category: "Eaux & Soft Drinks",
     description: "Eau gazeuse jus fruits tropical 25cl verre",
     price: 12,
-    image: "oulmes-tropical.jpg",
+    image: "oukmesfruitee.png",
   },
   {
     handle: "oulmes-mojito",
@@ -1060,7 +1227,7 @@ export const menuProducts: Product[] = [
     category: "Eaux & Soft Drinks",
     description: "Eau gazeuse saveur mojito menthe 25cl verre",
     price: 12,
-    image: "oulmes-mojito.jpg",
+    image: "oukmesfruitee.png",
   },
   {
     handle: "oulmes-pinacolada",
@@ -1069,7 +1236,7 @@ export const menuProducts: Product[] = [
     category: "Eaux & Soft Drinks",
     description: "Eau gazeuse saveur piña colada 25cl verre",
     price: 12,
-    image: "oulmes-pinacolada.jpg",
+    image: "oukmesfruitee.png",
   },
   {
     handle: "oulmes-fruits-rouges",
@@ -1078,43 +1245,7 @@ export const menuProducts: Product[] = [
     category: "Eaux & Soft Drinks",
     description: "Eau gazeuse fruits rouges 25cl verre",
     price: 12,
-    image: "oulmes-fruits-rouges.jpg",
-  },
-  {
-    handle: "glass-cola",
-    sku: "GLASS-COL",
-    name: "Glass' Cola",
-    category: "Eaux & Soft Drinks",
-    description: "Boisson gazeuse cola",
-    image: "glass-cola.jpg",
-    variants: [
-      { option1Name: "Format", option1Value: "33cl", price: 8 },
-      { option1Name: "Format", option1Value: "1.5L", price: 15 },
-    ],
-  },
-  {
-    handle: "glass-tropical",
-    sku: "GLASS-TRO",
-    name: "Glass' Tropical",
-    category: "Eaux & Soft Drinks",
-    description: "Boisson gazeuse tropical",
-    image: "glass-tropical.jpg",
-    variants: [
-      { option1Name: "Format", option1Value: "33cl", price: 8 },
-      { option1Name: "Format", option1Value: "1.5L", price: 15 },
-    ],
-  },
-  {
-    handle: "glass-pomme",
-    sku: "GLASS-POM",
-    name: "Glass' Pomme",
-    category: "Eaux & Soft Drinks",
-    description: "Boisson gazeuse pomme",
-    image: "glass-pomme.jpg",
-    variants: [
-      { option1Name: "Format", option1Value: "33cl", price: 8 },
-      { option1Name: "Format", option1Value: "1.5L", price: 15 },
-    ],
+    image: "oukmesfruitee.png",
   },
   {
     handle: "sidi-ali",
@@ -1122,7 +1253,7 @@ export const menuProducts: Product[] = [
     name: "Sidi Ali",
     category: "Eaux & Soft Drinks",
     description: "Eau minérale naturelle plate",
-    image: "sidi-ali.jpg",
+    image: "sidiali33.png",
     variants: [
       { option1Name: "Format", option1Value: "33cl", price: 6 },
       { option1Name: "Format", option1Value: "50cl", price: 8 },
@@ -1137,7 +1268,7 @@ export const menuProducts: Product[] = [
     name: "Jus d'Orange Frais Pressé",
     category: "Jus Frais Pressés",
     description: "100% orange fraîches pressées sur place",
-    image: "jus-orange.jpg",
+    image: "jusdorange.png",
     variants: [
       { option1Name: "Taille", option1Value: "Small 25cl", price: 25 },
       { option1Name: "Taille", option1Value: "Medium 40cl", price: 35 },
@@ -1153,7 +1284,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Café glacé lait vanille",
     price: 35,
-    image: "ice-latte-vanille.jpg",
+    image: "icelattevanille.png",
   },
   {
     handle: "ice-latte-caramel",
@@ -1162,7 +1293,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Café glacé lait caramel",
     price: 35,
-    image: "ice-latte-caramel.jpg",
+    image: "icelattecaramel.png",
   },
   {
     handle: "ice-latte-noisette",
@@ -1171,7 +1302,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Café glacé lait noisette",
     price: 35,
-    image: "ice-latte-noisette.jpg",
+    image: "icelattenoisette.png",
   },
   {
     handle: "ice-mocha",
@@ -1180,7 +1311,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Café glacé chocolat lait",
     price: 38,
-    image: "ice-mocha.jpg",
+    image: "icemocha.png",
   },
   {
     handle: "ice-white-mocha",
@@ -1189,7 +1320,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Café glacé chocolat blanc lait",
     price: 40,
-    image: "ice-white-mocha.jpg",
+    image: "icewhitemocha.png",
   },
   {
     handle: "ice-caramel-macchiato",
@@ -1198,7 +1329,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Café glacé caramel macchiato",
     price: 38,
-    image: "ice-caramel-macchiato.jpg",
+    image: "icecaramelmachiato.png",
   },
   {
     handle: "ice-matcha-latte",
@@ -1207,7 +1338,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Matcha glacé lait",
     price: 40,
-    image: "ice-matcha-latte.jpg",
+    image: "icematchalatté.png",
   },
   {
     handle: "ice-chai-latte",
@@ -1216,7 +1347,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Chai glacé lait épices",
     price: 40,
-    image: "ice-chai-latte.jpg",
+    image: "chailattéfroid.png",
   },
 ];
 

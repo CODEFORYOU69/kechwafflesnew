@@ -1,7 +1,6 @@
 "use client";
 
 import FloatingBackground from "@/app/components/FloatingBackground";
-import { SparklesCore } from "@/components/ui/sparkles";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
@@ -123,32 +122,6 @@ export default function MenuPage() {
   return (
     <FloatingBackground>
       <div className="relative min-h-screen">
-        {/* Green Sparkles - Full screen */}
-        <div className="absolute inset-0 overflow-hidden">
-          <SparklesCore
-            id="sparkles-green-menu"
-            background="transparent"
-            minSize={1.5}
-            maxSize={3.5}
-            particleDensity={60}
-            className="w-full h-full"
-            particleColor="#22c55e"
-          />
-        </div>
-
-        {/* Red Sparkles - Full screen */}
-        <div className="absolute inset-0 overflow-hidden">
-          <SparklesCore
-            id="sparkles-red-menu"
-            background="transparent"
-            minSize={1.5}
-            maxSize={3.5}
-            particleDensity={60}
-            className="w-full h-full"
-            particleColor="#ef4444"
-          />
-        </div>
-
         <motion.main
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -210,7 +183,7 @@ export default function MenuPage() {
                     animate="show"
                     className="space-y-6"
                   >
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="cafes" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -225,7 +198,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="boissons-lactees" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -240,7 +213,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="milkshakes" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -255,7 +228,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="boissons-speciales" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -270,7 +243,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="boissons-ice-lactees" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -285,7 +258,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="eaux-soft-drinks" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -300,7 +273,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="jus-frais" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -315,7 +288,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="shots-vitamines" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -351,7 +324,7 @@ export default function MenuPage() {
                     animate="show"
                     className="space-y-6"
                   >
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="desserts" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -366,7 +339,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="cans" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -402,7 +375,7 @@ export default function MenuPage() {
                     animate="show"
                     className="space-y-6"
                   >
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="briodogs-sales" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -417,7 +390,7 @@ export default function MenuPage() {
                       </Card>
                     </motion.div>
 
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="briodogs-sucres" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
@@ -453,7 +426,7 @@ export default function MenuPage() {
                     animate="show"
                     className="space-y-6"
                   >
-                    <motion.div variants={fadeInUp}>
+                    <motion.div key="modificateurs" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
