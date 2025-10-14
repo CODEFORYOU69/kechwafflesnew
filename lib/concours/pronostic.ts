@@ -369,7 +369,7 @@ export async function getLeaderboard(limit = 50) {
 
   // Récupère les infos des utilisateurs
   const leaderboard = await Promise.all(
-    rankings.map(async (ranking, index) => {
+    rankings.map(async (ranking: typeof rankings[number], index: number) => {
       const user = await prisma.user.findUnique({
         where: { id: ranking.userId },
         select: {
