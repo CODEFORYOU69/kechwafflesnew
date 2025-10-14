@@ -46,7 +46,7 @@ async function calculateGroupStandings(group: string): Promise<GroupStanding[]> 
   });
 
   // Calculer les stats pour chaque équipe
-  const standings: GroupStanding[] = teams.map((team) => {
+  const standings: GroupStanding[] = teams.map((team: typeof teams[number]) => {
     let played = 0;
     let won = 0;
     let drawn = 0;
@@ -211,7 +211,7 @@ export async function generateRoundOf16Matches(): Promise<void> {
   });
 
   // Pour les meilleurs 3èmes, on les assigne dans l'ordre (simplifié)
-  const thirdPlaceTeams = bestThirds.map((t) => t.teamId);
+  const thirdPlaceTeams = bestThirds.map((t: typeof bestThirds[number]) => t.teamId);
 
   console.log(`   Found ${qualified.length} qualified teams`);
   console.log(`   Creating ${roundOf16Matchups.length} Round of 16 matches...`);
@@ -300,7 +300,7 @@ export async function generateQuarterFinalMatches(): Promise<void> {
     orderBy: { matchNumber: "asc" },
   });
 
-  const winners = round16Matches.map((match) => {
+  const winners = round16Matches.map((match: typeof round16Matches[number]) => {
     if (!match.isFinished || match.homeScore === null || match.awayScore === null) {
       throw new Error(`Match ${match.matchNumber} is not finished`);
     }
@@ -376,7 +376,7 @@ export async function generateSemiFinalMatches(): Promise<void> {
     orderBy: { matchNumber: "asc" },
   });
 
-  const winners = quarterMatches.map((match) => {
+  const winners = quarterMatches.map((match: typeof quarterMatches[number]) => {
     if (!match.isFinished || match.homeScore === null || match.awayScore === null) {
       throw new Error(`Match ${match.matchNumber} is not finished`);
     }

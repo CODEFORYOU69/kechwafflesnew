@@ -475,7 +475,7 @@ export async function getUserTickets(userId: string) {
     },
   });
 
-  return tickets.map((ticket) => ({
+  return tickets.map((ticket: typeof tickets[number]) => ({
     ticketCode: ticket.ticketCode,
     playerName: ticket.player.nameFr,
     playerNumber: ticket.player.number,

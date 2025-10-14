@@ -1358,13 +1358,13 @@ export const getProductsByCategory = (category: string): Product[] => {
 
 // Fonction utilitaire pour obtenir toutes les catégories uniques
 export const getAllCategories = (): string[] => {
-  return Array.from(new Set(menuProducts.map((product) => product.category)));
+  return Array.from(new Set(menuProducts.map((product: Product) => product.category)));
 };
 
 // Fonction utilitaire pour obtenir les catégories principales
 export const getMainCategories = (): string[] => {
   const categories = getAllCategories();
   return Array.from(
-    new Set(categories.map((cat) => cat.split(" - ")[0]))
-  ).filter((cat) => cat !== "Modificateurs");
+    new Set(categories.map((cat: string) => cat.split(" - ")[0]))
+  ).filter((cat: string) => cat !== "Modificateurs");
 };

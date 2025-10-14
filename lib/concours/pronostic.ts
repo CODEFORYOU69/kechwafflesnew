@@ -321,7 +321,7 @@ export async function getUserPronostics(userId: string) {
     },
   });
 
-  return pronostics.map((prono) => ({
+  return pronostics.map((prono: typeof pronostics[number]) => ({
     id: prono.id,
     match: {
       id: prono.match.id,
@@ -423,7 +423,7 @@ export async function getAvailableMatches(userId?: string) {
     },
   });
 
-  return matches.map((match) => ({
+  return matches.map((match: typeof matches[number]) => ({
     id: match.id,
     matchNumber: match.matchNumber,
     phase: match.phase,
