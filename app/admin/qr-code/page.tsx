@@ -158,44 +158,77 @@ export default function AdminQRCodePage() {
               justify-content: center;
               min-height: 100vh;
               margin: 0;
+              padding: 40px;
               font-family: Arial, sans-serif;
+              background: #f3f4f6;
             }
-            h1 {
-              color: #f97316;
+            .card {
+              background-image: url('/images/elements/wallpaper.png');
+              background-size: cover;
+              background-position: center;
+              border: 3px solid #fb923c;
+              border-radius: 20px;
+              padding: 40px;
+              box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+              text-align: center;
+            }
+            .logo {
+              width: 180px;
+              height: 180px;
+              margin: 0 auto 20px;
+              filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            }
+            .title {
+              font-size: 36px;
+              font-weight: bold;
+              color: white;
+              text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
               margin-bottom: 10px;
             }
-            h2 {
-              color: #666;
+            .subtitle {
+              font-size: 20px;
+              color: white;
+              font-weight: 600;
+              text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
               margin-bottom: 30px;
             }
-            img {
-              width: 500px;
-              height: 500px;
+            .qr-container {
+              background: white;
+              padding: 20px;
+              border-radius: 15px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+              display: inline-block;
             }
-            p {
+            img.qr {
+              width: 400px;
+              height: 400px;
+            }
+            .footer {
               margin-top: 20px;
-              font-size: 20px;
-              color: #333;
-              text-align: center;
-              max-width: 600px;
-            }
-            .subtitle {
-              font-size: 18px;
-              color: #666;
-              margin-top: 10px;
+              font-size: 16px;
+              color: white;
+              text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+              font-weight: 600;
             }
             @media print {
-              body { padding: 40px; }
+              body { padding: 20px; }
+              .card { page-break-inside: avoid; }
             }
           </style>
         </head>
         <body>
-          <h1>🏆 Concours CAN 2025 - Pronostics</h1>
-          <h2>Kech Waffles Marrakech</h2>
-          <img src="${registrationQR.qrCodeUrl}" alt="QR Code" />
-          <p><strong>Scannez ce QR code pour vous inscrire au concours de pronostics !</strong></p>
-          <p class="subtitle">Valable pendant toute la durée de la CAN 2025</p>
-          <p class="subtitle">Une seule inscription suffit</p>
+          <div class="card">
+            <img src="/images/menu-items/TransparentWhite.png" alt="Kech Waffles" class="logo" />
+            <div class="title">Concours CAN 2025</div>
+            <div class="subtitle">Pronostics</div>
+            <div class="qr-container">
+              <img src="${registrationQR.qrCodeUrl}" alt="QR Code" class="qr" />
+            </div>
+            <div class="footer">
+              <p><strong>Scannez pour vous inscrire</strong></p>
+              <p>Valable toute la durée de la CAN • Une seule inscription suffit</p>
+            </div>
+          </div>
         </body>
       </html>
     `);
@@ -225,46 +258,89 @@ export default function AdminQRCodePage() {
               justify-content: center;
               min-height: 100vh;
               margin: 0;
+              padding: 40px;
               font-family: Arial, sans-serif;
+              background: #f3f4f6;
             }
-            h1 {
-              color: #f97316;
+            .card {
+              background-image: url('/images/elements/wallpaper.png');
+              background-size: cover;
+              background-position: center;
+              border: 3px solid #60a5fa;
+              border-radius: 20px;
+              padding: 40px;
+              box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+              text-align: center;
+            }
+            .logo {
+              width: 180px;
+              height: 180px;
+              margin: 0 auto 20px;
+              filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            }
+            .title {
+              font-size: 36px;
+              font-weight: bold;
+              color: white;
+              text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
               margin-bottom: 10px;
             }
-            h2 {
-              color: #666;
+            .subtitle {
+              font-size: 20px;
+              color: white;
+              font-weight: 600;
+              text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
               margin-bottom: 30px;
             }
-            img {
-              width: 500px;
-              height: 500px;
+            .qr-container {
+              background: white;
+              padding: 20px;
+              border-radius: 15px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+              display: inline-block;
             }
-            p {
+            img.qr {
+              width: 400px;
+              height: 400px;
+            }
+            .footer {
               margin-top: 20px;
-              font-size: 20px;
-              color: #333;
+              font-size: 16px;
+              color: white;
+              text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+              font-weight: 600;
             }
             .date {
               font-size: 18px;
-              color: #666;
+              color: white;
               margin-top: 10px;
+              font-weight: bold;
+              text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
             }
             @media print {
-              body { padding: 40px; }
+              body { padding: 20px; }
+              .card { page-break-inside: avoid; }
             }
           </style>
         </head>
         <body>
-          <h1>🗓️ QR Code Quotidien - Concours 2</h1>
-          <h2>Kech Waffles Marrakech</h2>
-          <img src="${dailyQR.qrCodeUrl}" alt="QR Code" />
-          <p><strong>Scannez ce QR code pour participer au tirage quotidien !</strong></p>
-          <p class="date">Valable le ${new Date(dailyQR.validDate).toLocaleDateString("fr-FR", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}</p>
+          <div class="card">
+            <img src="/images/menu-items/TransparentWhite.png" alt="Kech Waffles" class="logo" />
+            <div class="title">Concours CAN 2025</div>
+            <div class="subtitle">Loterie Quotidienne</div>
+            <div class="qr-container">
+              <img src="${dailyQR.qrCodeUrl}" alt="QR Code" class="qr" />
+            </div>
+            <div class="footer">
+              <p><strong>Scannez chaque jour</strong></p>
+              <p class="date">Valable le ${new Date(dailyQR.validDate).toLocaleDateString("fr-FR", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}</p>
+            </div>
+          </div>
         </body>
       </html>
     `);
@@ -333,15 +409,52 @@ export default function AdminQRCodePage() {
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* QR Code Display */}
                     <div className="text-center">
-                      <Card className="bg-muted inline-block">
-                        <CardContent className="pt-6">
-                          <Image
-                            src={registrationQR.qrCodeUrl}
-                            alt="QR Code Inscription"
-                            width={300}
-                            height={300}
-                            className="w-72 h-72 mx-auto"
-                          />
+                      <Card
+                        className="border-2 border-orange-200 inline-block relative overflow-hidden"
+                        style={{
+                          backgroundImage: "url('/images/elements/wallpaper.png')",
+                          backgroundSize: "cover",
+                          backgroundPosition: "center"
+                        }}
+                      >
+                        <CardContent className="pt-6 pb-6 px-8 relative">
+                          {/* Logo */}
+                          <div className="mb-4">
+                            <Image
+                              src="/images/menu-items/TransparentWhite.png"
+                              alt="Kech Waffles"
+                              width={200}
+                              height={200}
+                              className="w-40 h-40 mx-auto drop-shadow-lg"
+                              unoptimized
+                            />
+                          </div>
+
+                          {/* Title */}
+                          <div className="mb-4">
+                            <h3 className="text-2xl font-bold text-white drop-shadow-lg">
+                              Concours CAN 2025
+                            </h3>
+                            <p className="text-sm text-white font-semibold mt-1 drop-shadow">
+                              Pronostics
+                            </p>
+                          </div>
+
+                          {/* QR Code */}
+                          <div className="bg-white p-4 rounded-lg shadow-md">
+                            <Image
+                              src={registrationQR.qrCodeUrl}
+                              alt="QR Code Inscription"
+                              width={300}
+                              height={300}
+                              className="w-64 h-64 mx-auto"
+                            />
+                          </div>
+
+                          {/* Footer */}
+                          <p className="text-xs text-white mt-4 drop-shadow font-semibold">
+                            Scannez pour vous inscrire
+                          </p>
                         </CardContent>
                       </Card>
                       <Badge variant="outline" className="font-mono mt-4">
@@ -460,15 +573,59 @@ export default function AdminQRCodePage() {
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* QR Code Display */}
                     <div className="text-center">
-                      <Card className="bg-muted inline-block">
-                        <CardContent className="pt-6">
-                          <Image
-                            src={dailyQR.qrCodeUrl}
-                            alt="QR Code Quotidien"
-                            width={300}
-                            height={300}
-                            className="w-72 h-72 mx-auto"
-                          />
+                      <Card
+                        className="border-2 border-blue-200 inline-block relative overflow-hidden"
+                        style={{
+                          backgroundImage: "url('/images/elements/wallpaper.png')",
+                          backgroundSize: "cover",
+                          backgroundPosition: "center"
+                        }}
+                      >
+                        <CardContent className="pt-6 pb-6 px-8 relative">
+                          {/* Logo */}
+                          <div className="mb-4">
+                            <Image
+                              src="/images/menu-items/TransparentWhite.png"
+                              alt="Kech Waffles"
+                              width={200}
+                              height={200}
+                              className="w-40 h-40 mx-auto drop-shadow-lg"
+                              unoptimized
+                            />
+                          </div>
+
+                          {/* Title */}
+                          <div className="mb-4">
+                            <h3 className="text-2xl font-bold text-white drop-shadow-lg">
+                              Concours CAN 2025
+                            </h3>
+                            <p className="text-sm text-white font-semibold mt-1 drop-shadow">
+                              Loterie Quotidienne
+                            </p>
+                          </div>
+
+                          {/* QR Code */}
+                          <div className="bg-white p-4 rounded-lg shadow-md">
+                            <Image
+                              src={dailyQR.qrCodeUrl}
+                              alt="QR Code Quotidien"
+                              width={300}
+                              height={300}
+                              className="w-64 h-64 mx-auto"
+                            />
+                          </div>
+
+                          {/* Footer */}
+                          <p className="text-xs text-white mt-4 drop-shadow font-semibold">
+                            Scannez chaque jour
+                          </p>
+                          <p className="text-xs text-white font-bold mt-1 drop-shadow">
+                            {new Date(dailyQR.validDate).toLocaleDateString("fr-FR", {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                            })}
+                          </p>
                         </CardContent>
                       </Card>
                       <Badge variant="outline" className="font-mono mt-4">
