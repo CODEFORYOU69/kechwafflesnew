@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
+import { ADMIN_EMAILS } from "./admin";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -22,6 +23,32 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24, // Mise à jour quotidienne
   },
   trustedOrigins: [process.env.BETTER_AUTH_URL!],
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        defaultValue: "USER",
+      },
+    },
+  },
+  hooks: {
+    after: [
+      {
+        matcher: (context) => {
+          return context.path === "/sign-up/email" || context.path === "/sign-in/social";
+        },
+        handler: async (context) => {
+          const user = context.user;
+          if (user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+            await prisma.user.update({
+              where: { id: user.id },
+              data: { role: "ADMIN" },
+            });
+          }
+        },
+      },
+    ],
+  },
 });
 
 export type Session = typeof auth.$Infer.Session;
