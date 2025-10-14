@@ -7,9 +7,9 @@ import crypto from "crypto";
  * Documentation: https://developer.loyverse.com/docs/#webhooks
  *
  * Types d'événements :
- * - receipt.created : Nouvelle vente/commande
- * - receipt.updated : Commande modifiée
- * - receipt.deleted : Commande supprimée
+ * - receipts.create : Nouvelle vente/commande
+ * - receipts.update : Commande modifiée
+ * - receipts.delete : Commande supprimée
  */
 export async function POST(request: NextRequest) {
   try {
@@ -37,14 +37,14 @@ export async function POST(request: NextRequest) {
     console.log("📥 Loyverse webhook received:", body.event_type);
 
     // Vérifier le type d'événement
-    if (body.event_type === "receipt.created" || body.event_type === "receipt.updated") {
+    if (body.event_type === "receipts.create" || body.event_type === "receipts.update") {
       const receipt = body.data;
 
       // Si le reçu a un customer_id, synchroniser les points
       if (receipt.customer_id) {
         await handleReceiptCreated(receipt);
       }
-    } else if (body.event_type === "receipt.deleted") {
+    } else if (body.event_type === "receipts.delete") {
       const receipt = body.data;
 
       // Si le reçu a un customer_id, annuler les points
@@ -64,9 +64,12 @@ export async function POST(request: NextRequest) {
 }
 
 type LoyverseReceipt = {
-  id: string;
-  customer_id: string;
-  total_money: string;
+  receipt_number: string;  // Identifiant principal du reçu
+  customer_id?: string;    // Optionnel - seulement si client associé
+  total_money: number;     // Montant total en nombre
+  receipt_type: string;    // SALE, REFUND, etc.
+  created_at: string;
+  updated_at: string;
 };
 
 /**
@@ -75,10 +78,10 @@ type LoyverseReceipt = {
 async function handleReceiptCreated(receipt: LoyverseReceipt) {
   try {
     const loyverseCustomerId = receipt.customer_id;
-    const totalMoney = parseFloat(receipt.total_money);
-    const receiptId = receipt.id;
+    const totalMoney = receipt.total_money; // Déjà un nombre
+    const receiptNumber = receipt.receipt_number;
 
-    console.log(`💰 Processing receipt ${receiptId} for customer ${loyverseCustomerId}`);
+    console.log(`💰 Processing receipt ${receiptNumber} for customer ${loyverseCustomerId}`);
     console.log(`   Amount: ${totalMoney} MAD`);
 
     // Trouver la carte membre liée à ce client Loyverse
@@ -96,12 +99,12 @@ async function handleReceiptCreated(receipt: LoyverseReceipt) {
     const existingTransaction = await prisma.loyaltyTransaction.findFirst({
       where: {
         userId: memberCard.userId,
-        orderId: receiptId,
+        orderId: receiptNumber,
       },
     });
 
     if (existingTransaction) {
-      console.log(`ℹ️  Transaction already processed: ${receiptId}`);
+      console.log(`ℹ️  Transaction already processed: ${receiptNumber}`);
       return;
     }
 
@@ -115,8 +118,8 @@ async function handleReceiptCreated(receipt: LoyverseReceipt) {
         type: "PURCHASE",
         points: pointsEarned,
         amount: totalMoney,
-        description: `Achat en magasin`,
-        orderId: receiptId,
+        description: `Achat en magasin - Receipt ${receiptNumber}`,
+        orderId: receiptNumber,
       },
     });
 
@@ -164,9 +167,9 @@ async function handleReceiptCreated(receipt: LoyverseReceipt) {
 async function handleReceiptDeleted(receipt: LoyverseReceipt) {
   try {
     const loyverseCustomerId = receipt.customer_id;
-    const receiptId = receipt.id;
+    const receiptNumber = receipt.receipt_number;
 
-    console.log(`🔄 Processing receipt deletion ${receiptId} for customer ${loyverseCustomerId}`);
+    console.log(`🔄 Processing receipt deletion ${receiptNumber} for customer ${loyverseCustomerId}`);
 
     // Trouver la carte membre liée à ce client Loyverse
     const memberCard = await prisma.memberCard.findUnique({
@@ -183,13 +186,13 @@ async function handleReceiptDeleted(receipt: LoyverseReceipt) {
     const existingTransaction = await prisma.loyaltyTransaction.findFirst({
       where: {
         userId: memberCard.userId,
-        orderId: receiptId,
+        orderId: receiptNumber,
         type: "PURCHASE", // Seulement les achats
       },
     });
 
     if (!existingTransaction) {
-      console.log(`ℹ️  No transaction found for receipt: ${receiptId}`);
+      console.log(`ℹ️  No transaction found for receipt: ${receiptNumber}`);
       return;
     }
 
@@ -206,8 +209,8 @@ async function handleReceiptDeleted(receipt: LoyverseReceipt) {
         type: "MANUAL_ADJUSTMENT", // Type pour les ajustements
         points: -pointsToRemove, // Points négatifs
         amount: -amountToRemove, // Montant négatif
-        description: `Remboursement - Annulation achat (Receipt ${receiptId})`,
-        orderId: receiptId,
+        description: `Remboursement - Annulation achat (Receipt ${receiptNumber})`,
+        orderId: receiptNumber,
       },
     });
 
