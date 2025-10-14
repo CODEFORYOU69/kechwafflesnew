@@ -214,11 +214,12 @@ export default function ClassementPage() {
         <div className="mt-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl shadow-xl p-6 text-white">
           <h3 className="text-xl font-bold mb-3">🎁 Lots à gagner</h3>
           <div className="space-y-2 text-sm">
-            <p>🥇 <strong>1er</strong> : Menu complet ×10 (500 MAD)</p>
-            <p>🥈 <strong>2ème</strong> : Bon partenaire 300 MAD</p>
-            <p>🥉 <strong>3ème</strong> : Bon partenaire 200 MAD</p>
+            <p className="font-semibold mb-2">Les 10 premiers du classement général gagneront des lots offerts par nos partenaires !</p>
+            <p className="text-xs opacity-90">
+              Les lots incluent des bons d&apos;achat, réductions et cadeaux chez nos commerçants partenaires
+            </p>
             <p className="text-xs opacity-90 mt-3">
-              * Les gagnants seront annoncés à la fin de la CAN 2025
+              * Les gagnants seront annoncés à la fin de la CAN 2025 et pourront choisir leur lot parmi ceux disponibles
             </p>
           </div>
         </div>

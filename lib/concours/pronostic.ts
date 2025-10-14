@@ -72,13 +72,16 @@ export async function createOrUpdatePronostic(data: {
       };
     }
 
-    // Vérifie que l'utilisateur a scanné le QR du jour (pour Concours 2)
-    // Note: Cette vérification peut être désactivée pour Contest 1 si nécessaire
-    const hasScanned = await hasScannedTodayForPronostic(data.userId);
-    if (!hasScanned) {
+    // Vérifie que l'utilisateur est inscrit au Concours 1 (scan unique)
+    const user = await prisma.user.findUnique({
+      where: { id: data.userId },
+      select: { registeredForPronostics: true },
+    });
+
+    if (!user?.registeredForPronostics) {
       return {
         success: false,
-        message: "Vous devez scanner le QR code du jour en magasin pour faire des pronostics",
+        message: "Vous devez vous inscrire au concours en scannant le QR code en magasin",
       };
     }
 
@@ -143,35 +146,6 @@ export async function createOrUpdatePronostic(data: {
       message: "Erreur lors de l'enregistrement du pronostic",
     };
   }
-}
-
-/**
- * Vérifie si l'utilisateur a scanné le QR aujourd'hui
- * (simplifié pour ne pas dépendre de daily-qr.ts)
- */
-async function hasScannedTodayForPronostic(userId: string): Promise<boolean> {
-  const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
-
-  const todayQR = await prisma.dailyQRCode.findFirst({
-    where: {
-      validDate: today,
-      isActive: true,
-    },
-  });
-
-  if (!todayQR) return false;
-
-  const scan = await prisma.qRScan.findUnique({
-    where: {
-      userId_qrCodeId: {
-        userId,
-        qrCodeId: todayQR.id,
-      },
-    },
-  });
-
-  return !!scan;
 }
 
 /**

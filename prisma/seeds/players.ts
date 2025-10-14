@@ -198,7 +198,7 @@ export const players = [
   { teamCode: "ZIM", name: "Jordan Zemura", position: "DEFENDER", number: 20 },
   { teamCode: "ZIM", name: "Never Tigere", position: "MIDFIELDER", number: 18 },
 
-  // ========== GROUPE C - SÉNÉGAL ==========
+  // ========== GROUPE D - SÉNÉGAL ==========
   { teamCode: "SEN", name: "Édouard Mendy", position: "GOALKEEPER", number: 16 },
   { teamCode: "SEN", name: "Seny Dieng", position: "GOALKEEPER", number: 1 },
   { teamCode: "SEN", name: "Mory Diaw", position: "GOALKEEPER", number: 23 },
@@ -221,7 +221,7 @@ export const players = [
   { teamCode: "SEN", name: "Boulaye Dia", position: "FORWARD", number: 11 },
   { teamCode: "SEN", name: "Pathé Ciss", position: "MIDFIELDER", number: 8 },
 
-  // ========== GROUPE C - CAMEROUN ==========
+  // ========== GROUPE F - CAMEROUN ==========
   { teamCode: "CMR", name: "André Onana", position: "GOALKEEPER", number: 1 },
   { teamCode: "CMR", name: "Devis Epassy", position: "GOALKEEPER", number: 16 },
   { teamCode: "CMR", name: "Simon Ngapandouetnbu", position: "GOALKEEPER", number: 23 },
@@ -244,7 +244,7 @@ export const players = [
   { teamCode: "CMR", name: "Olivier Ntcham", position: "MIDFIELDER", number: 17 },
   { teamCode: "CMR", name: "Collins Fai", position: "DEFENDER", number: 19 },
 
-  // ========== GROUPE C - RD CONGO ==========
+  // ========== GROUPE D - RD CONGO ==========
   { teamCode: "COD", name: "Lionel Mpasi", position: "GOALKEEPER", number: 1 },
   { teamCode: "COD", name: "Brudel Luyeye", position: "GOALKEEPER", number: 16 },
   { teamCode: "COD", name: "Ley Matampi", position: "GOALKEEPER", number: 22 },
@@ -289,7 +289,7 @@ export const players = [
   { teamCode: "TAN", name: "Lusajo Mwaikenda", position: "MIDFIELDER", number: 19 },
   { teamCode: "TAN", name: "Said Ndemla", position: "MIDFIELDER", number: 20 },
 
-  // ========== GROUPE D - ALGÉRIE ==========
+  // ========== GROUPE E - ALGÉRIE ==========
   { teamCode: "ALG", name: "Anthony Mandrea", position: "GOALKEEPER", number: 23 },
   { teamCode: "ALG", name: "Alexis Guendouz", position: "GOALKEEPER", number: 1 },
   { teamCode: "ALG", name: "Mustapha Zeghba", position: "GOALKEEPER", number: 16 },
@@ -312,7 +312,7 @@ export const players = [
   { teamCode: "ALG", name: "Reda Belahyane", position: "MIDFIELDER", number: 5 },
   { teamCode: "ALG", name: "Farès Chaïbi", position: "MIDFIELDER", number: 11 },
 
-  // ========== GROUPE D - NIGERIA ==========
+  // ========== GROUPE C - NIGERIA ==========
   { teamCode: "NGA", name: "Stanley Nwabali", position: "GOALKEEPER", number: 23 },
   { teamCode: "NGA", name: "Francis Uzoho", position: "GOALKEEPER", number: 1 },
   { teamCode: "NGA", name: "Maduka Okoye", position: "GOALKEEPER", number: 16 },
@@ -403,28 +403,29 @@ export const players = [
   { teamCode: "CIV", name: "Ousmane Diomandé", position: "DEFENDER", number: 2 },
   { teamCode: "CIV", name: "Christian Kouamé", position: "FORWARD", number: 15 },
 
-  // ========== GROUPE E - GHANA ==========
-  { teamCode: "GHA", name: "Richard Ofori", position: "GOALKEEPER", number: 16 },
-  { teamCode: "GHA", name: "Joseph Wollacott", position: "GOALKEEPER", number: 1 },
-  { teamCode: "GHA", name: "Lawrence Ati-Zigi", position: "GOALKEEPER", number: 23 },
-  { teamCode: "GHA", name: "Alexander Djiku", position: "DEFENDER", number: 23 },
-  { teamCode: "GHA", name: "Alidu Seidu", position: "DEFENDER", number: 4 },
-  { teamCode: "GHA", name: "Gideon Mensah", position: "DEFENDER", number: 14 },
-  { teamCode: "GHA", name: "Denis Odoi", position: "DEFENDER", number: 3 },
-  { teamCode: "GHA", name: "Mohammed Salisu", position: "DEFENDER", number: 18 },
-  { teamCode: "GHA", name: "Thomas Partey", position: "MIDFIELDER", number: 5 },
-  { teamCode: "GHA", name: "Mohammed Kudus", position: "MIDFIELDER", number: 20 },
-  { teamCode: "GHA", name: "André Ayew", position: "MIDFIELDER", number: 9 },
-  { teamCode: "GHA", name: "Kamaldeen Sulemana", position: "FORWARD", number: 19 },
-  { teamCode: "GHA", name: "Jordan Ayew", position: "FORWARD", number: 11 },
-  { teamCode: "GHA", name: "Iñaki Williams", position: "FORWARD", number: 10 },
-  { teamCode: "GHA", name: "Antoine Semenyo", position: "FORWARD", number: 17 },
-  { teamCode: "GHA", name: "Ernest Nuamah", position: "FORWARD", number: 15 },
-  { teamCode: "GHA", name: "Abdul Fatawu Issahaku", position: "FORWARD", number: 7 },
-  { teamCode: "GHA", name: "Elisha Owusu", position: "MIDFIELDER", number: 6 },
-  { teamCode: "GHA", name: "Salis Abdul Samed", position: "MIDFIELDER", number: 21 },
-  { teamCode: "GHA", name: "Joseph Paintsil", position: "FORWARD", number: 8 },
-  { teamCode: "GHA", name: "Tariq Lamptey", position: "DEFENDER", number: 2 },
+  // ========== GROUPE E - GUINÉE ÉQUATORIALE ==========
+  { teamCode: "GEQ", name: "Jesús Owono", position: "GOALKEEPER", number: 1 },
+  { teamCode: "GEQ", name: "Aitor Embela", position: "GOALKEEPER", number: 23 },
+  { teamCode: "GEQ", name: "Manuel Sapalo", position: "GOALKEEPER", number: 13 },
+  { teamCode: "GEQ", name: "Esteban Obiang", position: "DEFENDER", number: 21 },
+  { teamCode: "GEQ", name: "Saúl Coco", position: "DEFENDER", number: 15 },
+  { teamCode: "GEQ", name: "Basilio Ndong", position: "DEFENDER", number: 3 },
+  { teamCode: "GEQ", name: "Carlos Akapo", position: "DEFENDER", number: 2 },
+  { teamCode: "GEQ", name: "Marvin Anieboh", position: "DEFENDER", number: 4 },
+  { teamCode: "GEQ", name: "Pablo Ganet", position: "MIDFIELDER", number: 6 },
+  { teamCode: "GEQ", name: "José Machín", position: "MIDFIELDER", number: 14 },
+  { teamCode: "GEQ", name: "Álex Balboa", position: "MIDFIELDER", number: 8 },
+  { teamCode: "GEQ", name: "Jannick Buyla", position: "MIDFIELDER", number: 18 },
+  { teamCode: "GEQ", name: "Emilio Nsue", position: "FORWARD", number: 10 },
+  { teamCode: "GEQ", name: "Iban Salvador", position: "FORWARD", number: 7 },
+  { teamCode: "GEQ", name: "Dorian Hanza", position: "FORWARD", number: 11 },
+  { teamCode: "GEQ", name: "Santiago Eneme", position: "FORWARD", number: 9 },
+  { teamCode: "GEQ", name: "José Miranda", position: "FORWARD", number: 19 },
+  { teamCode: "GEQ", name: "Luis Asue", position: "FORWARD", number: 12 },
+  { teamCode: "GEQ", name: "Féderico Bikoro", position: "MIDFIELDER", number: 5 },
+  { teamCode: "GEQ", name: "Óscar Siafá", position: "MIDFIELDER", number: 17 },
+  { teamCode: "GEQ", name: "Rubén Belima", position: "DEFENDER", number: 22 },
+  { teamCode: "GEQ", name: "Josete Miranda", position: "MIDFIELDER", number: 16 },
 
   // ========== GROUPE E - MOZAMBIQUE ==========
   { teamCode: "MOZ", name: "Ernan Siluane", position: "GOALKEEPER", number: 1 },

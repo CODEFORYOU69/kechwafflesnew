@@ -24,6 +24,10 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  // Inscription au Concours 1 (Pronostics) - Scan unique
+  registeredForPronostics Boolean   @default(false)
+  registeredAt            DateTime? // Date d'inscription au concours
+
   // Relations Better Auth
   accounts Account[]
   sessions Session[]
@@ -38,8 +42,8 @@ model User {
   rewards        Reward[]
 
   // Relations Nouveaux Concours
-  qrScans       QRScan[] // Scans QR journaliers
-  buteurTickets ButeurTicket[] // Tickets buteur
+  qrScans       QRScan[] // Scans QR journaliers (Concours 2)
+  buteurTickets ButeurTicket[] // Tickets buteur (Concours 3)
 
   @@index([email])
   @@index([role])
@@ -391,6 +395,29 @@ model Competition {
 }
 
 // ==========================================
+// QR CODE D'INSCRIPTION CONCOURS 1 (Scan unique)
+// ==========================================
+
+model ConcoursRegistrationQR {
+  id String @id @default(cuid())
+
+  // QR code unique pour l'inscription
+  qrCode    String @unique
+  qrCodeUrl String // Data URL de l'image QR
+
+  // Actif ou non
+  isActive Boolean @default(true)
+
+  // Stats
+  scanCount Int @default(0) // Nombre d'inscriptions
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([qrCode])
+}
+
+// ==========================================
 // SYSTÈME QR CODE JOURNALIER (Concours 2)
 // ==========================================
 
@@ -503,4 +530,56 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+// ==========================================
+// SYSTÈME DE PARTENAIRES COMMERCIAUX
+// ==========================================
+
+model Partner {
+  id String @id @default(cuid())
+
+  // Informations de base
+  name        String // Nom du commerce
+  description String @db.Text // Description du partenaire
+  logo        String? // URL du logo
+
+  // Coordonnées
+  address String? // Adresse complète
+  phone   String? // Numéro de téléphone
+  email   String? // Email de contact
+  website String? // Site web
+
+  // Niveau de partenariat
+  tier PartnerTier @default(BRONZE)
+
+  // Cadeau proposé pour le concours
+  prizeTitle       String // Titre du cadeau (ex: "Bon d'achat 50 MAD")
+  prizeDescription String? @db.Text // Description détaillée du cadeau
+  prizeValue       Float? // Valeur en MAD
+  prizeImage       String? // Image du cadeau
+
+  // Nombre de lots disponibles
+  prizeQuantity Int @default(1) // Nombre de cadeaux à distribuer
+
+  // Visibilité
+  isActive  Boolean @default(true)
+  isVisible Boolean @default(true) // Affiché sur la page concours
+
+  // Ordre d'affichage
+  displayOrder Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tier])
+  @@index([isActive])
+  @@index([displayOrder])
+}
+
+enum PartnerTier {
+  PREMIUM // Partenaire premium (affichage prioritaire)
+  GOLD // Partenaire gold
+  SILVER // Partenaire silver
+  BRONZE // Partenaire bronze
 }
