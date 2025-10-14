@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
 /**
  * Middleware Next.js pour protéger les routes admin
- * Vérifie l'authentification et le rôle admin avant d'autoriser l'accès
+ * Vérifie l'authentification avant d'autoriser l'accès
+ * Note: La validation complète du rôle admin se fait dans les pages/API
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -11,10 +13,10 @@ export async function middleware(request: NextRequest) {
   // Routes admin à protéger
   if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
     try {
-      // Récupérer le cookie de session Better Auth
-      const sessionToken = request.cookies.get("better-auth.session_token")?.value;
+      // Vérifier l'existence d'un cookie de session Better Auth
+      const sessionCookie = getSessionCookie(request);
 
-      if (!sessionToken) {
+      if (!sessionCookie) {
         // Pas de session - rediriger vers la page de connexion
         if (pathname.startsWith("/api/admin")) {
           return NextResponse.json(
@@ -27,14 +29,8 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(loginUrl);
       }
 
-      // Note: Pour une vérification complète du rôle admin, il faudrait faire une requête DB
-      // Mais pour éviter de ralentir chaque requête, on peut:
-      // 1. Vérifier uniquement la présence d'une session ici
-      // 2. Faire la vérification du rôle admin dans chaque API route (comme on fait déjà)
-      // 3. Ou utiliser un JWT décodable côté middleware
-
-      // Pour l'instant, on laisse passer si la session existe
-      // La vérification du rôle admin se fait dans chaque API route
+      // Le cookie existe - laisser passer
+      // La validation complète du rôle admin se fait dans chaque page/API route
       return NextResponse.next();
     } catch (error) {
       console.error("Middleware error:", error);

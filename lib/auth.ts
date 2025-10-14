@@ -1,9 +1,11 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
 import { prisma } from "./prisma";
 import { ADMIN_EMAILS } from "./admin";
 
 export const auth = betterAuth({
+  plugins: [nextCookies()],
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
