@@ -197,20 +197,11 @@ export default function LoyaltyCardPage() {
           </div>
 
           <div className="relative z-10">
-            {/* Header with Logo */}
+            {/* Header */}
             <div className="flex items-start justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <Image
-                  src="/images/menu-items/TransparentBlack.jpg"
-                  alt="Kech Waffles"
-                  width={60}
-                  height={60}
-                  className="rounded-lg bg-white/90 p-1"
-                />
-                <div>
-                  <p className="text-sm opacity-90 mb-1">KECH WAFFLES</p>
-                  <p className="text-2xl font-bold">{session?.user?.name}</p>
-                </div>
+              <div>
+                <p className="text-sm opacity-90 mb-1">KECH WAFFLES</p>
+                <p className="text-2xl font-bold">{session?.user?.name}</p>
               </div>
               <div className="text-right">
                 <p className="text-4xl mb-1">{tierInfo.icon}</p>
@@ -226,15 +217,29 @@ export default function LoyaltyCardPage() {
               </p>
             </div>
 
-            {/* QR Code */}
-            <div className="bg-white rounded-xl p-4 inline-block">
-              <Image
-                src={card.qrCode}
-                alt="QR Code"
-                width={128}
-                height={128}
-                className="w-32 h-32"
-              />
+            {/* Logo et QR Code côte à côte */}
+            <div className="flex items-center justify-center gap-6 mb-8">
+              {/* Logo agrandi */}
+              <div className="bg-white rounded-2xl p-4 shadow-lg">
+                <Image
+                  src="/images/menu-items/TransparentBlack.jpg"
+                  alt="Kech Waffles"
+                  width={160}
+                  height={160}
+                  className="w-40 h-40 object-contain"
+                />
+              </div>
+
+              {/* QR Code */}
+              <div className="bg-white rounded-2xl p-4 shadow-lg">
+                <Image
+                  src={card.qrCode}
+                  alt="QR Code"
+                  width={160}
+                  height={160}
+                  className="w-40 h-40"
+                />
+              </div>
             </div>
 
             {/* Footer */}
