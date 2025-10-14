@@ -30,7 +30,10 @@ export async function POST() {
     }
 
     // URL du webhook (votre endpoint)
-    const webhookUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/loyverse/webhook`;
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.BETTER_AUTH_URL || "https://www.kechwaffles.com";
+    const webhookUrl = `${baseUrl}/api/loyverse/webhook`;
+
+    console.log("📡 Configuration webhook avec URL:", webhookUrl);
 
     // Enregistrer le webhook pour l'événement "receipt.created"
     const response = await fetch("https://api.loyverse.com/v1.0/webhooks", {
@@ -51,7 +54,9 @@ export async function POST() {
       return NextResponse.json(
         {
           success: false,
-          message: `Erreur Loyverse API (${response.status}): ${errorText}`
+          error: `Erreur Loyverse API (${response.status}): ${errorText}`,
+          webhookUrl,
+          hint: "Vérifiez que l'URL du webhook est accessible publiquement et que Loyverse peut l'atteindre."
         },
         { status: response.status }
       );

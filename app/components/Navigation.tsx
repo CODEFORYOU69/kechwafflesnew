@@ -9,10 +9,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { Menu } from "lucide-react";
+import { Menu, LogOut, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useSession, signOut } from "@/lib/auth-client";
 
 const MenuLink = ({ text, href }: { text: string; href: string }) => {
   return (
@@ -37,6 +38,7 @@ const MenuLink = ({ text, href }: { text: string; href: string }) => {
 export function Navigation() {
   const [hidden, setHidden] = useState(false);
   const { scrollY } = useScroll();
+  const { data: session } = useSession();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
@@ -46,6 +48,11 @@ export function Navigation() {
       setHidden(false);
     }
   });
+
+  const handleSignOut = async () => {
+    await signOut();
+    window.location.href = "/";
+  };
 
   return (
     <motion.div
@@ -126,6 +133,30 @@ export function Navigation() {
           </NavigationMenu>
         </div>
 
+        {/* User Menu Desktop */}
+        <div className="hidden md:flex ml-auto items-center gap-2">
+          {session ? (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/loyalty/card">
+                  <User className="h-4 w-4 mr-2" />
+                  {session.user?.name?.split(" ")[0] || "Mon compte"}
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Déconnexion
+              </Button>
+            </>
+          ) : (
+            <Button variant="default" size="sm" asChild>
+              <Link href="/concours/auth">
+                Connexion
+              </Link>
+            </Button>
+          )}
+        </div>
+
         {/* Mobile Navigation */}
         <div className="flex md:hidden ml-auto">
           <Sheet>
@@ -143,6 +174,35 @@ export function Navigation() {
                 <MenuLink text="NOUS TROUVER" href="/location" />
                 <MenuLink text="CONCOURS CAN" href="/concours" />
                 <MenuLink text="FIDÉLITÉ" href="/loyalty/card" />
+
+                {/* User section mobile */}
+                <div className="pt-8 border-t border-amber-500/20">
+                  {session ? (
+                    <>
+                      <p className="text-amber-500 text-sm mb-4">
+                        Connecté en tant que <strong>{session.user?.name}</strong>
+                      </p>
+                      <Button
+                        variant="outline"
+                        className="w-full text-amber-500 border-amber-500"
+                        onClick={handleSignOut}
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Déconnexion
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="default"
+                      className="w-full bg-amber-500 hover:bg-amber-600"
+                      asChild
+                    >
+                      <Link href="/concours/auth">
+                        Connexion
+                      </Link>
+                    </Button>
+                  )}
+                </div>
               </div>
             </SheetContent>
           </Sheet>
