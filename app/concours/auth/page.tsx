@@ -99,9 +99,9 @@ function AuthPageContent() {
 
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Connexion</TabsTrigger>
-              <TabsTrigger value="signup">Inscription</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-white/10">
+              <TabsTrigger value="signin" className="data-[state=active]:bg-white data-[state=active]:text-gray-900">Connexion</TabsTrigger>
+              <TabsTrigger value="signup" className="data-[state=active]:bg-white data-[state=active]:text-gray-900">Inscription</TabsTrigger>
             </TabsList>
 
             {/* Sign In */}
@@ -114,7 +114,7 @@ function AuthPageContent() {
 
               <form onSubmit={(e) => handleEmailAuth(e, "signin")} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
+                  <Label htmlFor="signin-email" className="text-white">Email</Label>
                   <Input
                     id="signin-email"
                     type="email"
@@ -122,11 +122,12 @@ function AuthPageContent() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="votre@email.com"
                     required
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password">Mot de passe</Label>
+                  <Label htmlFor="signin-password" className="text-white">Mot de passe</Label>
                   <Input
                     id="signin-password"
                     type="password"
@@ -135,6 +136,7 @@ function AuthPageContent() {
                     placeholder="••••••••"
                     required
                     minLength={8}
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
                   />
                 </div>
 
@@ -145,10 +147,10 @@ function AuthPageContent() {
 
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                  <span className="w-full border-t border-white/20" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className="bg-black/80 px-2 text-white/50">
                     Ou continuer avec
                   </span>
                 </div>
@@ -156,7 +158,7 @@ function AuthPageContent() {
 
               <Button
                 variant="outline"
-                className="w-full"
+                className="w-full bg-white hover:bg-white/90 text-gray-900 border-white/20"
                 onClick={handleGoogleAuth}
                 disabled={loading}
               >
@@ -192,7 +194,7 @@ function AuthPageContent() {
 
               <form onSubmit={(e) => handleEmailAuth(e, "signup")} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name">Nom complet</Label>
+                  <Label htmlFor="signup-name" className="text-white">Nom complet</Label>
                   <Input
                     id="signup-name"
                     type="text"
@@ -200,11 +202,12 @@ function AuthPageContent() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Votre nom"
                     required
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email" className="text-white">Email</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -212,11 +215,12 @@ function AuthPageContent() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="votre@email.com"
                     required
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Mot de passe</Label>
+                  <Label htmlFor="signup-password" className="text-white">Mot de passe</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -225,8 +229,9 @@ function AuthPageContent() {
                     placeholder="••••••••"
                     required
                     minLength={8}
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-white/50">
                     Minimum 8 caractères
                   </p>
                 </div>
@@ -238,10 +243,10 @@ function AuthPageContent() {
 
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                  <span className="w-full border-t border-white/20" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className="bg-black/80 px-2 text-white/50">
                     Ou continuer avec
                   </span>
                 </div>
@@ -249,7 +254,7 @@ function AuthPageContent() {
 
               <Button
                 variant="outline"
-                className="w-full"
+                className="w-full bg-white hover:bg-white/90 text-gray-900 border-white/20"
                 onClick={handleGoogleAuth}
                 disabled={loading}
               >
