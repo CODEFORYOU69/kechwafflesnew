@@ -165,6 +165,42 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
           </Link>
+
+          <Link href="/admin/qr-code">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-orange-200 hover:border-orange-400">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-orange-100 rounded-lg">
+                    <svg className="w-6 h-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">QR Codes</h3>
+                    <p className="text-sm text-gray-600">Générer et gérer les QR</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/admin/verify-ticket">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-teal-200 hover:border-teal-400">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-teal-100 rounded-lg">
+                    <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Vérifier Tickets</h3>
+                    <p className="text-sm text-gray-600">Valider les gagnants</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Statistiques */}
@@ -328,6 +364,32 @@ export default function AdminDashboard() {
                   <div className="text-left">
                     <div className="font-semibold mb-1">Gérer récompenses</div>
                     <div className="text-xs text-gray-500">Valider les gains</div>
+                  </div>
+                </Link>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-4"
+                asChild
+              >
+                <Link href="/admin/qr-code">
+                  <div className="text-left">
+                    <div className="font-semibold mb-1">Générer QR Codes</div>
+                    <div className="text-xs text-gray-500">Inscription et QR quotidiens</div>
+                  </div>
+                </Link>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-4"
+                asChild
+              >
+                <Link href="/admin/verify-ticket">
+                  <div className="text-left">
+                    <div className="font-semibold mb-1">Vérifier un ticket</div>
+                    <div className="text-xs text-gray-500">Valider les tickets gagnants</div>
                   </div>
                 </Link>
               </Button>
