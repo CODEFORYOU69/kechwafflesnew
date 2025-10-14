@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       distinct: ["playerId"],
     });
 
-    const playerIds = existingTickets.map((t) => t.playerId);
+    const playerIds = existingTickets.map((t: { playerId: string }) => t.playerId);
 
     return NextResponse.json({ playerIds });
   } catch (error) {
