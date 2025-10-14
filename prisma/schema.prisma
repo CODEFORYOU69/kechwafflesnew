@@ -29,8 +29,8 @@ model User {
   sessions Session[]
 
   // Relations Fidélité
-  memberCard       MemberCard?
-  loyaltyPoints    LoyaltyTransaction[]
+  memberCard    MemberCard?
+  loyaltyPoints LoyaltyTransaction[]
 
   // Relations Concours
   pronostics     Pronostic[]
@@ -38,49 +38,54 @@ model User {
   rewards        Reward[]
 
   // Relations Nouveaux Concours
-  qrScans        QRScan[]        // Scans QR journaliers
-  buteurTickets  ButeurTicket[]  // Tickets buteur
+  qrScans       QRScan[] // Scans QR journaliers
+  buteurTickets ButeurTicket[] // Tickets buteur
 
   @@index([email])
   @@index([role])
+  @@map("user")
 }
 
 enum UserRole {
-  USER  // Client normal
+  USER // Client normal
   ADMIN // Administrateur
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String?
-  password          String?
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
   @@index([userId])
+  @@map("account")
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+  @@map("session")
 }
 
 // ==========================================
@@ -89,13 +94,13 @@ model VerificationToken {
 
 model LoyverseConfig {
   id           String   @id @default("singleton") // Une seule config
-  accessToken  String   // Token OAuth obtenu
-  refreshToken String?  // Pour renouveler le token
+  accessToken  String // Token OAuth obtenu
+  refreshToken String? // Pour renouveler le token
   expiresAt    DateTime // Expiration du token
-  storeId      String?  // ID du magasin Loyverse
+  storeId      String? // ID du magasin Loyverse
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // ==========================================
@@ -338,8 +343,8 @@ model Reward {
 
   type        RewardType
   description String
-  code        String  @unique // Code à 8 caractères (ex: KW-A3B5C)
-  isRedeemed  Boolean @default(false)
+  code        String     @unique // Code à 8 caractères (ex: KW-A3B5C)
+  isRedeemed  Boolean    @default(false)
   redeemedAt  DateTime?
   redeemedBy  String? // Nom du staff
 
@@ -363,11 +368,11 @@ enum RewardType {
 }
 
 model Competition {
-  id        String  @id @default(cuid())
-  name      String  @default("CAN 2025")
+  id        String   @id @default(cuid())
+  name      String   @default("CAN 2025")
   startDate DateTime
   endDate   DateTime
-  isActive  Boolean @default(true)
+  isActive  Boolean  @default(true)
 
   // Verrouillage des pronostics finaux
   lockFinalPronostics     Boolean  @default(false)
@@ -393,11 +398,11 @@ model Competition {
 // ==========================================
 
 model DailyQRCode {
-  id        String   @id @default(cuid())
+  id String @id @default(cuid())
 
   // QR code unique du jour
-  qrCode    String   @unique
-  qrCodeUrl String   // Data URL de l'image QR
+  qrCode    String @unique
+  qrCodeUrl String // Data URL de l'image QR
 
   // Validité
   validDate DateTime @db.Date // Date de validité (uniquement ce jour)
@@ -414,19 +419,20 @@ model DailyQRCode {
 }
 
 model QRScan {
-  id          String   @id @default(cuid())
-  userId      String
-  qrCodeId    String
+  id       String @id @default(cuid())
+  userId   String
+  qrCodeId String
 
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   dailyQRCode DailyQRCode @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
 
-  scannedAt   DateTime @default(now())
+  scannedAt DateTime @default(now())
 
   // Permet de participer au concours 2
-  hasAccess   Boolean  @default(true)
+  hasAccess Boolean @default(true)
 
-  @@unique([userId, qrCodeId]) // Un scan par jour par utilisateur
+  // Un scan par jour par utilisateur
+  @@unique([userId, qrCodeId])
   @@index([userId])
   @@index([scannedAt])
 }
@@ -436,7 +442,7 @@ model QRScan {
 // ==========================================
 
 model Player {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   name     String
   nameFr   String
   number   Int? // Numéro de maillot
@@ -446,44 +452,44 @@ model Player {
   team Team @relation(fields: [teamId], references: [id])
 
   // Stats
-  goals    Int    @default(0) // Buts marqués dans la compétition
+  goals Int @default(0) // Buts marqués dans la compétition
 
-  tickets  ButeurTicket[]
+  tickets ButeurTicket[]
 
   @@index([teamId])
 }
 
 model ButeurTicket {
-  id        String   @id @default(cuid())
+  id String @id @default(cuid())
 
   // Code unique du ticket (ex: BUT-ABC123)
-  ticketCode String  @unique
+  ticketCode String @unique
 
   // Utilisateur qui a reçu le ticket (optionnel si anonyme)
-  userId     String?
-  user       User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   // Match concerné
-  matchId    String
-  match      Match   @relation(fields: [matchId], references: [id])
+  matchId String
+  match   Match  @relation(fields: [matchId], references: [id])
 
   // Buteur attribué (aléatoire)
-  playerId   String
-  player     Player  @relation(fields: [playerId], references: [id])
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id])
 
   // Résultat
-  hasWon     Boolean  @default(false)
-  isChecked  Boolean  @default(false)
+  hasWon    Boolean @default(false)
+  isChecked Boolean @default(false)
 
   // Lot gagné (si hasWon = true)
   prizeType  String? // "SMOOTHIE", "GAUFRE", "BON_PARTENAIRE"
   prizeValue Float? // Valeur du lot
 
   // Réclamation
-  isRedeemed Boolean  @default(false)
+  isRedeemed Boolean   @default(false)
   redeemedAt DateTime?
 
-  createdAt  DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([ticketCode])
   @@index([userId])
@@ -491,3 +497,13 @@ model ButeurTicket {
   @@index([hasWon])
 }
 
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
+}
