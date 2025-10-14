@@ -35,7 +35,7 @@ export async function POST() {
 
     console.log("📡 Configuration webhook avec URL:", webhookUrl);
 
-    // Enregistrer le webhook pour l'événement "receipts.create"
+    // Enregistrer le webhook pour l'événement "receipt.created"
     const response = await fetch("https://api.loyverse.com/v1.0/webhooks", {
       method: "POST",
       headers: {
@@ -44,7 +44,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         url: webhookUrl,
-        type: "receipts.create",
+        type: "receipt.created",
         status: "ENABLED",
       }),
     });
@@ -66,7 +66,7 @@ export async function POST() {
     const webhookData = await response.json();
     console.log("✅ Webhook enregistré:", webhookData);
 
-    // Enregistrer aussi pour "receipts.update"
+    // Enregistrer aussi pour "receipt.updated"
     const response2 = await fetch("https://api.loyverse.com/v1.0/webhooks", {
       method: "POST",
       headers: {
@@ -75,7 +75,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         url: webhookUrl,
-        type: "receipts.update",
+        type: "receipt.updated",
         status: "ENABLED",
       }),
     });
@@ -83,10 +83,10 @@ export async function POST() {
     let webhook2Data = null;
     if (response2.ok) {
       webhook2Data = await response2.json();
-      console.log("✅ Webhook receipts.update enregistré:", webhook2Data);
+      console.log("✅ Webhook receipt.updated enregistré:", webhook2Data);
     }
 
-    // Enregistrer aussi pour "receipts.delete" (remboursements)
+    // Enregistrer aussi pour "receipt.deleted" (remboursements)
     const response3 = await fetch("https://api.loyverse.com/v1.0/webhooks", {
       method: "POST",
       headers: {
@@ -95,7 +95,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         url: webhookUrl,
-        type: "receipts.delete",
+        type: "receipt.deleted",
         status: "ENABLED",
       }),
     });
@@ -103,7 +103,7 @@ export async function POST() {
     let webhook3Data = null;
     if (response3.ok) {
       webhook3Data = await response3.json();
-      console.log("✅ Webhook receipts.delete enregistré:", webhook3Data);
+      console.log("✅ Webhook receipt.deleted enregistré:", webhook3Data);
     }
 
     return NextResponse.json({
