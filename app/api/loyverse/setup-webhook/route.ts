@@ -46,7 +46,7 @@ export async function POST() {
         type: "WEB_HOOK",
         event_type: "RECEIPT_CREATED",
         url: webhookUrl,
-        status: "ACTIVE",
+        status: "active",
       }),
     });
 
@@ -78,7 +78,7 @@ export async function POST() {
         type: "WEB_HOOK",
         event_type: "RECEIPT_UPDATED",
         url: webhookUrl,
-        status: "ACTIVE",
+        status: "active",
       }),
     });
 
@@ -99,7 +99,7 @@ export async function POST() {
         type: "WEB_HOOK",
         event_type: "RECEIPT_DELETED",
         url: webhookUrl,
-        status: "ACTIVE",
+        status: "active",
       }),
     });
 
