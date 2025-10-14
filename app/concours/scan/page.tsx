@@ -6,6 +6,7 @@ import { useSession } from "@/lib/auth-client";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { storeEncryptedQRCode, retrieveEncryptedQRCode } from "@/lib/crypto/qr-crypto";
 
 function ScanQRPageContent() {
   const searchParams = useSearchParams();
@@ -17,22 +18,38 @@ function ScanQRPageContent() {
   const [isFirstScan, setIsFirstScan] = useState(false);
 
   useEffect(() => {
-    const qrCode = searchParams.get("code");
+    async function processQRCode() {
+      // Récupérer le code depuis l'URL ou sessionStorage crypté
+      let qrCode = searchParams.get("code");
 
-    if (!qrCode) {
-      setStatus("error");
-      setMessage("QR code invalide");
-      return;
+      if (!qrCode) {
+        // Vérifier si le code est stocké en session (crypté)
+        try {
+          qrCode = await retrieveEncryptedQRCode("qr_daily_code");
+        } catch (error) {
+          console.error("Erreur décryptage code QR:", error);
+        }
+      }
+
+      if (!qrCode) {
+        setStatus("error");
+        setMessage("QR code invalide");
+        return;
+      }
+
+      if (!isPending && !session) {
+        // Stocker le code crypté puis rediriger
+        await storeEncryptedQRCode(qrCode, "qr_daily_code");
+        router.push(`/concours/auth?redirect=${encodeURIComponent("/concours/scan")}`);
+        return;
+      }
+
+      if (session?.user) {
+        handleScan(qrCode, session.user.id);
+      }
     }
 
-    if (!isPending && !session) {
-      router.push(`/concours/auth?redirect=/concours/scan?code=${qrCode}`);
-      return;
-    }
-
-    if (session?.user) {
-      handleScan(qrCode, session.user.id);
-    }
+    processQRCode();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, session, isPending, router]);
 

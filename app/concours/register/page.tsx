@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, CheckCircle, XCircle, Trophy } from "lucide-react";
+import { storeEncryptedQRCode, retrieveEncryptedQRCode } from "@/lib/crypto/qr-crypto";
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, isPending } = useSession();
@@ -16,19 +17,18 @@ export default function RegisterPage() {
   const [status, setStatus] = useState<"loading" | "success" | "error" | "already_registered">("loading");
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    if (!isPending && !session) {
-      router.push("/concours/auth?redirect=/concours/register");
-      return;
-    }
+  const checkRegistrationAndProcess = useCallback(async () => {
+    // Récupérer le code depuis l'URL ou sessionStorage crypté
+    let code = searchParams.get("code");
 
-    if (session?.user) {
-      checkRegistrationAndProcess();
+    if (!code) {
+      // Vérifier si le code est stocké en session (crypté)
+      try {
+        code = await retrieveEncryptedQRCode("qr_registration_code");
+      } catch (error) {
+        console.error("Erreur décryptage code QR:", error);
+      }
     }
-  }, [session, isPending]);
-
-  async function checkRegistrationAndProcess() {
-    const code = searchParams.get("code");
 
     if (!code) {
       setStatus("error");
@@ -76,7 +76,27 @@ export default function RegisterPage() {
       setStatus("error");
       setMessage("Erreur de connexion. Veuillez réessayer.");
     }
-  }
+  }, [searchParams, router]);
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      // Stocker le code QR crypté en sessionStorage
+      const code = searchParams.get("code");
+      if (code) {
+        // Stocker de manière cryptée puis rediriger
+        storeEncryptedQRCode(code, "qr_registration_code").then(() => {
+          router.push(`/concours/auth?redirect=${encodeURIComponent("/concours/register")}`);
+        });
+      } else {
+        router.push(`/concours/auth?redirect=${encodeURIComponent("/concours/register")}`);
+      }
+      return;
+    }
+
+    if (session?.user) {
+      checkRegistrationAndProcess();
+    }
+  }, [session, isPending, router, checkRegistrationAndProcess, searchParams]);
 
   if (isPending) {
     return (
@@ -176,5 +196,17 @@ export default function RegisterPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50">
+        <Loader2 className="h-16 w-16 animate-spin text-orange-500" />
+      </div>
+    }>
+      <RegisterPageContent />
+    </Suspense>
   );
 }

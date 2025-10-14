@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Plus, Pencil, Trash2, Building2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 type PartnerTier = "PREMIUM" | "GOLD" | "SILVER" | "BRONZE";
 
@@ -389,10 +390,10 @@ export default function AdminPartnersPage() {
 
                 {/* Options */}
                 <div className="border-t pt-6">
-                  <h3 className="font-semibold mb-4">Options d'affichage</h3>
+                  <h3 className="font-semibold mb-4">Options d&apos;affichage</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <Label htmlFor="displayOrder">Ordre d'affichage</Label>
+                      <Label htmlFor="displayOrder">Ordre d&apos;affichage</Label>
                       <Input
                         id="displayOrder"
                         type="number"
@@ -462,10 +463,13 @@ export default function AdminPartnersPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-4 flex-1">
                         {partner.logo && (
-                          <img
+                          <Image
                             src={partner.logo}
                             alt={partner.name}
+                            width={64}
+                            height={64}
                             className="w-16 h-16 object-cover rounded-lg"
+                            unoptimized
                           />
                         )}
                         <div className="flex-1">

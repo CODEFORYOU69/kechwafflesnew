@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 type TicketInfo = {
   valid: boolean;
@@ -102,12 +104,19 @@ export default function VerifyTicketPage() {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-3xl">✅ Vérification Tickets</CardTitle>
-            <CardDescription>Vérifier et valider les tickets gagnants</CardDescription>
-          </CardHeader>
-        </Card>
+        <div className="mb-8 flex items-center gap-4">
+          <Link href="/admin">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 via-amber-500 to-red-600 bg-clip-text text-transparent">
+              ✅ Vérification Tickets
+            </h1>
+            <p className="text-gray-600">Vérifier et valider les tickets gagnants</p>
+          </div>
+        </div>
 
         {/* Scanner Input */}
         <Card className="mb-6">

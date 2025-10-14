@@ -1,0 +1,493 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ==========================================
+// AUTHENTIFICATION (Better Auth)
+// ==========================================
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  role          UserRole @default(USER) // Rôle de l'utilisateur
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations Better Auth
+  accounts Account[]
+  sessions Session[]
+
+  // Relations Fidélité
+  memberCard       MemberCard?
+  loyaltyPoints    LoyaltyTransaction[]
+
+  // Relations Concours
+  pronostics     Pronostic[]
+  finalPronostic FinalPronostic?
+  rewards        Reward[]
+
+  // Relations Nouveaux Concours
+  qrScans        QRScan[]        // Scans QR journaliers
+  buteurTickets  ButeurTicket[]  // Tickets buteur
+
+  @@index([email])
+  @@index([role])
+}
+
+enum UserRole {
+  USER  // Client normal
+  ADMIN // Administrateur
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String?
+  password          String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ==========================================
+// INTÉGRATION LOYVERSE
+// ==========================================
+
+model LoyverseConfig {
+  id           String   @id @default("singleton") // Une seule config
+  accessToken  String   // Token OAuth obtenu
+  refreshToken String?  // Pour renouveler le token
+  expiresAt    DateTime // Expiration du token
+  storeId      String?  // ID du magasin Loyverse
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ==========================================
+// SYSTÈME DE FIDÉLITÉ
+// ==========================================
+
+model MemberCard {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Numéro de carte unique (format: KW-XXXXXX)
+  cardNumber String @unique
+
+  // QR Code pour scanner en magasin
+  qrCode String @unique
+
+  // Points de fidélité
+  totalPoints   Int @default(0)
+  currentPoints Int @default(0) // Points disponibles
+
+  // Statistiques
+  totalSpent Float @default(0) // Montant total dépensé (MAD)
+  visitCount Int   @default(0) // Nombre de visites
+
+  // Loyverse
+  loyverseCustomerId String?   @unique // ID client dans Loyverse
+  lastSyncAt         DateTime? // Dernière synchronisation
+
+  // Niveau de fidélité
+  tier MemberTier @default(BRONZE)
+
+  // Dates
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cardNumber])
+  @@index([qrCode])
+  @@index([loyverseCustomerId])
+}
+
+enum MemberTier {
+  BRONZE // 0-499 MAD
+  SILVER // 500-999 MAD
+  GOLD // 1000+ MAD
+  PLATINUM // 2000+ MAD
+}
+
+model LoyaltyTransaction {
+  id     String @id @default(cuid())
+  userId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Type de transaction
+  type LoyaltyTransactionType
+
+  // Points
+  points Int // Positif = gain, Négatif = dépense
+
+  // Montant associé (si achat)
+  amount Float? // Montant en MAD
+
+  // Description
+  description String
+
+  // Références externes
+  orderId  String? // ID commande Loyverse
+  rewardId String? // Si échange contre récompense
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([type])
+}
+
+enum LoyaltyTransactionType {
+  PURCHASE // Achat en magasin
+  REWARD_REDEEMED // Échange de points contre récompense
+  BONUS // Bonus (anniversaire, parrainage, etc.)
+  CONTEST_WIN // Gain via concours CAN
+  MANUAL_ADJUSTMENT // Ajustement manuel
+}
+
+model LoyaltyReward {
+  id String @id @default(cuid())
+
+  // Info récompense
+  name        String
+  description String
+
+  // Coût en points
+  pointsCost Int
+
+  // Stock
+  isActive     Boolean @default(true)
+  stockLimit   Int? // Limite de stock (null = illimité)
+  currentStock Int?
+
+  // Image
+  image String?
+
+  // Validité
+  expiresInDays Int? // Expiration du coupon après échange
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// CONCOURS CAN 2025
+// ==========================================
+
+model Team {
+  id     String  @id @default(cuid())
+  name   String
+  nameFr String // Nom en français
+  nameAr String? // Nom en arabe
+  code   String  @unique // Ex: "MAR", "SEN", "EGY"
+  flag   String // URL du drapeau
+  group  String? // "A", "B", "C", etc.
+
+  homeMatches Match[] @relation("HomeTeam")
+  awayMatches Match[] @relation("AwayTeam")
+
+  winnerPredictions      FinalPronostic[] @relation("WinnerPrediction")
+  firstPlacePredictions  FinalPronostic[] @relation("FirstPlace")
+  secondPlacePredictions FinalPronostic[] @relation("SecondPlace")
+  thirdPlacePredictions  FinalPronostic[] @relation("ThirdPlace")
+
+  // Joueurs de l'équipe (Concours 3)
+  players Player[]
+}
+
+model Match {
+  id          String     @id @default(cuid())
+  matchNumber Int        @unique
+  phase       MatchPhase
+  homeTeamId  String
+  awayTeamId  String
+  scheduledAt DateTime
+  venue       String? // Stade
+  city        String? // Ville
+
+  homeTeam Team @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam Team @relation("AwayTeam", fields: [awayTeamId], references: [id])
+
+  // Résultat réel
+  homeScore  Int?
+  awayScore  Int?
+  isFinished Boolean   @default(false)
+  finishedAt DateTime?
+
+  // Verrouillage automatique 1h avant le match
+  lockPronostics Boolean @default(false)
+
+  pronostics Pronostic[]
+
+  // Tickets buteur pour ce match (Concours 3)
+  buteurTickets ButeurTicket[]
+
+  @@index([scheduledAt])
+  @@index([phase])
+  @@index([isFinished])
+}
+
+enum MatchPhase {
+  GROUP_STAGE
+  ROUND_OF_16
+  QUARTER_FINAL
+  SEMI_FINAL
+  THIRD_PLACE
+  FINAL
+}
+
+model Pronostic {
+  id      String @id @default(cuid())
+  userId  String
+  matchId String
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  // Pronostic
+  homeScore Int
+  awayScore Int
+
+  // Résultats (calculés après le match)
+  points          Int     @default(0)
+  isExactScore    Boolean @default(false)
+  isCorrectWinner Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, matchId])
+  @@index([userId])
+  @@index([matchId])
+  @@index([points])
+}
+
+model FinalPronostic {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Vainqueur final
+  winnerTeamId String
+  winnerTeam   Team   @relation("WinnerPrediction", fields: [winnerTeamId], references: [id])
+
+  // Score de la finale (optionnel pour grand prix)
+  finalHomeScore Int?
+  finalAwayScore Int?
+
+  // Podium (top 3)
+  firstPlaceId  String
+  secondPlaceId String
+  thirdPlaceId  String
+
+  firstPlace  Team @relation("FirstPlace", fields: [firstPlaceId], references: [id])
+  secondPlace Team @relation("SecondPlace", fields: [secondPlaceId], references: [id])
+  thirdPlace  Team @relation("ThirdPlace", fields: [thirdPlaceId], references: [id])
+
+  // Points bonus
+  bonusPoints Int     @default(0)
+  isLocked    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Reward {
+  id     String @id @default(cuid())
+  userId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type        RewardType
+  description String
+  code        String  @unique // Code à 8 caractères (ex: KW-A3B5C)
+  isRedeemed  Boolean @default(false)
+  redeemedAt  DateTime?
+  redeemedBy  String? // Nom du staff
+
+  // Lié au match ou final
+  matchId String?
+  reason  String
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime // Expiration 30 jours après création
+
+  @@index([userId])
+  @@index([code])
+  @@index([isRedeemed])
+  @@index([expiresAt])
+}
+
+enum RewardType {
+  CAFE_GRATUIT
+  GAUFRE_GRATUITE
+  TIRAGE_GRAND_PRIX // Éligibilité au tirage
+}
+
+model Competition {
+  id        String  @id @default(cuid())
+  name      String  @default("CAN 2025")
+  startDate DateTime
+  endDate   DateTime
+  isActive  Boolean @default(true)
+
+  // Verrouillage des pronostics finaux
+  lockFinalPronostics     Boolean  @default(false)
+  finalPronosticsDeadline DateTime // Date limite
+
+  // Résultats réels
+  actualWinnerId String?
+  actualSecondId String?
+  actualThirdId  String?
+  finalHomeScore Int?
+  finalAwayScore Int?
+
+  // Grand prix
+  grandPrixWinnerId String?
+  grandPrixDrawnAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// SYSTÈME QR CODE JOURNALIER (Concours 2)
+// ==========================================
+
+model DailyQRCode {
+  id        String   @id @default(cuid())
+
+  // QR code unique du jour
+  qrCode    String   @unique
+  qrCodeUrl String   // Data URL de l'image QR
+
+  // Validité
+  validDate DateTime @db.Date // Date de validité (uniquement ce jour)
+  isActive  Boolean  @default(true)
+
+  // Stats
+  scanCount Int      @default(0) // Nombre de scans
+  scans     QRScan[]
+
+  createdAt DateTime @default(now())
+
+  @@index([validDate])
+  @@index([qrCode])
+}
+
+model QRScan {
+  id          String   @id @default(cuid())
+  userId      String
+  qrCodeId    String
+
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyQRCode DailyQRCode @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+
+  scannedAt   DateTime @default(now())
+
+  // Permet de participer au concours 2
+  hasAccess   Boolean  @default(true)
+
+  @@unique([userId, qrCodeId]) // Un scan par jour par utilisateur
+  @@index([userId])
+  @@index([scannedAt])
+}
+
+// ==========================================
+// CONCOURS 3 : JEU DU BUTEUR
+// ==========================================
+
+model Player {
+  id       String @id @default(cuid())
+  name     String
+  nameFr   String
+  number   Int? // Numéro de maillot
+  position String? // "ATT", "MIL", "DEF", "GAR"
+  teamId   String
+
+  team Team @relation(fields: [teamId], references: [id])
+
+  // Stats
+  goals    Int    @default(0) // Buts marqués dans la compétition
+
+  tickets  ButeurTicket[]
+
+  @@index([teamId])
+}
+
+model ButeurTicket {
+  id        String   @id @default(cuid())
+
+  // Code unique du ticket (ex: BUT-ABC123)
+  ticketCode String  @unique
+
+  // Utilisateur qui a reçu le ticket (optionnel si anonyme)
+  userId     String?
+  user       User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Match concerné
+  matchId    String
+  match      Match   @relation(fields: [matchId], references: [id])
+
+  // Buteur attribué (aléatoire)
+  playerId   String
+  player     Player  @relation(fields: [playerId], references: [id])
+
+  // Résultat
+  hasWon     Boolean  @default(false)
+  isChecked  Boolean  @default(false)
+
+  // Lot gagné (si hasWon = true)
+  prizeType  String? // "SMOOTHIE", "GAUFRE", "BON_PARTENAIRE"
+  prizeValue Float? // Valeur du lot
+
+  // Réclamation
+  isRedeemed Boolean  @default(false)
+  redeemedAt DateTime?
+
+  createdAt  DateTime @default(now())
+
+  @@index([ticketCode])
+  @@index([userId])
+  @@index([matchId])
+  @@index([hasWon])
+}
+

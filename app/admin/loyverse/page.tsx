@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle2, XCircle, Loader2, ExternalLink, RefreshCw, Webhook } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ExternalLink, RefreshCw, Webhook, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 type LoyverseStatus = {
   isConnected: boolean;
@@ -78,13 +79,19 @@ export default function LoyverseAdminPage() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 via-amber-500 to-red-600 bg-clip-text text-transparent">
-          Configuration Loyverse
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Gérez la connexion avec votre système de caisse Loyverse
-        </p>
+      {/* Header */}
+      <div className="mb-8 flex items-center gap-4">
+        <Link href="/admin">
+          <Button variant="ghost" size="icon">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        </Link>
+        <div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 via-amber-500 to-red-600 bg-clip-text text-transparent">
+            Configuration Loyverse
+          </h1>
+          <p className="text-gray-600">Gérez la connexion avec votre système de caisse Loyverse</p>
+        </div>
       </div>
 
       {error && (

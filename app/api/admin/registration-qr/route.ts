@@ -3,7 +3,6 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import {
   createRegistrationQRCode,
-  getActiveRegistrationQRCode,
   getRegistrationStats,
 } from "@/lib/concours/registration";
 

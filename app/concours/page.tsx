@@ -4,10 +4,10 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Trophy, Target, Ticket, Gift, User, LogIn, Building2, ExternalLink, QrCode, X } from "lucide-react";
+import { Trophy, Target, Ticket, Gift, User, LogIn, QrCode } from "lucide-react";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -134,9 +134,11 @@ export default function ConcoursPage() {
                 >
                   <CardContent className="p-3 text-white">
                     {partner.logo && (
-                      <img
+                      <Image
                         src={partner.logo}
                         alt={partner.name}
+                        width={200}
+                        height={80}
                         className="w-full h-20 object-contain mb-2 bg-white/10 rounded p-1"
                       />
                     )}
@@ -356,9 +358,11 @@ export default function ConcoursPage() {
                 >
                   <CardContent className="p-3 text-white">
                     {partner.logo && (
-                      <img
+                      <Image
                         src={partner.logo}
                         alt={partner.name}
+                        width={200}
+                        height={80}
                         className="w-full h-20 object-contain mb-2 bg-white/10 rounded p-1"
                       />
                     )}
@@ -389,9 +393,11 @@ export default function ConcoursPage() {
                 >
                   <CardContent className="p-3 text-white">
                     {partner.logo && (
-                      <img
+                      <Image
                         src={partner.logo}
                         alt={partner.name}
+                        width={200}
+                        height={64}
                         className="w-full h-16 object-contain mb-2 bg-white/10 rounded p-1"
                       />
                     )}
