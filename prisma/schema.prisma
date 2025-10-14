@@ -43,7 +43,6 @@ model User {
 
   @@index([email])
   @@index([role])
-  @@map("user")
 }
 
 enum UserRole {
@@ -69,7 +68,6 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@map("account")
 }
 
 model Session {
@@ -85,7 +83,6 @@ model Session {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@map("session")
 }
 
 // ==========================================
