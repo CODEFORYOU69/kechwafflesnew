@@ -93,8 +93,7 @@ export async function createLoyverseCustomer(data: {
         customer_code: data.cardNumber, // Numéro de carte comme code client
         phone_number: data.phone,
         total_points: 0,
-        total_visits: 0,
-        total_spent: "0",
+        // Note: total_visits et total_spent sont calculés automatiquement par Loyverse
       }),
     });
 
