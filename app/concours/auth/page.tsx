@@ -21,10 +21,21 @@ function AuthPageContent() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (session?.user) {
-      const redirect = searchParams.get("redirect") || "/concours/pronostics";
-      router.push(redirect);
-    }
+    const checkAdmin = async () => {
+      if (session?.user) {
+        // Vérifie et promouvoir en admin si nécessaire
+        try {
+          await fetch("/api/auth/check-admin", { method: "POST" });
+        } catch (error) {
+          console.error("Error checking admin status:", error);
+        }
+
+        const redirect = searchParams.get("redirect") || "/concours/pronostics";
+        router.push(redirect);
+      }
+    };
+
+    checkAdmin();
   }, [session, router, searchParams]);
 
   const handleEmailAuth = async (e: React.FormEvent, mode: "signin" | "signup") => {
