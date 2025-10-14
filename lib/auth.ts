@@ -31,24 +31,19 @@ export const auth = betterAuth({
       },
     },
   },
-  hooks: {
-    after: [
-      {
-        matcher: (context) => {
-          return context.path === "/sign-up/email" || context.path === "/sign-in/social";
-        },
-        handler: async (context) => {
-          const user = context.user;
-          if (user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-            await prisma.user.update({
-              where: { id: user.id },
-              data: { role: "ADMIN" },
-            });
-          }
-        },
-      },
-    ],
-  },
 });
+
+/**
+ * Helper function to promote admin users after creation
+ * Call this after user creation in your app
+ */
+export async function checkAndPromoteAdmin(userId: string, email: string) {
+  if (ADMIN_EMAILS.includes(email.toLowerCase())) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: "ADMIN" },
+    });
+  }
+}
 
 export type Session = typeof auth.$Infer.Session;
