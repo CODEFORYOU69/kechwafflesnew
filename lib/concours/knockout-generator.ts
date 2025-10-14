@@ -54,7 +54,7 @@ async function calculateGroupStandings(group: string): Promise<GroupStanding[]> 
     let goalsFor = 0;
     let goalsAgainst = 0;
 
-    matches.forEach((match) => {
+    matches.forEach((match: typeof matches[number]) => {
       if (match.homeTeamId === team.id) {
         played++;
         goalsFor += match.homeScore ?? 0;
@@ -178,7 +178,7 @@ export async function generateRoundOf16Matches(): Promise<void> {
 
   // Ajouter les 4 meilleurs 3èmes
   const bestThirds = await getBestThirdPlaces();
-  bestThirds.forEach((third) => {
+  bestThirds.forEach((third: GroupStanding) => {
     qualified.push({
       teamId: third.teamId,
       position: 3,
@@ -205,7 +205,7 @@ export async function generateRoundOf16Matches(): Promise<void> {
 
   // Créer un mapping des positions qualifiées
   const positionMap: { [key: string]: string } = {};
-  qualified.forEach((q) => {
+  qualified.forEach((q: typeof qualified[number]) => {
     const key = `${q.position}${q.group}`;
     positionMap[key] = q.teamId;
   });
