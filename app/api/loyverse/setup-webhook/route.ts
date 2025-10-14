@@ -44,7 +44,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         event_type: "receipt.created",
-        target_url: webhookUrl,
+        url: webhookUrl,
       }),
     });
 
@@ -74,7 +74,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         event_type: "receipt.updated",
-        target_url: webhookUrl,
+        url: webhookUrl,
       }),
     });
 
@@ -93,7 +93,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         event_type: "receipt.deleted",
-        target_url: webhookUrl,
+        url: webhookUrl,
       }),
     });
 
