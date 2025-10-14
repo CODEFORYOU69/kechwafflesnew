@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
+import html2canvas from "html2canvas";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, Download, Wallet } from "lucide-react";
 
 type MemberCard = {
   cardNumber: string;
@@ -28,6 +29,8 @@ export default function LoyaltyCardPage() {
 
   const [card, setCard] = useState<MemberCard | null>(null);
   const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -104,6 +107,36 @@ export default function LoyaltyCardPage() {
     return Math.min(Math.max(progress, 0), 100);
   }
 
+  async function downloadCard() {
+    if (!cardRef.current) return;
+
+    try {
+      setDownloading(true);
+      const canvas = await html2canvas(cardRef.current, {
+        backgroundColor: null,
+        scale: 2,
+        logging: false,
+      });
+
+      const link = document.createElement("a");
+      link.download = `kech-waffles-card-${card?.cardNumber}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (error) {
+      console.error("Erreur lors du téléchargement:", error);
+      alert("Erreur lors du téléchargement de la carte");
+    } finally {
+      setDownloading(false);
+    }
+  }
+
+  async function addToWallet() {
+    // TODO: Implémenter l'ajout au wallet Apple/Google
+    // Pour Apple Wallet: nécessite génération de .pkpass
+    // Pour Google Wallet: nécessite API Google Wallet Pass
+    alert("Fonctionnalité en développement. Pour l'instant, téléchargez votre carte et conservez-la dans vos photos.");
+  }
+
   if (isPending || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50">
@@ -154,6 +187,7 @@ export default function LoyaltyCardPage() {
 
         {/* Card Display */}
         <div
+          ref={cardRef}
           className={`bg-gradient-to-br ${tierInfo.color} rounded-2xl shadow-2xl p-8 mb-6 text-white relative overflow-hidden`}
         >
           {/* Background Pattern */}
@@ -163,11 +197,20 @@ export default function LoyaltyCardPage() {
           </div>
 
           <div className="relative z-10">
-            {/* Header */}
+            {/* Header with Logo */}
             <div className="flex items-start justify-between mb-8">
-              <div>
-                <p className="text-sm opacity-90 mb-1">KECH WAFFLES</p>
-                <p className="text-2xl font-bold">{session?.user?.name}</p>
+              <div className="flex items-center gap-3">
+                <Image
+                  src="/images/menu-items/TransparentBlack.jpg"
+                  alt="Kech Waffles"
+                  width={60}
+                  height={60}
+                  className="rounded-lg bg-white/90 p-1"
+                />
+                <div>
+                  <p className="text-sm opacity-90 mb-1">KECH WAFFLES</p>
+                  <p className="text-2xl font-bold">{session?.user?.name}</p>
+                </div>
               </div>
               <div className="text-right">
                 <p className="text-4xl mb-1">{tierInfo.icon}</p>
@@ -200,6 +243,36 @@ export default function LoyaltyCardPage() {
               <p>{card.visitCount} visite{card.visitCount > 1 ? "s" : ""}</p>
             </div>
           </div>
+        </div>
+
+        {/* Actions sur la carte */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <Button
+            onClick={downloadCard}
+            disabled={downloading}
+            variant="outline"
+            className="w-full"
+          >
+            {downloading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Téléchargement...
+              </>
+            ) : (
+              <>
+                <Download className="mr-2 h-4 w-4" />
+                Télécharger
+              </>
+            )}
+          </Button>
+          <Button
+            onClick={addToWallet}
+            variant="outline"
+            className="w-full"
+          >
+            <Wallet className="mr-2 h-4 w-4" />
+            Ajouter au Wallet
+          </Button>
         </div>
 
         {/* Points & Stats */}
