@@ -260,7 +260,7 @@ export default function LoyverseAdminPage() {
               3. Scopes nécessaires
             </h4>
             <p className="font-mono text-xs">
-              read:items, read:receipts, read:customers
+              CUSTOMERS_READ, ITEMS_READ, RECEIPTS_READ, STORES_READ, MERCHANT_READ
             </p>
           </div>
 

@@ -20,7 +20,8 @@ export async function GET() {
   authUrl.searchParams.append("client_id", clientId);
   authUrl.searchParams.append("redirect_uri", redirectUri);
   authUrl.searchParams.append("response_type", "code");
-  authUrl.searchParams.append("scope", "read:items read:receipts read:customers"); // Ajustez les scopes selon vos besoins
+  // Scopes Loyverse: CUSTOMERS_READ, ITEMS_READ, RECEIPTS_READ, STORES_READ, etc.
+  authUrl.searchParams.append("scope", "CUSTOMERS_READ ITEMS_READ RECEIPTS_READ STORES_READ MERCHANT_READ");
 
   // Rediriger vers Loyverse
   return NextResponse.redirect(authUrl.toString());
