@@ -108,6 +108,20 @@ export function Navigation() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/concours" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Concours CAN
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/loyalty/card" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Ma Carte Fidélité
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -127,6 +141,8 @@ export function Navigation() {
                 <MenuLink text="NOS PRODUITS" href="/product" />
                 <MenuLink text="NOTRE CARTE" href="/menu" />
                 <MenuLink text="NOUS TROUVER" href="/location" />
+                <MenuLink text="CONCOURS CAN" href="/concours" />
+                <MenuLink text="FIDÉLITÉ" href="/loyalty/card" />
               </div>
             </SheetContent>
           </Sheet>
