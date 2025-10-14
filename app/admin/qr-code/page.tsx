@@ -133,11 +133,193 @@ export default function AdminQRCodePage() {
     }
   }
 
-  function downloadQR(qrCodeUrl: string, filename: string) {
-    const link = document.createElement("a");
-    link.href = qrCodeUrl;
-    link.download = filename;
-    link.click();
+  async function downloadRegistrationQR() {
+    if (!registrationQR) return;
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Canvas size
+    canvas.width = 800;
+    canvas.height = 1000;
+
+    // Load images
+    const wallpaper = document.createElement("img");
+    const logo = document.createElement("img");
+    const qr = document.createElement("img");
+
+    wallpaper.crossOrigin = "anonymous";
+    logo.crossOrigin = "anonymous";
+    qr.crossOrigin = "anonymous";
+
+    await Promise.all([
+      new Promise((resolve) => {
+        wallpaper.onload = resolve;
+        wallpaper.src = "/images/elements/wallpaper.png";
+      }),
+      new Promise((resolve) => {
+        logo.onload = resolve;
+        logo.src = "/images/menu-items/TransparentWhite.png";
+      }),
+      new Promise((resolve) => {
+        qr.onload = resolve;
+        qr.src = registrationQR.qrCodeUrl;
+      }),
+    ]);
+
+    // Draw wallpaper background
+    ctx.drawImage(wallpaper, 0, 0, canvas.width, canvas.height);
+
+    // Draw semi-transparent overlay for better text readability
+    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw logo
+    const logoSize = 180;
+    ctx.drawImage(logo, (canvas.width - logoSize) / 2, 60, logoSize, logoSize);
+
+    // Draw title
+    ctx.fillStyle = "white";
+    ctx.font = "bold 48px Arial";
+    ctx.textAlign = "center";
+    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowBlur = 8;
+    ctx.fillText("Concours CAN 2025", canvas.width / 2, 290);
+
+    // Draw subtitle
+    ctx.font = "600 24px Arial";
+    ctx.fillText("Pronostics", canvas.width / 2, 330);
+
+    // Draw QR code with white background
+    const qrSize = 400;
+    const qrX = (canvas.width - qrSize) / 2;
+    const qrY = 370;
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "white";
+    ctx.fillRect(qrX - 20, qrY - 20, qrSize + 40, qrSize + 40);
+
+    ctx.drawImage(qr, qrX, qrY, qrSize, qrSize);
+
+    // Draw footer text
+    ctx.shadowBlur = 4;
+    ctx.font = "600 20px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText("Scannez pour vous inscrire", canvas.width / 2, 830);
+
+    ctx.font = "18px Arial";
+    ctx.fillText("Valable toute la durée de la CAN", canvas.width / 2, 870);
+    ctx.fillText("Une seule inscription suffit", canvas.width / 2, 900);
+
+    // Download
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "QR-Inscription-Concours-CAN-2025.png";
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+    });
+  }
+
+  async function downloadDailyQR() {
+    if (!dailyQR) return;
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Canvas size
+    canvas.width = 800;
+    canvas.height = 1000;
+
+    // Load images
+    const wallpaper = document.createElement("img");
+    const logo = document.createElement("img");
+    const qr = document.createElement("img");
+
+    wallpaper.crossOrigin = "anonymous";
+    logo.crossOrigin = "anonymous";
+    qr.crossOrigin = "anonymous";
+
+    await Promise.all([
+      new Promise((resolve) => {
+        wallpaper.onload = resolve;
+        wallpaper.src = "/images/elements/wallpaper.png";
+      }),
+      new Promise((resolve) => {
+        logo.onload = resolve;
+        logo.src = "/images/menu-items/TransparentWhite.png";
+      }),
+      new Promise((resolve) => {
+        qr.onload = resolve;
+        qr.src = dailyQR.qrCodeUrl;
+      }),
+    ]);
+
+    // Draw wallpaper background
+    ctx.drawImage(wallpaper, 0, 0, canvas.width, canvas.height);
+
+    // Draw semi-transparent overlay
+    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw logo
+    const logoSize = 180;
+    ctx.drawImage(logo, (canvas.width - logoSize) / 2, 60, logoSize, logoSize);
+
+    // Draw title
+    ctx.fillStyle = "white";
+    ctx.font = "bold 48px Arial";
+    ctx.textAlign = "center";
+    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowBlur = 8;
+    ctx.fillText("Concours CAN 2025", canvas.width / 2, 290);
+
+    // Draw subtitle
+    ctx.font = "600 24px Arial";
+    ctx.fillText("Loterie Quotidienne", canvas.width / 2, 330);
+
+    // Draw QR code with white background
+    const qrSize = 400;
+    const qrX = (canvas.width - qrSize) / 2;
+    const qrY = 370;
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "white";
+    ctx.fillRect(qrX - 20, qrY - 20, qrSize + 40, qrSize + 40);
+
+    ctx.drawImage(qr, qrX, qrY, qrSize, qrSize);
+
+    // Draw footer text
+    ctx.shadowBlur = 4;
+    ctx.font = "600 20px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText("Scannez chaque jour", canvas.width / 2, 830);
+
+    ctx.font = "bold 22px Arial";
+    const dateStr = new Date(dailyQR.validDate).toLocaleDateString("fr-FR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    ctx.fillText(dateStr, canvas.width / 2, 870);
+
+    // Download
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `QR-Quotidien-${dailyQR.validDate}.png`;
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+    });
   }
 
   function printRegistrationQR() {
@@ -465,12 +647,7 @@ export default function AdminQRCodePage() {
                     {/* Actions */}
                     <div className="flex flex-col gap-4">
                       <Button
-                        onClick={() =>
-                          downloadQR(
-                            registrationQR.qrCodeUrl,
-                            "QR-Inscription-Concours1.png"
-                          )
-                        }
+                        onClick={downloadRegistrationQR}
                         className="w-full"
                       >
                         <Download className="mr-2 h-4 w-4" />
@@ -636,12 +813,7 @@ export default function AdminQRCodePage() {
                     {/* Actions */}
                     <div className="flex flex-col gap-4">
                       <Button
-                        onClick={() =>
-                          downloadQR(
-                            dailyQR.qrCodeUrl,
-                            `QR-${dailyQR.validDate}.png`
-                          )
-                        }
+                        onClick={downloadDailyQR}
                         className="w-full"
                       >
                         <Download className="mr-2 h-4 w-4" />
