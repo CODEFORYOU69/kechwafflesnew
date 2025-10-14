@@ -43,7 +43,8 @@ export async function POST() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        event_type: "receipt.created",
+        type: "WEB_HOOK",
+        event_type: "RECEIPT_CREATED",
         url: webhookUrl,
       }),
     });
@@ -73,7 +74,8 @@ export async function POST() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        event_type: "receipt.updated",
+        type: "WEB_HOOK",
+        event_type: "RECEIPT_UPDATED",
         url: webhookUrl,
       }),
     });
@@ -92,7 +94,8 @@ export async function POST() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        event_type: "receipt.deleted",
+        type: "WEB_HOOK",
+        event_type: "RECEIPT_DELETED",
         url: webhookUrl,
       }),
     });
