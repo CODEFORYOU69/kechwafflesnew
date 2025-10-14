@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Download, Printer, RefreshCw, QrCode } from "lucide-react";
+import { Loader2, Download, Printer, RefreshCw } from "lucide-react";
 
 type QRCode = {
   id: string;
@@ -54,7 +55,7 @@ export default function AdminQRCodePage() {
   }
 
   async function generateNewQR() {
-    if (!confirm("Générer un nouveau QR code pour aujourd'hui ?")) return;
+    if (!confirm("Générer un nouveau QR code pour aujourd&apos;hui ?")) return;
 
     setGenerating(true);
     try {
@@ -195,9 +196,11 @@ export default function AdminQRCodePage() {
                 <div className="text-center">
                   <Card className="bg-muted inline-block">
                     <CardContent className="pt-6">
-                      <img
+                      <Image
                         src={currentQR.qrCodeUrl}
                         alt="QR Code"
+                        width={256}
+                        height={256}
                         className="w-64 h-64 mx-auto"
                       />
                     </CardContent>
@@ -260,7 +263,7 @@ export default function AdminQRCodePage() {
               <span className="text-6xl mb-4 block">📱</span>
               <CardTitle className="text-2xl mb-2">Aucun QR Code Actif</CardTitle>
               <CardDescription className="mb-6">
-                Générez le QR code du jour pour permettre aux clients d'accéder aux pronostics
+                Générez le QR code du jour pour permettre aux clients d&apos;accéder aux pronostics
               </CardDescription>
               <Button
                 onClick={generateNewQR}
@@ -302,9 +305,11 @@ export default function AdminQRCodePage() {
                           </Badge>
                         )}
                       </div>
-                      <img
+                      <Image
                         src={qr.qrCodeUrl}
                         alt="QR Code"
+                        width={200}
+                        height={128}
                         className="w-full h-32 object-contain mb-2"
                       />
                       <p className="text-xs text-muted-foreground text-center">

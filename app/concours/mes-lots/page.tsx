@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import QRCode from "qrcode";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowLeft, Gift } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 type Reward = {
   id: string;
@@ -44,6 +45,7 @@ export default function MesLotsPage() {
     if (session?.user) {
       loadRewards();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   async function loadRewards() {
@@ -215,9 +217,11 @@ export default function MesLotsPage() {
                           <p className="text-sm font-semibold mb-3">
                             Scannez ce code en magasin
                           </p>
-                          <img
+                          <Image
                             src={qrCodes[reward.id]}
                             alt="QR Code"
+                            width={192}
+                            height={192}
                             className="mx-auto w-48 h-48 mb-3"
                           />
                           <Badge variant="outline" className="font-mono">

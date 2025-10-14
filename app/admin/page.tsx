@@ -173,7 +173,7 @@ export default function AdminDashboard() {
                     <span className="font-semibold text-blue-600">{stats.matches.upcoming}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Aujourd'hui</span>
+                    <span className="text-sm text-gray-600">Aujourd&apos;hui</span>
                     <span className="font-semibold text-amber-600">{stats.matches.today}</span>
                   </div>
                 </div>
@@ -283,7 +283,7 @@ export default function AdminDashboard() {
                 <Link href="/admin/matches">
                   <div className="text-left">
                     <div className="font-semibold mb-1">Saisir un résultat</div>
-                    <div className="text-xs text-gray-500">Entrer le score d'un match terminé</div>
+                    <div className="text-xs text-gray-500">Entrer le score d&apos;un match terminé</div>
                   </div>
                 </Link>
               </Button>

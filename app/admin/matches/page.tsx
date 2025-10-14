@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -110,7 +111,7 @@ export default function AdminMatchesPage() {
       } else {
         setMessage({ type: "error", text: data.error || "Erreur lors de l'enregistrement" });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: "error", text: "Erreur réseau" });
     } finally {
       setLoading(false);
@@ -200,13 +201,13 @@ export default function AdminMatchesPage() {
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 flex-1">
-                          <img src={match.homeTeam.flag} alt={match.homeTeam.code} className="w-6 h-4 object-cover" />
+                          <Image src={match.homeTeam.flag} alt={match.homeTeam.code} width={24} height={16} className="w-6 h-4 object-cover" />
                           <span className="font-medium">{match.homeTeam.nameFr}</span>
                         </div>
                         <span className="mx-4 text-lg font-bold text-gray-400">VS</span>
                         <div className="flex items-center gap-2 flex-1 justify-end">
                           <span className="font-medium">{match.awayTeam.nameFr}</span>
-                          <img src={match.awayTeam.flag} alt={match.awayTeam.code} className="w-6 h-4 object-cover" />
+                          <Image src={match.awayTeam.flag} alt={match.awayTeam.code} width={24} height={16} className="w-6 h-4 object-cover" />
                         </div>
                       </div>
                       <div className="mt-2 text-xs text-gray-500">
@@ -235,9 +236,11 @@ export default function AdminMatchesPage() {
                   {/* Équipe à domicile */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <img
+                      <Image
                         src={selectedMatch.homeTeam.flag}
                         alt={selectedMatch.homeTeam.code}
+                        width={32}
+                        height={24}
                         className="w-8 h-6 object-cover"
                       />
                       <span className="font-medium">{selectedMatch.homeTeam.nameFr}</span>
@@ -257,9 +260,11 @@ export default function AdminMatchesPage() {
                   {/* Équipe à l'extérieur */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <img
+                      <Image
                         src={selectedMatch.awayTeam.flag}
                         alt={selectedMatch.awayTeam.code}
+                        width={32}
+                        height={24}
                         className="w-8 h-6 object-cover"
                       />
                       <span className="font-medium">{selectedMatch.awayTeam.nameFr}</span>

@@ -4,7 +4,6 @@
  */
 
 import { prisma } from "@/lib/prisma";
-import type { MatchPhase } from "@prisma/client";
 
 interface GroupStanding {
   teamId: string;

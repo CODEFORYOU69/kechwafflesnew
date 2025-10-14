@@ -266,7 +266,7 @@ export default function LoyverseAdminPage() {
 
           <div>
             <h4 className="font-semibold text-gray-900 mb-1">
-              4. Variables d'environnement
+              4. Variables d&apos;environnement
             </h4>
             <p>
               Ajoutez les variables <code>LOYVERSE_CLIENT_ID</code> et{" "}

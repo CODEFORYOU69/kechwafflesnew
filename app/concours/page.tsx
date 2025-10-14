@@ -142,7 +142,7 @@ export default function ConcoursPage() {
             </CardHeader>
             <CardContent className="space-y-4 flex-1 flex flex-col">
               <p className="text-sm text-white/70">
-                Recevez un ticket avec un buteur aléatoire. S'il marque, vous gagnez un lot !
+                Recevez un ticket avec un buteur aléatoire. S&apos;il marque, vous gagnez un lot !
               </p>
               <ul className="text-sm space-y-2 text-white/70 flex-1">
                 <li>• Ticket gratuit avec achat</li>

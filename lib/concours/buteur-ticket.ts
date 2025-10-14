@@ -5,7 +5,7 @@
  * Si ce buteur marque lors du match, le client gagne un lot
  */
 
-import { nanoid, customAlphabet } from "nanoid";
+import { customAlphabet } from "nanoid";
 import { prisma } from "@/lib/prisma";
 
 const generateTicketCode = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 6);

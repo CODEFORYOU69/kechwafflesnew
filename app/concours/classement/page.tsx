@@ -6,8 +6,7 @@ import { useSession } from "@/lib/auth-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Loader2, ArrowLeft, Trophy } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 type LeaderboardEntry = {
   rank: number;
@@ -34,6 +33,7 @@ export default function ClassementPage() {
 
   useEffect(() => {
     loadLeaderboard();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   async function loadLeaderboard() {

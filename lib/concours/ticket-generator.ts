@@ -23,11 +23,52 @@ function generateTicketCode(): string {
  * @param selectedPlayerIds - Liste des IDs des joueurs sélectionnés par l'admin
  * @returns Le ticket créé
  */
+type ButeurTicket = {
+  id: string;
+  ticketCode: string;
+  userId: string | null;
+  matchId: string;
+  playerId: string;
+  hasWon: boolean;
+  isChecked: boolean;
+  isRedeemed: boolean;
+  prizeType: string | null;
+  prizeValue: number | null;
+  player: {
+    id: string;
+    name: string;
+    nameFr: string;
+    team: {
+      id: string;
+      name: string;
+      nameFr: string;
+      code: string;
+      flag: string;
+    };
+  };
+  match: {
+    id: string;
+    matchNumber: number;
+    homeTeam: {
+      id: string;
+      name: string;
+      nameFr: string;
+      code: string;
+    };
+    awayTeam: {
+      id: string;
+      name: string;
+      nameFr: string;
+      code: string;
+    };
+  };
+};
+
 export async function generateButeurTicket(
   userId: string | null,
   matchId: string,
   selectedPlayerIds: string[]
-): Promise<any> {
+): Promise<ButeurTicket> {
   if (selectedPlayerIds.length === 0) {
     throw new Error("Aucun buteur potentiel sélectionné pour ce match");
   }
@@ -95,7 +136,7 @@ export async function generateMultipleTickets(
   matchId: string,
   selectedPlayerIds: string[],
   count: number = 1
-): Promise<any[]> {
+): Promise<ButeurTicket[]> {
   const tickets = [];
 
   for (let i = 0; i < count; i++) {
@@ -269,7 +310,53 @@ export async function getUserWinningTickets(userId: string) {
 /**
  * Marque un ticket comme réclamé
  */
-export async function redeemTicket(ticketCode: string): Promise<any> {
+type RedeemedTicket = {
+  id: string;
+  ticketCode: string;
+  userId: string | null;
+  matchId: string;
+  playerId: string;
+  hasWon: boolean;
+  isChecked: boolean;
+  isRedeemed: boolean;
+  redeemedAt: Date | null;
+  prizeType: string | null;
+  prizeValue: number | null;
+  player: {
+    id: string;
+    name: string;
+    nameFr: string;
+    team: {
+      id: string;
+      name: string;
+      nameFr: string;
+      code: string;
+      flag: string;
+    };
+  };
+  match: {
+    id: string;
+    matchNumber: number;
+    homeScore: number | null;
+    awayScore: number | null;
+    phase: string;
+    homeTeamId: string;
+    awayTeamId: string;
+    scheduledAt: Date;
+    venue: string | null;
+    city: string | null;
+    isFinished: boolean;
+    finishedAt: Date | null;
+    lockPronostics: boolean;
+  };
+  user: {
+    id: string;
+    name: string | null;
+    email: string | null;
+  } | null;
+};
+
+export async function redeemTicket(ticketCode: string): Promise<RedeemedTicket> {
   const ticket = await prisma.buteurTicket.findUnique({
     where: { ticketCode },
   });

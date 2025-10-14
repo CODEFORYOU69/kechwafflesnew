@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -237,7 +236,7 @@ export default function VerifyTicketPage() {
               <li>Scannez ou saisissez le code dans le champ ci-dessus</li>
               <li>Si le ticket est gagnant, vérifiez le lot à remettre</li>
               <li>Remettez le lot au client</li>
-              <li>Cliquez sur "Confirmer la remise du lot"</li>
+              <li>Cliquez sur &quot;Confirmer la remise du lot&quot;</li>
               <li>Le ticket est automatiquement marqué comme utilisé</li>
             </ol>
           </AlertDescription>

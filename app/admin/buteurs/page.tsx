@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -149,7 +149,7 @@ export default function AdminButeursPage() {
       } else {
         setMessage({ type: "error", text: data.error || "Erreur lors de l'enregistrement" });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: "error", text: "Erreur réseau" });
     } finally {
       setLoading(false);
@@ -210,11 +210,11 @@ export default function AdminButeursPage() {
                       </div>
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <img src={match.homeTeam.flag} alt={match.homeTeam.code} className="w-5 h-3 object-cover" />
+                          <Image src={match.homeTeam.flag} alt={match.homeTeam.code} width={20} height={12} className="w-5 h-3 object-cover" />
                           <span className="text-sm font-medium">{match.homeTeam.code}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <img src={match.awayTeam.flag} alt={match.awayTeam.code} className="w-5 h-3 object-cover" />
+                          <Image src={match.awayTeam.flag} alt={match.awayTeam.code} width={20} height={12} className="w-5 h-3 object-cover" />
                           <span className="text-sm font-medium">{match.awayTeam.code}</span>
                         </div>
                       </div>
@@ -268,9 +268,11 @@ export default function AdminButeursPage() {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <img
+                          <Image
                             src={selectedMatch.homeTeam.flag}
                             alt={selectedMatch.homeTeam.code}
+                            width={40}
+                            height={28}
                             className="w-10 h-7 object-cover"
                           />
                           <div>
@@ -330,9 +332,11 @@ export default function AdminButeursPage() {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <img
+                          <Image
                             src={selectedMatch.awayTeam.flag}
                             alt={selectedMatch.awayTeam.code}
+                            width={40}
+                            height={28}
                             className="w-10 h-7 object-cover"
                           />
                           <div>

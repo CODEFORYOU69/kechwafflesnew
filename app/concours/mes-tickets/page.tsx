@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowLeft, Ticket as TicketIcon } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 type Ticket = {
   ticketCode: string;
@@ -45,6 +46,7 @@ export default function MesTicketsPage() {
     if (session?.user) {
       loadTickets();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   async function loadTickets() {
@@ -175,9 +177,11 @@ export default function MesTicketsPage() {
 
                   {/* Player Info */}
                   <div className="flex items-center gap-4">
-                    <img
+                    <Image
                       src={ticket.teamFlag}
                       alt={ticket.teamName}
+                      width={64}
+                      height={64}
                       className="w-16 h-16 object-cover rounded-full"
                     />
                     <div className="flex-1">
@@ -239,7 +243,7 @@ export default function MesTicketsPage() {
                     <Card className="bg-muted">
                       <CardContent className="pt-4 text-center">
                         <p className="text-sm text-muted-foreground">
-                          😔 Votre joueur n'a pas marqué cette fois
+                          😔 Votre joueur n&apos;a pas marqué cette fois
                         </p>
                       </CardContent>
                     </Card>
@@ -265,7 +269,7 @@ export default function MesTicketsPage() {
                 variant="secondary"
                 className="bg-white text-green-600 hover:bg-gray-100"
               >
-                📍 Voir l'adresse
+                📍 Voir l&apos;adresse
               </Button>
             </CardContent>
           </Card>

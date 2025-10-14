@@ -63,10 +63,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
+type LoyverseReceipt = {
+  id: string;
+  customer_id: string;
+  total_money: string;
+};
+
 /**
  * Gère un nouveau reçu/achat
  */
-async function handleReceiptCreated(receipt: any) {
+async function handleReceiptCreated(receipt: LoyverseReceipt) {
   try {
     const loyverseCustomerId = receipt.customer_id;
     const totalMoney = parseFloat(receipt.total_money);
@@ -155,7 +161,7 @@ async function handleReceiptCreated(receipt: any) {
 /**
  * Gère la suppression d'un reçu (remboursement)
  */
-async function handleReceiptDeleted(receipt: any) {
+async function handleReceiptDeleted(receipt: LoyverseReceipt) {
   try {
     const loyverseCustomerId = receipt.customer_id;
     const receiptId = receipt.id;

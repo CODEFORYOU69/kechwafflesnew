@@ -6,7 +6,7 @@
  * {
  *   "crons": [{
  *     "path": "/api/cron/lock-matches",
- *     "schedule": "*/5 * * * *"
+ *     "schedule": "every 5 minutes"
  *   }]
  * }
  */

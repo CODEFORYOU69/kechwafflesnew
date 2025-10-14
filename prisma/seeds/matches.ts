@@ -386,7 +386,7 @@ export async function seedGroupStageMatches() {
     await prisma.match.upsert({
       where: { matchNumber: matchData.matchNumber },
       update: {
-        phase: matchData.phase,
+        phase: matchData.phase as "GROUP_STAGE",
         homeTeamId: homeTeam.id,
         awayTeamId: awayTeam.id,
         scheduledAt: matchData.scheduledAt,
@@ -397,7 +397,7 @@ export async function seedGroupStageMatches() {
       },
       create: {
         matchNumber: matchData.matchNumber,
-        phase: matchData.phase,
+        phase: matchData.phase as "GROUP_STAGE",
         homeTeamId: homeTeam.id,
         awayTeamId: awayTeam.id,
         scheduledAt: matchData.scheduledAt,

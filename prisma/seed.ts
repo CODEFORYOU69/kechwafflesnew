@@ -26,15 +26,14 @@ async function main() {
     await seedGroupStageMatches();
     console.log("");
 
-    // 4. Seed Loyalty Rewards
-    console.log("🎁 Seeding loyalty rewards...");
+    // 4. Seed Loyalty Rewards (Catalogue fidélité)
+    console.log("🎁 Seeding loyalty rewards catalog...");
 
     const rewardsData = [
       {
         name: "Café Gratuit",
         description: "Un café de votre choix offert",
         pointsCost: 50,
-        category: "FOOD",
         isActive: true,
         stockLimit: 100,
         currentStock: 100,
@@ -43,7 +42,6 @@ async function main() {
         name: "Gaufre 50% off",
         description: "50% de réduction sur une gaufre de votre choix",
         pointsCost: 100,
-        category: "FOOD",
         isActive: true,
         stockLimit: 50,
         currentStock: 50,
@@ -52,7 +50,6 @@ async function main() {
         name: "Smoothie Gratuit",
         description: "Un smoothie au choix offert",
         pointsCost: 75,
-        category: "FOOD",
         isActive: true,
         stockLimit: 80,
         currentStock: 80,
@@ -61,7 +58,6 @@ async function main() {
         name: "Menu Complet -30%",
         description: "30% de réduction sur un menu complet (entrée + plat + dessert)",
         pointsCost: 150,
-        category: "FOOD",
         isActive: true,
         stockLimit: 30,
         currentStock: 30,
@@ -70,7 +66,6 @@ async function main() {
         name: "Dessert Gratuit",
         description: "Un dessert de votre choix offert",
         pointsCost: 80,
-        category: "FOOD",
         isActive: true,
         stockLimit: 60,
         currentStock: 60,
@@ -78,15 +73,15 @@ async function main() {
     ];
 
     for (const reward of rewardsData) {
-      const existing = await prisma.reward.findFirst({
+      const existing = await prisma.loyaltyReward.findFirst({
         where: { name: reward.name },
       });
 
       if (!existing) {
-        await prisma.reward.create({ data: reward });
-        console.log(`✅ Reward created: ${reward.name} (${reward.pointsCost} pts)`);
+        await prisma.loyaltyReward.create({ data: reward });
+        console.log(`✅ Loyalty reward created: ${reward.name} (${reward.pointsCost} pts)`);
       } else {
-        console.log(`ℹ️  Reward already exists: ${reward.name}`);
+        console.log(`ℹ️  Loyalty reward already exists: ${reward.name}`);
       }
     }
 

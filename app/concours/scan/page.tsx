@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
-export default function ScanQRPage() {
+function ScanQRPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { data: session, isPending } = useSession();
@@ -34,6 +33,7 @@ export default function ScanQRPage() {
     if (session?.user) {
       handleScan(qrCode, session.user.id);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, session, isPending, router]);
 
   async function handleScan(qrCode: string, userId: string) {
@@ -63,7 +63,7 @@ export default function ScanQRPage() {
         setStatus("error");
         setMessage(data.message || "Erreur lors du scan");
       }
-    } catch (error) {
+    } catch {
       setStatus("error");
       setMessage("Erreur de connexion au serveur");
     }
@@ -132,5 +132,17 @@ export default function ScanQRPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function ScanQRPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50">
+        <Loader2 className="h-16 w-16 animate-spin text-orange-500" />
+      </div>
+    }>
+      <ScanQRPageContent />
+    </Suspense>
   );
 }

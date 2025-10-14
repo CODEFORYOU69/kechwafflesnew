@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn, signUp, useSession } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 
-export default function AuthPage() {
+function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, isPending } = useSession();
@@ -43,8 +42,9 @@ export default function AuthPage() {
 
       const redirect = searchParams.get("redirect") || "/concours/pronostics";
       router.push(redirect);
-    } catch (err: any) {
-      setError(err.message || "Erreur d'authentification");
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || "Erreur d'authentification");
     } finally {
       setLoading(false);
     }
@@ -59,8 +59,9 @@ export default function AuthPage() {
         provider: "google",
         callbackURL: searchParams.get("redirect") || "/concours/pronostics",
       });
-    } catch (err: any) {
-      setError(err.message || "Erreur d'authentification Google");
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || "Erreur d'authentification Google");
       setLoading(false);
     }
   };
@@ -274,10 +275,22 @@ export default function AuthPage() {
           </Tabs>
 
           <p className="mt-6 text-center text-xs text-white/50">
-            En continuant, vous acceptez les conditions d'utilisation et la politique de confidentialité.
+            En continuant, vous acceptez les conditions d&apos;utilisation et la politique de confidentialité.
           </p>
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-amber-500 shadow-[0_0_20px_rgba(217,119,6,0.6)]"></div>
+      </div>
+    }>
+      <AuthPageContent />
+    </Suspense>
   );
 }

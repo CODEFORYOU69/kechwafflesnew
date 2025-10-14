@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -58,6 +59,7 @@ export default function MesPronosticsPage() {
       loadPronostics();
       loadStats();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   async function loadPronostics() {
@@ -178,7 +180,7 @@ export default function MesPronosticsPage() {
                 Aucun pronostic
               </CardTitle>
               <CardDescription className="mb-6">
-                Vous n'avez pas encore fait de pronostics
+                Vous n&apos;avez pas encore fait de pronostics
               </CardDescription>
               <Button onClick={() => router.push("/concours/pronostics")}>
                 Faire un pronostic
@@ -200,9 +202,11 @@ export default function MesPronosticsPage() {
                   <div className="flex items-center justify-between">
                     {/* Home Team */}
                     <div className="flex items-center gap-3 flex-1">
-                      <img
+                      <Image
                         src={prono.match.homeFlag}
                         alt={prono.match.homeTeam}
+                        width={40}
+                        height={40}
                         className="w-10 h-10 object-cover rounded-full"
                       />
                       <span className="font-bold">{prono.match.homeTeam}</span>
@@ -229,9 +233,11 @@ export default function MesPronosticsPage() {
                     {/* Away Team */}
                     <div className="flex items-center gap-3 flex-1 justify-end">
                       <span className="font-bold">{prono.match.awayTeam}</span>
-                      <img
+                      <Image
                         src={prono.match.awayFlag}
                         alt={prono.match.awayTeam}
+                        width={40}
+                        height={40}
                         className="w-10 h-10 object-cover rounded-full"
                       />
                     </div>

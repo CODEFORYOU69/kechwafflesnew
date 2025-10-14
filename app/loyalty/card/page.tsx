@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowLeft, CreditCard } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 type MemberCard = {
   cardNumber: string;
@@ -38,6 +39,7 @@ export default function LoyaltyCardPage() {
     if (session?.user) {
       loadCard();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   async function loadCard() {
@@ -118,10 +120,10 @@ export default function LoyaltyCardPage() {
             <span className="text-6xl mb-4 block">💳</span>
             <CardTitle className="text-2xl mb-2">Aucune carte membre</CardTitle>
             <CardDescription className="mb-6">
-              Une erreur s'est produite. Veuillez contacter le support.
+              Une erreur s&apos;est produite. Veuillez contacter le support.
             </CardDescription>
             <Button onClick={() => router.push("/")}>
-              Retour à l'accueil
+              Retour à l&apos;accueil
             </Button>
           </CardContent>
         </Card>
@@ -183,9 +185,11 @@ export default function LoyaltyCardPage() {
 
             {/* QR Code */}
             <div className="bg-white rounded-xl p-4 inline-block">
-              <img
+              <Image
                 src={card.qrCode}
                 alt="QR Code"
+                width={128}
+                height={128}
                 className="w-32 h-32"
               />
             </div>

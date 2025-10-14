@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 /**
@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
  *
  * URL: /api/loyverse/setup-webhook
  */
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // Récupérer le token OAuth depuis la BDD
     const config = await prisma.loyverseConfig.findUnique({
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
 /**
  * Liste les webhooks enregistrés
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Récupérer le token OAuth depuis la BDD
     const config = await prisma.loyverseConfig.findUnique({

@@ -5,7 +5,7 @@
  * Concours 2: Pronostics multiples → Classement général
  */
 
-import { nanoid, customAlphabet } from "nanoid";
+import { customAlphabet } from "nanoid";
 import { prisma } from "@/lib/prisma";
 
 const generateRewardCode = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 6);

@@ -1,4 +1,4 @@
-import { nanoid, customAlphabet } from "nanoid";
+import { customAlphabet } from "nanoid";
 import QRCode from "qrcode";
 import { prisma } from "../prisma";
 import { createLoyverseCustomer, syncCustomerToLoyverse } from "./loyverse";

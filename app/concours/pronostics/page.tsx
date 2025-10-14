@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowLeft, Clock, MapPin } from "lucide-react";
+import { Loader2, Clock, MapPin } from "lucide-react";
 
 type Match = {
   id: string;
@@ -58,6 +59,7 @@ export default function PronosticsPage() {
       loadMatches();
       checkQRScan();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   async function loadMatches() {
@@ -183,7 +185,7 @@ export default function PronosticsPage() {
                     Scannez le QR code en magasin
                   </h3>
                   <p className="text-sm">
-                    Vous devez scanner le QR code affiché en magasin pour accéder aux pronostics d'aujourd'hui.
+                    Vous devez scanner le QR code affiché en magasin pour accéder aux pronostics d&apos;aujourd&apos;hui.
                   </p>
                 </div>
               </div>
@@ -200,7 +202,7 @@ export default function PronosticsPage() {
                 Aucun match disponible
               </CardTitle>
               <CardDescription>
-                Les matchs à venir s'afficheront ici
+                Les matchs à venir s&apos;afficheront ici
               </CardDescription>
             </CardContent>
           </Card>
@@ -227,9 +229,11 @@ export default function PronosticsPage() {
                     {/* Teams */}
                     <div className="flex items-center justify-between">
                       <div className="flex-1 text-center">
-                        <img
+                        <Image
                           src={match.homeTeam.flag}
                           alt={match.homeTeam.name}
+                          width={64}
+                          height={64}
                           className="w-16 h-16 object-cover rounded-full mx-auto mb-2"
                         />
                         <p className="font-bold">{match.homeTeam.name}</p>
@@ -241,9 +245,11 @@ export default function PronosticsPage() {
                       </div>
 
                       <div className="flex-1 text-center">
-                        <img
+                        <Image
                           src={match.awayTeam.flag}
                           alt={match.awayTeam.name}
+                          width={64}
+                          height={64}
                           className="w-16 h-16 object-cover rounded-full mx-auto mb-2"
                         />
                         <p className="font-bold">{match.awayTeam.name}</p>
@@ -338,9 +344,11 @@ export default function PronosticsPage() {
               {/* Teams */}
               <div className="flex items-center justify-between">
                 <div className="text-center flex-1">
-                  <img
+                  <Image
                     src={selectedMatch.homeTeam.flag}
                     alt={selectedMatch.homeTeam.name}
+                    width={48}
+                    height={48}
                     className="w-12 h-12 object-cover rounded-full mx-auto mb-2"
                   />
                   <p className="font-bold text-sm">{selectedMatch.homeTeam.name}</p>
@@ -351,9 +359,11 @@ export default function PronosticsPage() {
                 </div>
 
                 <div className="text-center flex-1">
-                  <img
+                  <Image
                     src={selectedMatch.awayTeam.flag}
                     alt={selectedMatch.awayTeam.name}
+                    width={48}
+                    height={48}
                     className="w-12 h-12 object-cover rounded-full mx-auto mb-2"
                   />
                   <p className="font-bold text-sm">{selectedMatch.awayTeam.name}</p>
