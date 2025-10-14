@@ -494,6 +494,31 @@ export async function getUserTickets(userId: string) {
 }
 
 /**
+ * Récupère le prochain match disponible pour générer un ticket
+ * Retourne le match le plus proche dans le futur qui n'est pas encore commencé
+ */
+export async function getNextAvailableMatch(): Promise<string | null> {
+  const now = new Date();
+
+  const nextMatch = await prisma.match.findFirst({
+    where: {
+      isFinished: false,
+      scheduledAt: {
+        gt: now,
+      },
+    },
+    orderBy: {
+      scheduledAt: "asc",
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  return nextMatch?.id || null;
+}
+
+/**
  * Statistiques des tickets pour l'admin
  */
 export async function getTicketStats() {

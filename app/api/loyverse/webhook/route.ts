@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
+import { createButeurTicket, getNextAvailableMatch } from "@/lib/concours/buteur-ticket";
 
 /**
  * Webhook Loyverse - Reçoit les notifications d'achats
@@ -154,6 +155,31 @@ async function handleReceiptCreated(receipt: LoyverseReceipt) {
 
     console.log(`✅ ${pointsEarned} points added to ${memberCard.user.name}`);
     console.log(`   New tier: ${newTier}, Total spent: ${newTotalSpent} MAD`);
+
+    // 🎫 CONCOURS 3 : Générer un ticket buteur automatiquement
+    try {
+      const nextMatchId = await getNextAvailableMatch();
+
+      if (nextMatchId) {
+        const ticketResult = await createButeurTicket({
+          matchId: nextMatchId,
+          userId: memberCard.userId,
+        });
+
+        if (ticketResult.success && ticketResult.ticket) {
+          console.log(`🎫 Ticket buteur généré : ${ticketResult.ticket.ticketCode}`);
+          console.log(`   Joueur : ${ticketResult.ticket.playerName} (${ticketResult.ticket.teamName})`);
+          console.log(`   Match : ${ticketResult.ticket.matchInfo}`);
+        } else {
+          console.log(`⚠️  Impossible de générer un ticket buteur : ${ticketResult.message}`);
+        }
+      } else {
+        console.log(`ℹ️  Pas de match disponible pour générer un ticket buteur`);
+      }
+    } catch (ticketError) {
+      // Ne pas bloquer le traitement du reçu si la génération du ticket échoue
+      console.error("⚠️  Erreur génération ticket buteur:", ticketError);
+    }
   } catch (error) {
     console.error("❌ Error handling receipt:", error);
     throw error;
