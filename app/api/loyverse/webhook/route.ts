@@ -7,9 +7,8 @@ import crypto from "crypto";
  * Documentation: https://developer.loyverse.com/docs/#webhooks
  *
  * Types d'événements :
- * - receipt.created : Nouvelle vente/commande
- * - receipt.updated : Commande modifiée
- * - receipt.deleted : Commande supprimée
+ * - receipts.update : Nouvelle vente/commande OU commande modifiée
+ * - receipts.delete : Commande supprimée
  */
 export async function POST(request: NextRequest) {
   try {
@@ -37,14 +36,14 @@ export async function POST(request: NextRequest) {
     console.log("📥 Loyverse webhook received:", body.event_type);
 
     // Vérifier le type d'événement
-    if (body.event_type === "receipt.created" || body.event_type === "receipt.updated") {
+    if (body.event_type === "receipts.update") {
       const receipt = body.data;
 
       // Si le reçu a un customer_id, synchroniser les points
       if (receipt.customer_id) {
         await handleReceiptCreated(receipt);
       }
-    } else if (body.event_type === "receipt.deleted") {
+    } else if (body.event_type === "receipts.delete") {
       const receipt = body.data;
 
       // Si le reçu a un customer_id, annuler les points

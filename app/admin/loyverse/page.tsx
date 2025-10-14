@@ -193,9 +193,8 @@ export default function LoyverseAdminPage() {
                 Les webhooks permettent de recevoir automatiquement les données
                 des achats effectués en caisse. Événements surveillés :
                 <ul className="list-disc list-inside mt-2 space-y-1">
-                  <li>receipt.created - Nouveau reçu</li>
-                  <li>receipt.updated - Reçu modifié</li>
-                  <li>receipt.deleted - Reçu supprimé</li>
+                  <li>receipts.update - Nouveau reçu ou reçu modifié</li>
+                  <li>receipts.delete - Reçu supprimé (remboursement)</li>
                 </ul>
               </AlertDescription>
             </Alert>

@@ -35,7 +35,7 @@ export async function POST() {
 
     console.log("📡 Configuration webhook avec URL:", webhookUrl);
 
-    // Enregistrer le webhook pour l'événement "receipt.created"
+    // Enregistrer le webhook pour receipts.update (couvre création ET modification)
     const response = await fetch("https://api.loyverse.com/v1.0/webhooks", {
       method: "POST",
       headers: {
@@ -44,7 +44,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         url: webhookUrl,
-        type: "receipt.created",
+        type: "receipts.update",
         status: "ENABLED",
       }),
     });
@@ -64,9 +64,9 @@ export async function POST() {
     }
 
     const webhookData = await response.json();
-    console.log("✅ Webhook enregistré:", webhookData);
+    console.log("✅ Webhook receipts.update enregistré:", webhookData);
 
-    // Enregistrer aussi pour "receipt.updated"
+    // Enregistrer aussi pour receipts.delete (remboursements)
     const response2 = await fetch("https://api.loyverse.com/v1.0/webhooks", {
       method: "POST",
       headers: {
@@ -75,7 +75,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         url: webhookUrl,
-        type: "receipt.updated",
+        type: "receipts.delete",
         status: "ENABLED",
       }),
     });
@@ -83,36 +83,15 @@ export async function POST() {
     let webhook2Data = null;
     if (response2.ok) {
       webhook2Data = await response2.json();
-      console.log("✅ Webhook receipt.updated enregistré:", webhook2Data);
-    }
-
-    // Enregistrer aussi pour "receipt.deleted" (remboursements)
-    const response3 = await fetch("https://api.loyverse.com/v1.0/webhooks", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${config.accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: webhookUrl,
-        type: "receipt.deleted",
-        status: "ENABLED",
-      }),
-    });
-
-    let webhook3Data = null;
-    if (response3.ok) {
-      webhook3Data = await response3.json();
-      console.log("✅ Webhook receipt.deleted enregistré:", webhook3Data);
+      console.log("✅ Webhook receipts.delete enregistré:", webhook2Data);
     }
 
     return NextResponse.json({
       success: true,
       message: "Webhooks Loyverse configurés avec succès",
       webhooks: {
-        receipt_created: webhookData,
-        receipt_updated: webhook2Data,
-        receipt_deleted: webhook3Data,
+        receipts_update: webhookData,
+        receipts_delete: webhook2Data,
       },
       webhook_url: webhookUrl,
     });
