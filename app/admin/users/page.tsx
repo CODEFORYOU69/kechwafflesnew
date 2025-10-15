@@ -39,12 +39,18 @@ export default function AdminUsersPage() {
   async function fetchUsers() {
     try {
       const response = await fetch("/api/admin/users");
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
+        console.log("✅ Utilisateurs chargés:", data.users?.length);
         setUsers(data.users || []);
+      } else {
+        console.error("❌ Erreur API:", data);
+        alert(`Erreur: ${data.message || "Impossible de charger les utilisateurs"}`);
       }
     } catch (error) {
-      console.error("Erreur chargement utilisateurs:", error);
+      console.error("❌ Erreur chargement utilisateurs:", error);
+      alert("Erreur de connexion au serveur");
     } finally {
       setLoading(false);
     }
