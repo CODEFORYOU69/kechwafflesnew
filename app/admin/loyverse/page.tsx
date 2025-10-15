@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle2, XCircle, Loader2, ExternalLink, RefreshCw, Webhook, ArrowLeft, CreditCard } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ExternalLink, RefreshCw, Webhook, ArrowLeft, CreditCard, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 
 type LoyverseStatus = {
@@ -23,6 +23,7 @@ export default function LoyverseAdminPage() {
   const [settingUpWebhooks, setSettingUpWebhooks] = useState(false);
   const [syncingCards, setSyncingCards] = useState(false);
   const [syncingLoyverse, setSyncingLoyverse] = useState(false);
+  const [disconnecting, setDisconnecting] = useState(false);
 
   useEffect(() => {
     fetchStatus();
@@ -47,6 +48,31 @@ export default function LoyverseAdminPage() {
 
   const handleConnect = () => {
     window.location.href = "/api/loyverse/connect";
+  };
+
+  const handleDisconnect = async () => {
+    if (!confirm("⚠️ Êtes-vous sûr de vouloir déconnecter Loyverse ?\n\nVous devrez reconnecter pour créer des customers.")) {
+      return;
+    }
+
+    try {
+      setDisconnecting(true);
+      const response = await fetch("/api/loyverse/disconnect", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        alert("✅ Loyverse déconnecté avec succès !\n\nVous pouvez maintenant reconnecter avec les nouveaux scopes.");
+        fetchStatus();
+      } else {
+        const data = await response.json();
+        alert(`Erreur : ${data.message || "Impossible de déconnecter"}`);
+      }
+    } catch {
+      alert("Erreur lors de la déconnexion");
+    } finally {
+      setDisconnecting(false);
+    }
   };
 
   const handleSetupWebhooks = async () => {
@@ -165,6 +191,16 @@ export default function LoyverseAdminPage() {
         </Alert>
       )}
 
+      {/* Avertissement Scopes */}
+      {status?.isConnected && (
+        <Alert className="mb-6 border-orange-200 bg-orange-50">
+          <AlertTriangle className="h-4 w-4 text-orange-600" />
+          <AlertDescription className="text-sm text-orange-800">
+            <strong>Important:</strong> Si vous aviez connecté Loyverse avant le 15/10/2025, vous devez <strong>déconnecter et reconnecter</strong> pour obtenir les permissions nécessaires à la création de customers (scope CUSTOMERS_WRITE).
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Statut de Connexion */}
       <Card className="mb-6">
         <CardHeader>
@@ -229,10 +265,37 @@ export default function LoyverseAdminPage() {
                 Connecter à Loyverse
               </Button>
             ) : (
-              <Button onClick={fetchStatus} variant="outline">
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Rafraîchir
-              </Button>
+              <>
+                <Button onClick={fetchStatus} variant="outline">
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Rafraîchir
+                </Button>
+                <Button
+                  onClick={handleDisconnect}
+                  variant="destructive"
+                  disabled={disconnecting}
+                >
+                  {disconnecting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Déconnexion...
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="mr-2 h-4 w-4" />
+                      Déconnecter
+                    </>
+                  )}
+                </Button>
+                <Button
+                  onClick={handleConnect}
+                  variant="outline"
+                  className="border-green-600 text-green-600 hover:bg-green-50"
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Reconnecter (nouveaux scopes)
+                </Button>
+              </>
             )}
           </div>
         </CardContent>
@@ -393,7 +456,7 @@ export default function LoyverseAdminPage() {
               3. Scopes nécessaires
             </h4>
             <p className="font-mono text-xs">
-              CUSTOMERS_READ, ITEMS_READ, RECEIPTS_READ, STORES_READ, MERCHANT_READ
+              CUSTOMERS_READ, CUSTOMERS_WRITE, ITEMS_READ, RECEIPTS_READ, STORES_READ, MERCHANT_READ
             </p>
           </div>
 
