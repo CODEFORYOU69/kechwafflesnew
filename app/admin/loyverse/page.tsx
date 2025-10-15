@@ -22,6 +22,7 @@ export default function LoyverseAdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [settingUpWebhooks, setSettingUpWebhooks] = useState(false);
   const [syncingCards, setSyncingCards] = useState(false);
+  const [syncingLoyverse, setSyncingLoyverse] = useState(false);
 
   useEffect(() => {
     fetchStatus();
@@ -98,6 +99,38 @@ export default function LoyverseAdminPage() {
       alert("Erreur lors de la synchronisation");
     } finally {
       setSyncingCards(false);
+    }
+  };
+
+  const handleSyncLoyverseCustomers = async () => {
+    if (!confirm("Créer des customers Loyverse pour toutes les cartes membres qui n'en ont pas encore ?")) {
+      return;
+    }
+
+    try {
+      setSyncingLoyverse(true);
+      const response = await fetch("/api/admin/loyverse-sync", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(
+          `✅ Synchronisation Loyverse terminée !\n\n` +
+          `Total: ${data.stats.total}\n` +
+          `Créés: ${data.stats.created}\n` +
+          `Erreurs: ${data.stats.failed}\n\n` +
+          (data.errors.length > 0 ? `Erreurs:\n${data.errors.join("\n")}` : "")
+        );
+        fetchStatus();
+      } else {
+        const data = await response.json();
+        alert(`Erreur : ${data.message || "Impossible de synchroniser"}`);
+      }
+    } catch {
+      alert("Erreur lors de la synchronisation Loyverse");
+    } finally {
+      setSyncingLoyverse(false);
     }
   };
 
@@ -279,23 +312,44 @@ export default function LoyverseAdminPage() {
               </AlertDescription>
             </Alert>
 
-            <Button
-              onClick={handleSyncMemberCards}
-              disabled={syncingCards}
-              variant="outline"
-            >
-              {syncingCards ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Synchronisation...
-                </>
-              ) : (
-                <>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Créer cartes pour utilisateurs existants
-                </>
-              )}
-            </Button>
+            <div className="flex gap-3">
+              <Button
+                onClick={handleSyncMemberCards}
+                disabled={syncingCards}
+                variant="outline"
+              >
+                {syncingCards ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Synchronisation...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    Créer cartes pour utilisateurs existants
+                  </>
+                )}
+              </Button>
+
+              <Button
+                onClick={handleSyncLoyverseCustomers}
+                disabled={syncingLoyverse}
+                variant="default"
+                className="bg-gradient-to-r from-green-600 via-amber-500 to-red-600"
+              >
+                {syncingLoyverse ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Sync Loyverse...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    Sync avec Loyverse
+                  </>
+                )}
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}

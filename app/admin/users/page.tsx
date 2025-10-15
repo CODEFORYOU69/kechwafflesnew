@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Search, Users, Trophy, Ticket, CreditCard } from "lucide-react";
+import { ArrowLeft, Search, Users, Trophy, Ticket, CreditCard, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 type User = {
@@ -60,6 +60,29 @@ export default function AdminUsersPage() {
     user.name?.toLowerCase().includes(search.toLowerCase()) ||
     user.email?.toLowerCase().includes(search.toLowerCase())
   );
+
+  async function deleteUser(userId: string, userName: string) {
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${userName}" ?\n\nCette action est irréversible.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        alert("Utilisateur supprimé avec succès");
+        fetchUsers();
+      } else {
+        const data = await response.json();
+        alert(`Erreur: ${data.message || "Impossible de supprimer"}`);
+      }
+    } catch (error) {
+      console.error("Erreur suppression:", error);
+      alert("Erreur de connexion");
+    }
+  }
 
   const getTierColor = (tier?: string) => {
     switch (tier) {
@@ -238,8 +261,18 @@ export default function AdminUsersPage() {
                         </div>
                       </div>
 
-                      <div className="text-right text-xs text-gray-500">
-                        Inscrit le {new Date(user.createdAt).toLocaleDateString("fr-FR")}
+                      <div className="flex flex-col items-end gap-2">
+                        <div className="text-xs text-gray-500">
+                          Inscrit le {new Date(user.createdAt).toLocaleDateString("fr-FR")}
+                        </div>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => deleteUser(user.id, user.name || user.email)}
+                        >
+                          <Trash2 className="h-3 w-3 mr-1" />
+                          Supprimer
+                        </Button>
                       </div>
                     </div>
                   </div>
