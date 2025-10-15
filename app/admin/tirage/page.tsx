@@ -183,7 +183,7 @@ export default function AdminTiragePage() {
             <ul className="mt-2 space-y-1 list-disc list-inside text-sm">
               <li>Chaque semaine, 3 gagnants sont tirés au sort parmi les participants</li>
               <li>Pour participer: avoir scanné au moins 1 QR code pendant la semaine</li>
-              <li>1er prix: Gaufre XXL • 2ème prix: Bon d&apos;achat 100 MAD • 3ème prix: Menu complet</li>
+              <li>1er prix: Gaufre XXL • 2ème prix: Ticanmisu • 3ème prix: Menu complet</li>
               <li>Cliquez sur le bouton ci-dessus pour effectuer le tirage de la semaine en cours</li>
             </ul>
           </AlertDescription>

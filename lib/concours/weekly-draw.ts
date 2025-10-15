@@ -17,9 +17,9 @@ export const PRIZE_TYPES = {
     value: 50,
   },
   WEEKLY_2: {
-    title: "Bon d'achat 100 MAD",
-    description: "Bon d'achat de 100 MAD chez un partenaire",
-    value: 100,
+    title: "Ticanmisu",
+    description: "Un ticanmisu offert chez Kech Waffles",
+    value: 60,
   },
   WEEKLY_3: {
     title: "Menu complet",
