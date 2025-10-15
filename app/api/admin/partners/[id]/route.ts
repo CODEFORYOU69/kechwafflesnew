@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { isAdmin } from "@/lib/admin-check";
 
 /**
  * PUT: Met à jour un partenaire (Admin uniquement)
@@ -15,7 +16,7 @@ export async function PUT(
       headers: await headers(),
     });
 
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !(await isAdmin(session.user.id))) {
       return NextResponse.json(
         { success: false, message: "Non autorisé" },
         { status: 401 }
@@ -92,7 +93,7 @@ export async function DELETE(
       headers: await headers(),
     });
 
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !(await isAdmin(session.user.id))) {
       return NextResponse.json(
         { success: false, message: "Non autorisé" },
         { status: 401 }

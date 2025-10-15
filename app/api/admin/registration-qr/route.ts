@@ -5,6 +5,7 @@ import {
   createRegistrationQRCode,
   getRegistrationStats,
 } from "@/lib/concours/registration";
+import { isAdmin } from "@/lib/admin-check";
 
 /**
  * GET: Récupère le QR code d'inscription actif et les stats
@@ -15,7 +16,7 @@ export async function GET() {
       headers: await headers(),
     });
 
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !(await isAdmin(session.user.id))) {
       return NextResponse.json(
         { success: false, message: "Non autorisé" },
         { status: 401 }
@@ -46,7 +47,7 @@ export async function POST() {
       headers: await headers(),
     });
 
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !(await isAdmin(session.user.id))) {
       return NextResponse.json(
         { success: false, message: "Non autorisé" },
         { status: 401 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { isAdmin } from "@/lib/admin-check";
 
 export async function GET() {
   try {
@@ -9,7 +10,7 @@ export async function GET() {
       headers: await headers(),
     });
 
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !(await isAdmin(session.user.id))) {
       return NextResponse.json(
         { success: false, message: "Non autorisé" },
         { status: 401 }

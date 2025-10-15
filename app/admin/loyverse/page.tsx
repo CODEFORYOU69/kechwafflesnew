@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle2, XCircle, Loader2, ExternalLink, RefreshCw, Webhook, ArrowLeft } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ExternalLink, RefreshCw, Webhook, ArrowLeft, CreditCard } from "lucide-react";
 import Link from "next/link";
 
 type LoyverseStatus = {
@@ -21,6 +21,7 @@ export default function LoyverseAdminPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [settingUpWebhooks, setSettingUpWebhooks] = useState(false);
+  const [syncingCards, setSyncingCards] = useState(false);
 
   useEffect(() => {
     fetchStatus();
@@ -66,6 +67,37 @@ export default function LoyverseAdminPage() {
       alert("Erreur lors de la configuration des webhooks");
     } finally {
       setSettingUpWebhooks(false);
+    }
+  };
+
+  const handleSyncMemberCards = async () => {
+    if (!confirm("Créer des cartes membres (et customers Loyverse) pour tous les utilisateurs qui n'en ont pas ?")) {
+      return;
+    }
+
+    try {
+      setSyncingCards(true);
+      const response = await fetch("/api/admin/sync-member-cards", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(
+          `✅ Synchronisation terminée !\n\n` +
+          `Total: ${data.stats.total}\n` +
+          `Créées: ${data.stats.created}\n` +
+          `Erreurs: ${data.stats.failed}\n\n` +
+          (data.errors.length > 0 ? `Erreurs:\n${data.errors.join("\n")}` : "")
+        );
+      } else {
+        const data = await response.json();
+        alert(`Erreur : ${data.message || "Impossible de synchroniser"}`);
+      }
+    } catch {
+      alert("Erreur lors de la synchronisation");
+    } finally {
+      setSyncingCards(false);
     }
   };
 
@@ -220,6 +252,47 @@ export default function LoyverseAdminPage() {
                 <>
                   <Webhook className="mr-2 h-4 w-4" />
                   Configurer les webhooks
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Synchronisation Cartes Membres */}
+      {status?.isConnected && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5" />
+              Cartes Membres & Customers Loyverse
+            </CardTitle>
+            <CardDescription>
+              Créer automatiquement des cartes membres et customers Loyverse pour les utilisateurs
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Alert className="mb-4">
+              <AlertDescription>
+                Cette action va créer une carte membre (et un customer Loyverse) pour tous les utilisateurs qui n&apos;en ont pas encore.
+                Les nouveaux utilisateurs reçoivent automatiquement une carte membre à l&apos;inscription.
+              </AlertDescription>
+            </Alert>
+
+            <Button
+              onClick={handleSyncMemberCards}
+              disabled={syncingCards}
+              variant="outline"
+            >
+              {syncingCards ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Synchronisation...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Créer cartes pour utilisateurs existants
                 </>
               )}
             </Button>

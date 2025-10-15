@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { createAuthMiddleware } from "better-auth/api";
 import { prisma } from "./prisma";
 import { ADMIN_EMAILS } from "./admin";
+import { createMemberCard } from "./loyalty/member-card";
 
 export const auth = betterAuth({
   plugins: [nextCookies()],
@@ -32,6 +34,32 @@ export const auth = betterAuth({
         defaultValue: "USER",
       },
     },
+  },
+  hooks: {
+    after: createAuthMiddleware(async (ctx) => {
+      // Créer automatiquement une carte membre pour les nouveaux utilisateurs
+      if (
+        ctx.path === "/sign-up/email" ||
+        ctx.path?.includes("/callback/google")
+      ) {
+        const newSession = ctx.context.newSession;
+        const userId = newSession?.user?.id;
+        if (userId) {
+          try {
+            await createMemberCard(userId);
+            console.log(
+              `✅ Carte membre créée automatiquement pour l'utilisateur ${userId}`
+            );
+          } catch (error) {
+            console.error(
+              `⚠️  Erreur création carte membre pour ${userId}:`,
+              error
+            );
+            // Non-bloquant - l'utilisateur peut créer sa carte plus tard
+          }
+        }
+      }
+    }),
   },
 });
 
