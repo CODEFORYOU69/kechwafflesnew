@@ -44,6 +44,7 @@ model User {
   // Relations Nouveaux Concours
   qrScans       QRScan[] // Scans QR journaliers (Concours 2)
   buteurTickets ButeurTicket[] // Tickets buteur (Concours 3)
+  drawWinnings  DrawWinner[] // Gains des tirages au sort
 
   @@index([email])
   @@index([role])
@@ -541,7 +542,7 @@ model Partner {
 
   // Informations de base
   name        String // Nom du commerce
-  description String @db.Text // Description du partenaire
+  description String  @db.Text // Description du partenaire
   logo        String? // URL du logo
 
   // Coordonnées
@@ -572,6 +573,9 @@ model Partner {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Relations
+  drawWinners DrawWinner[]
+
   @@index([tier])
   @@index([isActive])
   @@index([displayOrder])
@@ -582,4 +586,89 @@ enum PartnerTier {
   GOLD // Partenaire gold
   SILVER // Partenaire silver
   BRONZE // Partenaire bronze
+}
+
+// ==========================================
+// SYSTÈME DE TIRAGE AU SORT (Concours 2)
+// ==========================================
+
+model WeeklyDraw {
+  id String @id @default(cuid())
+
+  // Période du tirage
+  weekNumber Int // Numéro de la semaine dans l'année
+  year       Int // Année
+  startDate  DateTime @db.Date // Début de la semaine
+  endDate    DateTime @db.Date // Fin de la semaine
+
+  // Type de tirage
+  drawType DrawType @default(WEEKLY)
+
+  // Statut
+  isCompleted Boolean   @default(false)
+  drawnAt     DateTime? // Date du tirage
+
+  // Stats
+  totalParticipants Int @default(0) // Nombre de participants éligibles
+  totalScans        Int @default(0) // Nombre total de scans dans la période
+
+  // Gagnants
+  winners DrawWinner[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([year, weekNumber, drawType])
+  @@index([weekNumber, year])
+  @@index([isCompleted])
+}
+
+model DrawWinner {
+  id String @id @default(cuid())
+
+  // Tirage
+  drawId String
+  draw   WeeklyDraw @relation(fields: [drawId], references: [id], onDelete: Cascade)
+
+  // Gagnant
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Position (1er, 2ème, 3ème...)
+  position Int
+
+  // Lot
+  prizeType        String // "WEEKLY_1", "WEEKLY_2", "GRAND_PRIZE"
+  prizeTitle       String // "Gaufre XXL", "Bon partenaire 100 MAD"
+  prizeDescription String? @db.Text
+  prizeValue       Float? // Valeur en MAD
+  prizeImage       String? // Image du lot
+
+  // Partenaire associé (si lot partenaire)
+  partnerId String?
+  partner   Partner? @relation(fields: [partnerId], references: [id], onDelete: SetNull)
+
+  // Notification et réclamation
+  notified   Boolean   @default(false)
+  notifiedAt DateTime?
+
+  isClaimed Boolean   @default(false)
+  claimedAt DateTime?
+
+  // Nombre de scans du gagnant pendant la période
+  scanCount Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([drawId])
+  @@index([userId])
+  @@index([isClaimed])
+}
+
+// Relation manquante dans User
+// Ajouter drawWinnings DrawWinner[] à User
+
+enum DrawType {
+  WEEKLY // Tirage hebdomadaire
+  GRAND_PRIZE // Grand tirage final
 }
