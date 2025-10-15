@@ -112,6 +112,24 @@ export default function AdminDashboard() {
             </Card>
           </Link>
 
+          <Link href="/admin/matchs-resultats">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-green-200 hover:border-green-400">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-green-100 rounded-lg">
+                    <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Résultats & Buteurs</h3>
+                    <p className="text-sm text-gray-600">Marquer les buteurs</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
           <Link href="/admin/loyverse">
             <Card className="cursor-pointer hover:shadow-lg transition-shadow border-blue-200 hover:border-blue-400">
               <CardContent className="pt-6">
