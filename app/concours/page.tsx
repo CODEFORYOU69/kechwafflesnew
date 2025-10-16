@@ -15,6 +15,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type PartnerTier = "PREMIUM" | "GOLD" | "SILVER" | "BRONZE";
 
@@ -54,6 +60,18 @@ export default function ConcoursPage() {
     }
   }, [session]);
 
+  // Re-vérifie l'inscription quand la page reprend le focus
+  useEffect(() => {
+    const handleFocus = () => {
+      if (session?.user) {
+        checkRegistration();
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [session]);
+
   const fetchPartners = async () => {
     try {
       const response = await fetch("/api/partners");
@@ -68,7 +86,9 @@ export default function ConcoursPage() {
 
   const checkRegistration = async () => {
     try {
-      const response = await fetch("/api/concours/register");
+      const response = await fetch("/api/concours/register", {
+        cache: 'no-store'
+      });
       if (response.ok) {
         const data = await response.json();
         setIsRegisteredForPronostics(data.registered || false);
@@ -309,36 +329,69 @@ export default function ConcoursPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <Button
-                      variant="outline"
-                      className="justify-start border-green-500/50 text-green-400 hover:bg-green-500/20 hover:text-green-300 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
-                      onClick={() => router.push("/concours/mes-pronostics")}
-                    >
-                      Mes Pronostics
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="justify-start border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300 shadow-[0_0_10px_rgba(220,38,38,0.3)]"
-                      onClick={() => router.push("/concours/mes-tickets")}
-                    >
-                      Mes Tickets Buteur
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="justify-start border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 shadow-[0_0_10px_rgba(217,119,6,0.3)]"
-                      onClick={() => router.push("/concours/mes-lots")}
-                    >
-                      Mes Lots Gagnés
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="justify-start border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 shadow-[0_0_10px_rgba(217,119,6,0.3)]"
-                      onClick={() => router.push("/concours/classement")}
-                    >
-                      Classement Général
-                    </Button>
-                  </div>
+                  <TooltipProvider>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {/* Mes Pronostics - Nécessite inscription au Concours 1 */}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div>
+                            <Button
+                              variant="outline"
+                              className="justify-start border-green-500/50 text-green-400 hover:bg-green-500/20 hover:text-green-300 shadow-[0_0_10px_rgba(16,185,129,0.3)] w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => router.push("/concours/mes-pronostics")}
+                              disabled={!isRegisteredForPronostics}
+                            >
+                              Mes Pronostics
+                            </Button>
+                          </div>
+                        </TooltipTrigger>
+                        {!isRegisteredForPronostics && (
+                          <TooltipContent>
+                            <p>Scannez le QR code en magasin pour accéder aux pronostics</p>
+                          </TooltipContent>
+                        )}
+                      </Tooltip>
+
+                      {/* Mes Tickets Buteur - Toujours accessible */}
+                      <Button
+                        variant="outline"
+                        className="justify-start border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300 shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                        onClick={() => router.push("/concours/mes-tickets")}
+                      >
+                        Mes Tickets Buteur
+                      </Button>
+
+                      {/* Mes Lots Gagnés - Toujours accessible */}
+                      <Button
+                        variant="outline"
+                        className="justify-start border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 shadow-[0_0_10px_rgba(217,119,6,0.3)]"
+                        onClick={() => router.push("/concours/mes-lots")}
+                      >
+                        Mes Lots Gagnés
+                      </Button>
+
+                      {/* Classement Général - Nécessite inscription au Concours 1 */}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div>
+                            <Button
+                              variant="outline"
+                              className="justify-start border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 shadow-[0_0_10px_rgba(217,119,6,0.3)] w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => router.push("/concours/classement")}
+                              disabled={!isRegisteredForPronostics}
+                            >
+                              Classement Général
+                            </Button>
+                          </div>
+                        </TooltipTrigger>
+                        {!isRegisteredForPronostics && (
+                          <TooltipContent>
+                            <p>Scannez le QR code en magasin pour accéder au classement</p>
+                          </TooltipContent>
+                        )}
+                      </Tooltip>
+                    </div>
+                  </TooltipProvider>
                 </CardContent>
               </Card>
             )}
