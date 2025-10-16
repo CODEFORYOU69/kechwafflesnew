@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { Menu, LogOut, User } from "lucide-react";
+import { Menu, LogOut, User, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession, signOut } from "@/lib/auth-client";
 
 const MenuLink = ({ text, href }: { text: string; href: string }) => {
@@ -37,8 +37,26 @@ const MenuLink = ({ text, href }: { text: string; href: string }) => {
 
 export function Navigation() {
   const [hidden, setHidden] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { scrollY } = useScroll();
   const { data: session } = useSession();
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (session?.user) {
+        try {
+          const response = await fetch("/api/auth/check-admin");
+          const data = await response.json();
+          setIsAdmin(data.isAdmin);
+        } catch (error) {
+          console.error("Error checking admin:", error);
+        }
+      } else {
+        setIsAdmin(false);
+      }
+    };
+    checkAdmin();
+  }, [session]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
@@ -77,7 +95,7 @@ export function Navigation() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex">
+        <div className="hidden md:flex md:ml-8">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -137,6 +155,14 @@ export function Navigation() {
         <div className="hidden md:flex ml-auto items-center gap-2">
           {session ? (
             <>
+              {isAdmin && (
+                <Button variant="outline" size="sm" asChild className="border-amber-500 text-amber-600 hover:bg-amber-50">
+                  <Link href="/admin">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Admin
+                  </Link>
+                </Button>
+              )}
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/loyalty/card">
                   <User className="h-4 w-4 mr-2" />
@@ -182,6 +208,18 @@ export function Navigation() {
                       <p className="text-amber-500 text-sm mb-4">
                         Connecté en tant que <strong>{session.user?.name}</strong>
                       </p>
+                      {isAdmin && (
+                        <Button
+                          variant="outline"
+                          className="w-full text-amber-500 border-amber-500 mb-2"
+                          asChild
+                        >
+                          <Link href="/admin">
+                            <Settings className="mr-2 h-4 w-4" />
+                            Admin
+                          </Link>
+                        </Button>
+                      )}
                       <Button
                         variant="outline"
                         className="w-full text-amber-500 border-amber-500"
