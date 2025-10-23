@@ -42,6 +42,7 @@ type ProductVariant = {
   option2Value: string | null;
   price: number;
   variantSku: string | null;
+  loyverseVariantId: string | null;
   isActive: boolean;
 };
 
