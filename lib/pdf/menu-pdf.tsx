@@ -52,17 +52,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#1a1a1a",
   },
-  coverTitle: {
-    fontSize: 48,
-    fontWeight: "bold",
-    color: "#D4AF37", // Or élégant
-    marginBottom: 20,
-    letterSpacing: 2,
+  coverLogo: {
+    width: 300,
+    height: 300,
+    marginBottom: 30,
   },
   coverSubtitle: {
-    fontSize: 24,
+    fontSize: 28,
     color: "#FFFFFF",
     marginBottom: 10,
+    fontWeight: "bold",
   },
   coverCity: {
     fontSize: 16,
@@ -77,29 +76,37 @@ const styles = StyleSheet.create({
 
   // En-tête de page
   header: {
-    marginBottom: 30,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
     paddingBottom: 15,
     borderBottomWidth: 2,
     borderBottomColor: "#D4AF37",
+  },
+  headerLogo: {
+    width: 60,
+    height: 60,
+    marginRight: 15,
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#1a1a1a",
+    flex: 1,
     textAlign: "center",
   },
 
   // Catégories
   categorySection: {
-    marginBottom: 25,
+    marginBottom: 15,
   },
   categoryTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#FFFFFF",
     backgroundColor: "#1a1a1a",
-    padding: 10,
-    marginBottom: 15,
+    padding: 8,
+    marginBottom: 10,
     borderLeftWidth: 4,
     borderLeftColor: "#D4AF37",
   },
@@ -108,32 +115,32 @@ const styles = StyleSheet.create({
   productGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 15,
+    gap: 10,
   },
 
   // Carte produit
   productCard: {
     width: "48%",
-    marginBottom: 15,
-    padding: 12,
+    marginBottom: 10,
+    padding: 10,
     backgroundColor: "#FAFAFA",
     borderRadius: 4,
     borderWidth: 1,
     borderColor: "#E5E5E5",
   },
   productImage: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     objectFit: "cover",
     borderRadius: 4,
-    marginBottom: 8,
+    marginBottom: 6,
     alignSelf: "center",
   },
   productName: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "bold",
     color: "#1a1a1a",
-    marginBottom: 5,
+    marginBottom: 4,
   },
   productDescription: {
     fontSize: 9,
@@ -196,7 +203,10 @@ const styles = StyleSheet.create({
 // Page de couverture
 const CoverPage = () => (
   <Page size="A4" style={styles.coverPage}>
-    <Text style={styles.coverTitle}>KECH WAFFLES</Text>
+    <Image
+      src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
+      style={styles.coverLogo}
+    />
     <Text style={styles.coverSubtitle}>Notre Menu</Text>
     <Text style={styles.coverCity}>Marrakech</Text>
     <Text style={styles.coverYear}>{new Date().getFullYear()}</Text>
@@ -209,7 +219,7 @@ const ProductsByCategory = ({ category, products }: { category: string; products
   const categoryDisplay = category.split(" - ").pop() || category;
 
   return (
-    <View style={styles.categorySection} break={products.length > 6}>
+    <View style={styles.categorySection} wrap={false}>
       <Text style={styles.categoryTitle}>{categoryDisplay}</Text>
       <View style={styles.productGrid}>
         {products.map((product, index) => (
@@ -317,6 +327,10 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {boissonsCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+            />
             <Text style={styles.headerTitle}>Nos Boissons</Text>
           </View>
           {boissonsCategories.map((category) => (
@@ -341,6 +355,10 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {dessertsCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+            />
             <Text style={styles.headerTitle}>Nos Desserts</Text>
           </View>
           {dessertsCategories.map((category) => (
@@ -365,6 +383,10 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {briodogsCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+            />
             <Text style={styles.headerTitle}>Nos Briodogs</Text>
           </View>
           {briodogsCategories.map((category) => (
@@ -389,6 +411,10 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {modificateursCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+            />
             <Text style={styles.headerTitle}>Suppléments</Text>
           </View>
           {modificateursCategories.map((category) => (
