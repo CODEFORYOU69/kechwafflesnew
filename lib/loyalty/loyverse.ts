@@ -325,21 +325,40 @@ export type LoyverseVariant = {
 };
 
 /**
- * Récupère tous les items depuis Loyverse
+ * Récupère tous les items depuis Loyverse (avec pagination)
  */
 export async function getLoyverseItems(): Promise<LoyverseItem[]> {
   try {
     const headers = await getLoyverseHeaders();
-    const response = await fetch(`${LOYVERSE_API_URL}/items`, {
-      headers,
-    });
+    const allItems: LoyverseItem[] = [];
+    let cursor: string | null = null;
+    let hasMore = true;
 
-    if (!response.ok) {
-      throw new Error(`Loyverse API error: ${response.statusText}`);
+    // Pagination - Loyverse limite à 250 items par requête
+    while (hasMore) {
+      const url = cursor
+        ? `${LOYVERSE_API_URL}/items?limit=250&cursor=${cursor}`
+        : `${LOYVERSE_API_URL}/items?limit=250`;
+
+      const response = await fetch(url, { headers });
+
+      if (!response.ok) {
+        throw new Error(`Loyverse API error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const items = data.items || [];
+      allItems.push(...items);
+
+      // Vérifier s'il y a plus de résultats
+      cursor = data.cursor || null;
+      hasMore = !!cursor && items.length > 0;
+
+      console.log(`📥 Récupéré ${items.length} items (Total: ${allItems.length})`);
     }
 
-    const data = await response.json();
-    return data.items || [];
+    console.log(`✅ Total items Loyverse: ${allItems.length}`);
+    return allItems;
   } catch (error) {
     console.error("Erreur récupération items Loyverse:", error);
     throw error;
