@@ -196,7 +196,7 @@ export default function LoyverseAdminPage() {
         <Alert className="mb-6 border-orange-200 bg-orange-50">
           <AlertTriangle className="h-4 w-4 text-orange-600" />
           <AlertDescription className="text-sm text-orange-800">
-            <strong>Important:</strong> Si vous aviez connecté Loyverse avant le 15/10/2025, vous devez <strong>déconnecter et reconnecter</strong> pour obtenir les permissions nécessaires à la création de customers (scope CUSTOMERS_WRITE).
+            <strong>Important:</strong> Si vous aviez connecté Loyverse avant le 23/10/2025, vous devez <strong>déconnecter et reconnecter</strong> pour obtenir les permissions nécessaires à la gestion des produits et prix (scopes CUSTOMERS_WRITE et ITEMS_WRITE).
           </AlertDescription>
         </Alert>
       )}
@@ -456,7 +456,7 @@ export default function LoyverseAdminPage() {
               3. Scopes nécessaires
             </h4>
             <p className="font-mono text-xs">
-              CUSTOMERS_READ, CUSTOMERS_WRITE, ITEMS_READ, RECEIPTS_READ, STORES_READ, MERCHANT_READ
+              CUSTOMERS_READ, CUSTOMERS_WRITE, ITEMS_READ, ITEMS_WRITE, RECEIPTS_READ, STORES_READ, MERCHANT_READ
             </p>
           </div>
 

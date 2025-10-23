@@ -106,6 +106,84 @@ model LoyverseConfig {
 }
 
 // ==========================================
+// GESTION DES PRODUITS & MENU
+// ==========================================
+
+model Product {
+  id String @id @default(cuid())
+
+  // Identifiants
+  handle String  @unique // URL-friendly identifier (ex: "espresso")
+  sku    String  @unique // SKU unique (ex: "ESP-001")
+  name   String // Nom du produit
+
+  // Catégorisation
+  category String // Ex: "Boissons - Cafés", "Desserts", etc.
+
+  // Description et contenu
+  description String? @db.Text
+  image       String? // Chemin de l'image dans /images/menu-items/
+
+  // Prix (pour produits sans variants)
+  price Float? // Prix en MAD (null si le produit a des variants)
+
+  // Flags
+  isModifier Boolean @default(false) // Est-ce un modificateur/topping ?
+  hasTax     Boolean @default(true) // Soumis à la TVA ?
+  isActive   Boolean @default(true) // Actif sur le menu ?
+
+  // Ordre d'affichage
+  displayOrder Int @default(0)
+
+  // Synchronisation Loyverse
+  loyverseItemId String?   @unique // ID de l'item dans Loyverse
+  lastSyncAt     DateTime? // Dernière synchronisation
+  syncSource     String    @default("MANUAL") // "MANUAL" | "LOYVERSE"
+
+  // Relations
+  variants ProductVariant[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([isActive])
+  @@index([displayOrder])
+  @@index([loyverseItemId])
+}
+
+model ProductVariant {
+  id        String @id @default(cuid())
+  productId String
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Options de variant (ex: "Taille: Small", "Température: Chaud")
+  option1Name  String? // Nom de l'option 1 (ex: "Taille")
+  option1Value String? // Valeur de l'option 1 (ex: "Small")
+  option2Name  String? // Nom de l'option 2 (ex: "Température")
+  option2Value String? // Valeur de l'option 2 (ex: "Chaud")
+
+  // Prix du variant
+  price Float // Prix en MAD
+
+  // SKU unique du variant (optionnel)
+  variantSku String? @unique
+
+  // Synchronisation Loyverse
+  loyverseVariantId String? @unique // ID du variant dans Loyverse
+
+  // Disponibilité
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([loyverseVariantId])
+}
+
+// ==========================================
 // SYSTÈME DE FIDÉLITÉ
 // ==========================================
 

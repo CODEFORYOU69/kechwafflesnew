@@ -21,7 +21,7 @@ export async function GET() {
   authUrl.searchParams.append("redirect_uri", redirectUri);
   authUrl.searchParams.append("response_type", "code");
   // Scopes Loyverse: lecture et écriture des customers, items, receipts, stores
-  authUrl.searchParams.append("scope", "CUSTOMERS_READ CUSTOMERS_WRITE ITEMS_READ RECEIPTS_READ STORES_READ MERCHANT_READ");
+  authUrl.searchParams.append("scope", "CUSTOMERS_READ CUSTOMERS_WRITE ITEMS_READ ITEMS_WRITE RECEIPTS_READ STORES_READ MERCHANT_READ");
 
   // Rediriger vers Loyverse
   return NextResponse.redirect(authUrl.toString());

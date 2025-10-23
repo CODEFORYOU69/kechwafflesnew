@@ -278,3 +278,268 @@ export async function testLoyverseConnection(): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Types pour les Items Loyverse
+ */
+export type LoyverseItem = {
+  id: string;
+  item_name: string;
+  reference_id?: string; // SKU
+  category_id?: string;
+  option1_name?: string;
+  option2_name?: string;
+  option3_name?: string;
+  variants: LoyverseVariant[];
+  track_stock: boolean;
+  sold_by_weight: boolean;
+  is_composite: boolean;
+  use_production: boolean;
+  components?: unknown[];
+  modifiers?: unknown[];
+  created_at: string;
+  updated_at: string;
+};
+
+export type LoyverseVariant = {
+  variant_id: string;
+  item_id: string;
+  sku?: string;
+  reference_variant_id?: string;
+  option1_value?: string;
+  option2_value?: string;
+  option3_value?: string;
+  barcode?: string;
+  cost?: string;
+  purchase_cost?: string;
+  default_price: string;
+  prices?: Array<{
+    id: string;
+    variant_id: string;
+    store_id: string;
+    price_type_id: string;
+    price: string;
+  }>;
+  created_at: string;
+  updated_at: string;
+};
+
+/**
+ * Récupère tous les items depuis Loyverse
+ */
+export async function getLoyverseItems(): Promise<LoyverseItem[]> {
+  try {
+    const headers = await getLoyverseHeaders();
+    const response = await fetch(`${LOYVERSE_API_URL}/items`, {
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Loyverse API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.items || [];
+  } catch (error) {
+    console.error("Erreur récupération items Loyverse:", error);
+    throw error;
+  }
+}
+
+/**
+ * Récupère un item spécifique par son ID
+ */
+export async function getLoyverseItem(itemId: string): Promise<LoyverseItem | null> {
+  try {
+    const headers = await getLoyverseHeaders();
+    const response = await fetch(`${LOYVERSE_API_URL}/items/${itemId}`, {
+      headers,
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error(`Loyverse API error: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur récupération item Loyverse:", error);
+    return null;
+  }
+}
+
+/**
+ * Crée un nouvel item dans Loyverse
+ */
+export async function createLoyverseItem(data: {
+  name: string;
+  sku?: string;
+  category_id?: string;
+  price: number;
+  option1_name?: string;
+  option2_name?: string;
+  variants?: Array<{
+    sku?: string;
+    option1_value?: string;
+    option2_value?: string;
+    price: number;
+  }>;
+}): Promise<LoyverseItem> {
+  try {
+    const headers = await getLoyverseHeaders();
+
+    // Construction de l'item
+    const itemData: {
+      item_name: string;
+      reference_id?: string;
+      category_id?: string;
+      option1_name?: string;
+      option2_name?: string;
+      variants: Array<{
+        reference_variant_id?: string;
+        sku?: string;
+        option1_value?: string;
+        option2_value?: string;
+        default_price: string;
+      }>;
+    } = {
+      item_name: data.name,
+      reference_id: data.sku,
+      category_id: data.category_id,
+      option1_name: data.option1_name,
+      option2_name: data.option2_name,
+      variants: [],
+    };
+
+    // Si variants fournis, les ajouter
+    if (data.variants && data.variants.length > 0) {
+      itemData.variants = data.variants.map((v) => ({
+        reference_variant_id: v.sku,
+        sku: v.sku,
+        option1_value: v.option1_value,
+        option2_value: v.option2_value,
+        default_price: v.price.toFixed(2),
+      }));
+    } else {
+      // Sinon créer un variant par défaut
+      itemData.variants = [
+        {
+          reference_variant_id: data.sku,
+          sku: data.sku,
+          default_price: data.price.toFixed(2),
+        },
+      ];
+    }
+
+    const response = await fetch(`${LOYVERSE_API_URL}/items`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(itemData),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Loyverse API error (${response.status}): ${error}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur création item Loyverse:", error);
+    throw error;
+  }
+}
+
+/**
+ * Met à jour un item dans Loyverse
+ */
+export async function updateLoyverseItem(
+  itemId: string,
+  data: {
+    name?: string;
+    sku?: string;
+    category_id?: string;
+  }
+): Promise<LoyverseItem> {
+  try {
+    const headers = await getLoyverseHeaders();
+
+    const updateData: {
+      item_name?: string;
+      reference_id?: string;
+      category_id?: string;
+    } = {};
+
+    if (data.name) updateData.item_name = data.name;
+    if (data.sku) updateData.reference_id = data.sku;
+    if (data.category_id) updateData.category_id = data.category_id;
+
+    const response = await fetch(`${LOYVERSE_API_URL}/items/${itemId}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(updateData),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Loyverse API error (${response.status}): ${error}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur mise à jour item Loyverse:", error);
+    throw error;
+  }
+}
+
+/**
+ * Met à jour le prix d'un variant dans Loyverse
+ */
+export async function updateLoyverseVariantPrice(
+  variantId: string,
+  price: number
+): Promise<void> {
+  try {
+    const headers = await getLoyverseHeaders();
+
+    const response = await fetch(
+      `${LOYVERSE_API_URL}/variants/${variantId}`,
+      {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({
+          default_price: price.toFixed(2),
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Loyverse API error (${response.status}): ${error}`);
+    }
+  } catch (error) {
+    console.error("Erreur mise à jour prix variant Loyverse:", error);
+    throw error;
+  }
+}
+
+/**
+ * Supprime un item dans Loyverse
+ */
+export async function deleteLoyverseItem(itemId: string): Promise<void> {
+  try {
+    const headers = await getLoyverseHeaders();
+
+    const response = await fetch(`${LOYVERSE_API_URL}/items/${itemId}`, {
+      method: "DELETE",
+      headers,
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Loyverse API error (${response.status}): ${error}`);
+    }
+  } catch (error) {
+    console.error("Erreur suppression item Loyverse:", error);
+    throw error;
+  }
+}
