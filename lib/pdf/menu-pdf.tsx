@@ -78,18 +78,18 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
-    paddingBottom: 15,
+    marginBottom: 15,
+    paddingBottom: 10,
     borderBottomWidth: 2,
     borderBottomColor: "#D4AF37",
   },
   headerLogo: {
-    width: 60,
-    height: 60,
-    marginRight: 15,
+    width: 50,
+    height: 50,
+    marginRight: 12,
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#1a1a1a",
     flex: 1,
@@ -98,15 +98,15 @@ const styles = StyleSheet.create({
 
   // Catégories
   categorySection: {
-    marginBottom: 15,
+    marginBottom: 10,
   },
   categoryTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#FFFFFF",
     backgroundColor: "#1a1a1a",
-    padding: 8,
-    marginBottom: 10,
+    padding: 6,
+    marginBottom: 8,
     borderLeftWidth: 4,
     borderLeftColor: "#D4AF37",
   },
@@ -115,63 +115,63 @@ const styles = StyleSheet.create({
   productGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 10,
+    gap: 6,
   },
 
   // Carte produit
   productCard: {
     width: "48%",
-    marginBottom: 10,
-    padding: 10,
+    marginBottom: 6,
+    padding: 6,
     backgroundColor: "#FAFAFA",
-    borderRadius: 4,
+    borderRadius: 3,
     borderWidth: 1,
     borderColor: "#E5E5E5",
   },
   productImage: {
-    width: 60,
-    height: 60,
+    width: 45,
+    height: 45,
     objectFit: "cover",
-    borderRadius: 4,
-    marginBottom: 6,
+    borderRadius: 3,
+    marginBottom: 4,
     alignSelf: "center",
   },
   productName: {
-    fontSize: 11,
+    fontSize: 9,
     fontWeight: "bold",
     color: "#1a1a1a",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   productDescription: {
-    fontSize: 9,
+    fontSize: 7,
     color: "#666666",
-    marginBottom: 8,
-    lineHeight: 1.3,
+    marginBottom: 4,
+    lineHeight: 1.2,
   },
 
   // Prix
   priceContainer: {
-    marginTop: 8,
-    paddingTop: 8,
+    marginTop: 4,
+    paddingTop: 4,
     borderTopWidth: 1,
     borderTopColor: "#E5E5E5",
   },
   priceSimple: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: "bold",
     color: "#D4AF37",
   },
   variantRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 4,
+    marginBottom: 2,
   },
   variantName: {
-    fontSize: 9,
+    fontSize: 7,
     color: "#666666",
   },
   variantPrice: {
-    fontSize: 10,
+    fontSize: 8,
     fontWeight: "bold",
     color: "#1a1a1a",
   },
@@ -219,7 +219,7 @@ const ProductsByCategory = ({ category, products }: { category: string; products
   const categoryDisplay = category.split(" - ").pop() || category;
 
   return (
-    <View style={styles.categorySection} wrap={false}>
+    <View style={styles.categorySection}>
       <Text style={styles.categoryTitle}>{categoryDisplay}</Text>
       <View style={styles.productGrid}>
         {products.map((product, index) => (
