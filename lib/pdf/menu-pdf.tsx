@@ -215,7 +215,7 @@ const ProductsByCategory = ({ category, products }: { category: string; products
           <View key={index} style={styles.productCard}>
             {product.image && (
               <Image
-                src={`/images/menu-items/${product.image}`}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/${product.image}`}
                 style={styles.productImage}
               />
             )}
