@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       menuProducts.map((p) => [p.sku, p])
     );
 
-    // Traiter chaque item Loyverse
+    // Traiter chaque item Loyverse en batch
     for (const loyverseItem of loyverseItems) {
       try {
         const sku = loyverseItem.reference_id || loyverseItem.variants[0]?.sku;
@@ -63,12 +63,6 @@ export async function POST(request: NextRequest) {
 
         // Récupérer les données d'enrichissement depuis menu-data.ts
         const menuData = menuDataMap.get(sku);
-
-        // Vérifier si le produit existe déjà en DB
-        const existingProduct = await prisma.product.findUnique({
-          where: { sku },
-          include: { variants: true },
-        });
 
         const productData = {
           handle: menuData?.handle || sku.toLowerCase().replace(/[^a-z0-9]/g, "-"),
@@ -83,43 +77,31 @@ export async function POST(request: NextRequest) {
           loyverseItemId: loyverseItem.id,
           lastSyncAt: new Date(),
           syncSource: "LOYVERSE" as const,
+          price: null as number | null,
         };
 
-        if (existingProduct) {
-          // Mise à jour du produit existant
-          await prisma.product.update({
-            where: { id: existingProduct.id },
-            data: productData,
-          });
-
-          // Supprimer les anciens variants
-          await prisma.productVariant.deleteMany({
-            where: { productId: existingProduct.id },
-          });
-
-          stats.updated++;
-        } else {
-          // Créer un nouveau produit
-          await prisma.product.create({
-            data: productData,
-          });
-
-          stats.created++;
+        // Déterminer le prix
+        if (loyverseItem.variants && loyverseItem.variants.length > 0) {
+          if (loyverseItem.variants.length === 1 && !loyverseItem.option1_name) {
+            // Un seul variant sans options = produit simple
+            productData.price = parseFloat(loyverseItem.variants[0].default_price);
+          }
         }
 
-        // Récupérer le produit mis à jour/créé
-        const product = await prisma.product.findUnique({
+        // Upsert du produit (create or update) en une seule requête
+        const product = await prisma.product.upsert({
           where: { sku },
+          create: productData,
+          update: productData,
         });
 
-        if (!product) {
-          throw new Error(`Produit non trouvé après création/mise à jour: ${sku}`);
-        }
-
-        // Créer les variants depuis Loyverse
-        if (loyverseItem.variants && loyverseItem.variants.length > 0) {
-          for (const loyverseVariant of loyverseItem.variants) {
-            await prisma.productVariant.create({
+        // Supprimer les anciens variants et créer les nouveaux en une transaction
+        await prisma.$transaction([
+          prisma.productVariant.deleteMany({
+            where: { productId: product.id },
+          }),
+          ...loyverseItem.variants.map((loyverseVariant) =>
+            prisma.productVariant.create({
               data: {
                 productId: product.id,
                 option1Name: loyverseItem.option1_name || null,
@@ -131,26 +113,14 @@ export async function POST(request: NextRequest) {
                 loyverseVariantId: loyverseVariant.variant_id,
                 isActive: true,
               },
-            });
-          }
+            })
+          ),
+        ]);
 
-          // Mettre le prix du produit à null (il a des variants)
-          await prisma.product.update({
-            where: { id: product.id },
-            data: { price: null },
-          });
-        } else {
-          // Produit sans variants, le prix vient du premier variant
-          const firstVariant = loyverseItem.variants[0];
-          if (firstVariant) {
-            await prisma.product.update({
-              where: { id: product.id },
-              data: { price: parseFloat(firstVariant.default_price) },
-            });
-          }
+        stats.created++;
+        if (stats.created % 10 === 0) {
+          console.log(`✅ Synchronisé ${stats.created}/${loyverseItems.length} produits...`);
         }
-
-        console.log(`✅ Synchronisé: ${loyverseItem.item_name}`);
       } catch (error) {
         console.error(`❌ Erreur pour ${loyverseItem.item_name}:`, error);
         stats.errors.push(
