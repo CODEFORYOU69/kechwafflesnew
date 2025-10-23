@@ -122,11 +122,12 @@ const styles = StyleSheet.create({
     borderColor: "#E5E5E5",
   },
   productImage: {
-    width: "100%",
+    width: 80,
     height: 80,
     objectFit: "cover",
     borderRadius: 4,
     marginBottom: 8,
+    alignSelf: "center",
   },
   productName: {
     fontSize: 12,
