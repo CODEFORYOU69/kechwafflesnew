@@ -21,10 +21,21 @@ export type Product = {
 
 export const menuProducts: Product[] = [
   {
+    handle: "cafe-au-lait",
+    sku: "CAL-001",
+    name: "Café au Lait",
+    category: "Boissons - Boissons Lactées",
+    description: "Café avec lait",
+    image: "caféaulait.png",
+    price: 25,
+  },
+
+  {
     handle: "cap-sm",
     sku: "CAP-SM",
     name: "Cappuccino",
-    category: "Autres",
+    category: "Boissons - Boissons Lactées",
+    image: "cappuccino.png",
     variants: [
       {
         option1Name: "Taille",
@@ -34,12 +45,12 @@ export const menuProducts: Product[] = [
       {
         option1Name: "Taille",
         option1Value: "Medium",
-        price: 35,
+        price: 30,
       },
       {
         option1Name: "Taille",
         option1Value: "Large",
-        price: 45,
+        price: 35,
       }
     ],
   },
@@ -48,17 +59,18 @@ export const menuProducts: Product[] = [
     handle: "cha-h",
     sku: "CHA-H",
     name: "Chai Latte",
-    category: "Autres",
+    category: "Boissons - Boissons Lactées",
+    image: "chailatté.png",
     variants: [
       {
         option1Name: "Température",
         option1Value: "Chaud",
-        price: 40,
+        price: 25,
       },
       {
         option1Name: "Température",
         option1Value: "Froid",
-        price: 40,
+        price: 25,
       }
     ],
   },
@@ -67,281 +79,20 @@ export const menuProducts: Product[] = [
     handle: "chb-h",
     sku: "CHB-H",
     name: "Chocolat Blanc",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Température",
-        option1Value: "Chaud",
-        price: 35,
-      },
-      {
-        option1Name: "Température",
-        option1Value: "Froid",
-        price: 35,
-      }
-    ],
-  },
-
-  {
-    handle: "glass-col",
-    sku: "GLASS-COL",
-    name: "Glass' Cola",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Format",
-        option1Value: "33cl",
-        price: 8,
-      },
-      {
-        option1Name: "Format",
-        option1Value: "1.5L",
-        price: 15,
-      }
-    ],
-  },
-
-  {
-    handle: "glass-pom",
-    sku: "GLASS-POM",
-    name: "Glass' Pomme",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Format",
-        option1Value: "33cl",
-        price: 8,
-      },
-      {
-        option1Name: "Format",
-        option1Value: "1.5L",
-        price: 15,
-      }
-    ],
-  },
-
-  {
-    handle: "glass-tro",
-    sku: "GLASS-TRO",
-    name: "Glass' Tropical",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Format",
-        option1Value: "33cl",
-        price: 8,
-      },
-      {
-        option1Name: "Format",
-        option1Value: "1.5L",
-        price: 15,
-      }
-    ],
-  },
-
-  {
-    handle: "lca-sm",
-    sku: "LCA-SM",
-    name: "Lait Chaud Aromatisé",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Taille",
-        option1Value: "Small",
-        price: 25,
-      },
-      {
-        option1Name: "Taille",
-        option1Value: "Medium",
-        price: 35,
-      }
-    ],
-  },
-
-  {
-    handle: "lch-sm",
-    sku: "LCH-SM",
-    name: "Lait Chaud Simple",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Taille",
-        option1Value: "Small",
-        price: 20,
-      },
-      {
-        option1Name: "Taille",
-        option1Value: "Medium",
-        price: 30,
-      }
-    ],
-  },
-
-  {
-    handle: "ext-soj",
-    sku: "EXT-SOJ",
-    name: "Lait Végétal",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Type",
-        option1Value: "Soja",
-        price: 5,
-      },
-      {
-        option1Name: "Type",
-        option1Value: "Amande",
-        price: 5,
-      },
-      {
-        option1Name: "Type",
-        option1Value: "Avoine",
-        price: 5,
-      },
-      {
-        option1Name: "Type",
-        option1Value: "Coco",
-        price: 5,
-      }
-    ],
-  },
-
-  {
-    handle: "lat-sm",
-    sku: "LAT-SM",
-    name: "Latte",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Taille",
-        option1Value: "Small",
-        price: 20,
-      },
-      {
-        option1Name: "Taille",
-        option1Value: "Medium",
-        price: 30,
-      },
-      {
-        option1Name: "Taille",
-        option1Value: "Large",
-        price: 40,
-      }
-    ],
-  },
-
-  {
-    handle: "mat-h",
-    sku: "MAT-H",
-    name: "Matcha Latte",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Température",
-        option1Value: "Chaud",
-        price: 40,
-      },
-      {
-        option1Name: "Température",
-        option1Value: "Froid",
-        price: 40,
-      }
-    ],
-  },
-
-  {
-    handle: "opt-fra",
-    sku: "OPT-FRA",
-    name: "Option Fraise Can",
-    category: "Autres",
-    price: 10,
-  },
-
-  {
-    handle: "oulm-25v",
-    sku: "OULM-25V",
-    name: "Oulmes",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Format",
-        option1Value: "25cl verre",
-        price: 10,
-      },
-      {
-        option1Name: "Format",
-        option1Value: "33cl",
-        price: 8,
-      },
-      {
-        option1Name: "Format",
-        option1Value: "1L",
-        price: 15,
-      }
-    ],
-  },
-
-  {
-    handle: "sidi-33",
-    sku: "SIDI-33",
-    name: "Sidi Ali",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Format",
-        option1Value: "33cl",
-        price: 6,
-      },
-      {
-        option1Name: "Format",
-        option1Value: "50cl",
-        price: 8,
-      },
-      {
-        option1Name: "Format",
-        option1Value: "75cl verre",
-        price: 12,
-      }
-    ],
-  },
-
-  {
-    handle: "sir-van",
-    sku: "SIR-VAN",
-    name: "Sirop Supplément",
-    category: "Autres",
-    variants: [
-      {
-        option1Name: "Parfum",
-        option1Value: "Vanille",
-        price: 5,
-      },
-      {
-        option1Name: "Parfum",
-        option1Value: "Caramel",
-        price: 5,
-      },
-      {
-        option1Name: "Parfum",
-        option1Value: "Noisette",
-        price: 5,
-      },
-      {
-        option1Name: "Parfum",
-        option1Value: "Autre",
-        price: 10,
-      }
-    ],
-  },
-
-  {
-    handle: "cafe-au-lait",
-    sku: "CAL-001",
-    name: "Café au Lait",
     category: "Boissons - Boissons Lactées",
-    description: "Café avec lait",
-    image: "caféaulait.png",
-    price: 25,
+    image: "chocolat blanc.png",
+    variants: [
+      {
+        option1Name: "Température",
+        option1Value: "Froid",
+        price: 30,
+      },
+      {
+        option1Name: "Température",
+        option1Value: "Chaud",
+        price: 30,
+      }
+    ],
   },
 
   {
@@ -405,6 +156,46 @@ export const menuProducts: Product[] = [
   },
 
   {
+    handle: "lca-sm",
+    sku: "LCA-SM",
+    name: "Lait Chaud Aromatisé",
+    category: "Boissons - Boissons Lactées",
+    image: "laitaromtisé.png",
+    variants: [
+      {
+        option1Name: "Taille",
+        option1Value: "Small",
+        price: 25,
+      },
+      {
+        option1Name: "Taille",
+        option1Value: "Medium",
+        price: 35,
+      }
+    ],
+  },
+
+  {
+    handle: "lch-sm",
+    sku: "LCH-SM",
+    name: "Lait Chaud Simple",
+    category: "Boissons - Boissons Lactées",
+    image: "laitchaud.png",
+    variants: [
+      {
+        option1Name: "Taille",
+        option1Value: "Small",
+        price: 20,
+      },
+      {
+        option1Name: "Taille",
+        option1Value: "Medium",
+        price: 30,
+      }
+    ],
+  },
+
+  {
     handle: "lait-froid-arome",
     sku: "LFA-001",
     name: "Lait Froid Aromatisé",
@@ -422,6 +213,51 @@ export const menuProducts: Product[] = [
     description: "Lait froid nature",
     image: "laitfroid.png",
     price: 30,
+  },
+
+  {
+    handle: "lat-sm",
+    sku: "LAT-SM",
+    name: "Latte",
+    category: "Boissons - Boissons Lactées",
+    image: "latte.png",
+    variants: [
+      {
+        option1Name: "Taille",
+        option1Value: "Small",
+        price: 20,
+      },
+      {
+        option1Name: "Taille",
+        option1Value: "Medium",
+        price: 30,
+      },
+      {
+        option1Name: "Taille",
+        option1Value: "Large",
+        price: 40,
+      }
+    ],
+  },
+
+  {
+    handle: "mat-h",
+    sku: "MAT-H",
+    name: "Matcha Latte",
+    category: "Boissons - Boissons Lactées",
+    image: "matchahot.png",
+    variants: [
+      {
+        option1Name: "Température",
+        option1Value: "Chaud",
+        price: 40,
+      },
+      {
+        option1Name: "Température",
+        option1Value: "Froid",
+        price: 40,
+      }
+    ],
   },
 
   {
@@ -864,18 +700,23 @@ export const menuProducts: Product[] = [
     variants: [
       {
         option1Name: "Saveur",
+        option1Value: "Fraise",
+        price: 50,
+      },
+      {
+        option1Name: "Saveur",
         option1Value: "Oreo",
-        price: 55,
+        price: 50,
       },
       {
         option1Name: "Saveur",
         option1Value: "Caramel",
-        price: 55,
+        price: 50,
       },
       {
         option1Name: "Saveur",
         option1Value: "Daim",
-        price: 55,
+        price: 50,
       },
       {
         option1Name: "Saveur",
@@ -885,22 +726,42 @@ export const menuProducts: Product[] = [
       {
         option1Name: "Saveur",
         option1Value: "Kinder Bueno",
-        price: 60,
+        price: 55,
       },
       {
         option1Name: "Saveur",
         option1Value: "Nutella",
-        price: 60,
+        price: 50,
       },
       {
         option1Name: "Saveur",
         option1Value: "Mangue",
         price: 55,
+      }
+    ],
+  },
+
+  {
+    handle: "oulm-25v",
+    sku: "OULM-25V",
+    name: "Oulmes",
+    category: "Eaux & Soft Drinks",
+    image: "oulmes33.png",
+    variants: [
+      {
+        option1Name: "Format",
+        option1Value: "25cl verre",
+        price: 10,
       },
       {
-        option1Name: "Saveur",
-        option1Value: "Fraise",
-        price: 55,
+        option1Name: "Format",
+        option1Value: "33cl",
+        price: 8,
+      },
+      {
+        option1Name: "Format",
+        option1Value: "1L",
+        price: 15,
       }
     ],
   },
@@ -963,6 +824,31 @@ export const menuProducts: Product[] = [
     description: "Eau gazeuse jus fruits tropical 25cl verre",
     image: "oukmesfruitee.png",
     price: 12,
+  },
+
+  {
+    handle: "sidi-33",
+    sku: "SIDI-33",
+    name: "Sidi Ali",
+    category: "Eaux & Soft Drinks",
+    image: "sidiali33.png",
+    variants: [
+      {
+        option1Name: "Format",
+        option1Value: "33cl",
+        price: 6,
+      },
+      {
+        option1Name: "Format",
+        option1Value: "50cl",
+        price: 8,
+      },
+      {
+        option1Name: "Format",
+        option1Value: "75cl verre",
+        price: 12,
+      }
+    ],
   },
 
   {
@@ -1124,6 +1010,36 @@ export const menuProducts: Product[] = [
   },
 
   {
+    handle: "ext-soj",
+    sku: "EXT-SOJ",
+    name: "Lait Végétal",
+    category: "Modificateurs",
+    image: "laitvegetal.png",
+    variants: [
+      {
+        option1Name: "Type",
+        option1Value: "Soja",
+        price: 5,
+      },
+      {
+        option1Name: "Type",
+        option1Value: "Amande",
+        price: 5,
+      },
+      {
+        option1Name: "Type",
+        option1Value: "Avoine",
+        price: 5,
+      },
+      {
+        option1Name: "Type",
+        option1Value: "Coco",
+        price: 5,
+      }
+    ],
+  },
+
+  {
     handle: "oignons-caramelises",
     sku: "EXT-OIG",
     name: "Oignons Caramélisés",
@@ -1143,6 +1059,15 @@ export const menuProducts: Product[] = [
     image: "chantilly.png",
     price: 8,
     isModifier: true,
+  },
+
+  {
+    handle: "opt-fra",
+    sku: "OPT-FRA",
+    name: "Option Fraise Can",
+    category: "Modificateurs",
+    image: "topfraises.png",
+    price: 10,
   },
 
   {
@@ -1242,6 +1167,36 @@ export const menuProducts: Product[] = [
     image: "espresso.png",
     price: 8,
     isModifier: true,
+  },
+
+  {
+    handle: "sir-van",
+    sku: "SIR-VAN",
+    name: "Sirop Supplément",
+    category: "Modificateurs",
+    image: "sirops.png",
+    variants: [
+      {
+        option1Name: "Parfum",
+        option1Value: "Vanille",
+        price: 5,
+      },
+      {
+        option1Name: "Parfum",
+        option1Value: "Caramel",
+        price: 5,
+      },
+      {
+        option1Name: "Parfum",
+        option1Value: "Noisette",
+        price: 5,
+      },
+      {
+        option1Name: "Parfum",
+        option1Value: "Autre",
+        price: 10,
+      }
+    ],
   },
 
   {
