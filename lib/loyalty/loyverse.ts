@@ -336,7 +336,7 @@ export async function getLoyverseItems(): Promise<LoyverseItem[]> {
 
     // Pagination - Loyverse limite à 250 items par requête
     while (hasMore) {
-      const url = cursor
+      const url: string = cursor
         ? `${LOYVERSE_API_URL}/items?limit=250&cursor=${cursor}`
         : `${LOYVERSE_API_URL}/items?limit=250`;
 
