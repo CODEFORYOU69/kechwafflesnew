@@ -101,7 +101,7 @@ export async function PUT(
     } = body;
 
     // Mettre à jour le produit
-    const updatedProduct = await prisma.product.update({
+    await prisma.product.update({
       where: { id },
       data: {
         name: name || existingProduct.name,
@@ -137,7 +137,7 @@ export async function PUT(
 
       // Créer les nouveaux variants
       for (const variant of variants) {
-        const createdVariant = await prisma.productVariant.create({
+        await prisma.productVariant.create({
           data: {
             productId: id,
             option1Name: variant.option1Name || null,

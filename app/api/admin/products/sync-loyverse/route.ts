@@ -119,13 +119,6 @@ export async function POST(request: NextRequest) {
         // Créer les variants depuis Loyverse
         if (loyverseItem.variants && loyverseItem.variants.length > 0) {
           for (const loyverseVariant of loyverseItem.variants) {
-            // Trouver les données du variant dans menu-data.ts
-            const menuVariant = menuData?.variants?.find(
-              (v) =>
-                v.option1Value === loyverseVariant.option1_value &&
-                v.option2Value === loyverseVariant.option2_value
-            );
-
             await prisma.productVariant.create({
               data: {
                 productId: product.id,

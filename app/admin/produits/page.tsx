@@ -18,11 +18,9 @@ import {
   ArrowLeft,
   RefreshCw,
   Loader2,
-  Download,
   Edit,
   Trash2,
   Search,
-  Plus,
   FileDown,
 } from "lucide-react";
 import Link from "next/link";
@@ -76,6 +74,7 @@ export default function ProduitsAdminPage() {
 
   useEffect(() => {
     filterProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, searchQuery, selectedCategory]);
 
   const fetchProducts = async () => {

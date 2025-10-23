@@ -5,10 +5,10 @@ import {
   Text,
   View,
   StyleSheet,
-  Font,
 } from "@react-pdf/renderer";
 
 // Enregistrer les polices (optionnel, utilise Helvetica par défaut)
+// import { Font } from "@react-pdf/renderer";
 // Font.register({
 //   family: "Poppins",
 //   src: "https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrFJA.ttf",
@@ -238,7 +238,7 @@ const ProductsByCategory = ({ category, products }: { category: string; products
 };
 
 // Document PDF complet
-export const MenuPDF = ({ products, generatedAt }: MenuPDFProps) => {
+export const MenuPDF = ({ products }: MenuPDFProps) => {
   // Grouper les produits par catégorie
   const productsByCategory = products.reduce((acc, product) => {
     if (!acc[product.category]) {
