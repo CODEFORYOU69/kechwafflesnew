@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { isUserAdmin } from "@/lib/admin";
-import { updateLoyverseItem, updateLoyverseVariantPrice } from "@/lib/loyalty/loyverse";
+import { updateLoyverseItem, updateLoyverseVariantPrice, deleteLoyverseItem } from "@/lib/loyalty/loyverse";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -189,6 +189,7 @@ export async function PUT(
 
 /**
  * DELETE: Supprime un produit
+ * Synchronise automatiquement avec Loyverse si le produit y est lié
  */
 export async function DELETE(
   request: NextRequest,
@@ -217,7 +218,30 @@ export async function DELETE(
 
     const { id } = await context.params;
 
-    // Supprimer le produit (les variants seront supprimés en cascade)
+    // Récupérer le produit pour vérifier s'il est lié à Loyverse
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      return NextResponse.json(
+        { error: "Produit non trouvé" },
+        { status: 404 }
+      );
+    }
+
+    // Supprimer dans Loyverse si lié
+    if (product.loyverseItemId) {
+      try {
+        await deleteLoyverseItem(product.loyverseItemId);
+        console.log(`✅ Produit supprimé dans Loyverse: ${product.loyverseItemId}`);
+      } catch (error) {
+        console.error("⚠️ Erreur suppression Loyverse (non bloquant):", error);
+        // On continue la suppression même si Loyverse échoue
+      }
+    }
+
+    // Supprimer le produit dans notre DB (les variants seront supprimés en cascade)
     await prisma.product.delete({
       where: { id },
     });

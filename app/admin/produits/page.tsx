@@ -7,6 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -67,6 +75,13 @@ export default function ProduitsAdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  // Modal states
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [editedVariants, setEditedVariants] = useState<ProductVariant[]>([]);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -184,6 +199,86 @@ export default function ProduitsAdminPage() {
       return `${min.toFixed(0)} - ${max.toFixed(0)} Dh`;
     }
     return product.price ? `${product.price.toFixed(0)} Dh` : "N/A";
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setEditedVariants([...product.variants]);
+    setEditDialogOpen(true);
+  };
+
+  const handleDeleteProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleVariantPriceChange = (variantId: string, newPrice: number) => {
+    setEditedVariants((prev) =>
+      prev.map((v) => (v.id === variantId ? { ...v, price: newPrice } : v))
+    );
+  };
+
+  const handleSaveProduct = async () => {
+    if (!selectedProduct) return;
+
+    try {
+      setSaving(true);
+
+      const response = await fetch(`/api/admin/products/${selectedProduct.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          variants: editedVariants.map((v) => ({
+            option1Name: v.option1Name,
+            option1Value: v.option1Value,
+            option2Name: v.option2Name,
+            option2Value: v.option2Value,
+            price: v.price,
+            variantSku: v.variantSku,
+            loyverseVariantId: v.loyverseVariantId,
+            isActive: v.isActive,
+          })),
+        }),
+      });
+
+      if (response.ok) {
+        alert("✅ Produit mis à jour avec succès !");
+        setEditDialogOpen(false);
+        fetchProducts();
+      } else {
+        const data = await response.json();
+        alert(`Erreur : ${data.error || "Impossible de sauvegarder"}`);
+      }
+    } catch {
+      alert("Erreur lors de la sauvegarde");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedProduct) return;
+
+    try {
+      setSaving(true);
+
+      const response = await fetch(`/api/admin/products/${selectedProduct.id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        alert("✅ Produit supprimé avec succès !");
+        setDeleteDialogOpen(false);
+        fetchProducts();
+      } else {
+        const data = await response.json();
+        alert(`Erreur : ${data.error || "Impossible de supprimer"}`);
+      }
+    } catch {
+      alert("Erreur lors de la suppression");
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (loading) {
@@ -391,10 +486,19 @@ export default function ProduitsAdminPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button size="sm" variant="outline">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleEditProduct(product)}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="outline" className="text-red-600">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-red-600"
+                            onClick={() => handleDeleteProduct(product)}
+                          >
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -407,6 +511,163 @@ export default function ProduitsAdminPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Edit Product Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Modifier le produit</DialogTitle>
+            <DialogDescription>
+              Modifiez les prix des variants. Les changements seront synchronisés avec Loyverse.
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedProduct && (
+            <div className="space-y-4">
+              {/* Product Info */}
+              <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                {selectedProduct.image && (
+                  <div className="relative w-16 h-16 rounded overflow-hidden">
+                    <Image
+                      src={`/images/menu-items/${selectedProduct.image}`}
+                      alt={selectedProduct.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+                <div>
+                  <h3 className="font-semibold text-lg">{selectedProduct.name}</h3>
+                  <p className="text-sm text-gray-600">SKU: {selectedProduct.sku}</p>
+                  <Badge variant="outline" className="mt-1">
+                    {selectedProduct.category}
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Variants Pricing */}
+              <div className="space-y-3">
+                <h4 className="font-medium">Prix des variants</h4>
+                {editedVariants.map((variant) => (
+                  <div key={variant.id} className="flex items-center gap-3">
+                    <div className="flex-1">
+                      <div className="text-sm font-medium">
+                        {variant.option1Name && variant.option1Value && (
+                          <span>
+                            {variant.option1Name}: {variant.option1Value}
+                          </span>
+                        )}
+                        {variant.option2Name && variant.option2Value && (
+                          <span className="ml-2">
+                            | {variant.option2Name}: {variant.option2Value}
+                          </span>
+                        )}
+                        {!variant.option1Name && "Prix standard"}
+                      </div>
+                      {variant.variantSku && (
+                        <div className="text-xs text-gray-500 font-mono">
+                          {variant.variantSku}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        step="0.01"
+                        value={variant.price}
+                        onChange={(e) =>
+                          handleVariantPriceChange(variant.id, parseFloat(e.target.value))
+                        }
+                        className="w-24"
+                      />
+                      <span className="text-sm font-medium">Dh</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setEditDialogOpen(false)}
+              disabled={saving}
+            >
+              Annuler
+            </Button>
+            <Button
+              onClick={handleSaveProduct}
+              disabled={saving}
+              className="bg-gradient-to-r from-green-600 via-amber-500 to-red-600"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Enregistrement...
+                </>
+              ) : (
+                "Enregistrer"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Product Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Supprimer le produit</DialogTitle>
+            <DialogDescription>
+              Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedProduct && (
+            <div className="flex items-center gap-4 p-4 bg-red-50 rounded-lg border border-red-200">
+              {selectedProduct.image && (
+                <div className="relative w-16 h-16 rounded overflow-hidden">
+                  <Image
+                    src={`/images/menu-items/${selectedProduct.image}`}
+                    alt={selectedProduct.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <div>
+                <h3 className="font-semibold">{selectedProduct.name}</h3>
+                <p className="text-sm text-gray-600">SKU: {selectedProduct.sku}</p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={saving}
+            >
+              Annuler
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleConfirmDelete}
+              disabled={saving}
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Suppression...
+                </>
+              ) : (
+                "Supprimer"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

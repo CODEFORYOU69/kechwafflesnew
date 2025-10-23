@@ -1,11 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import FloatingBackground from "@/app/components/FloatingBackground";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { menuProducts, type Product } from "@/lib/menu-data";
+import { Loader2 } from "lucide-react";
+
+type ProductVariant = {
+  option1Name: string | null;
+  option1Value: string | null;
+  option2Name: string | null;
+  option2Value: string | null;
+  price: number;
+};
+
+type Product = {
+  handle: string;
+  sku: string;
+  name: string;
+  category: string;
+  description?: string | null;
+  price?: number | null;
+  variants?: ProductVariant[];
+  isModifier?: boolean;
+  hasTax?: boolean;
+  image?: string | null;
+};
 
 interface ProductCardProps {
   product: Product;
@@ -68,6 +90,27 @@ const ProductCard = ({ product }: ProductCardProps) => (
 );
 
 export default function MenuPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("/api/products");
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data.products);
+        }
+      } catch (error) {
+        console.error("Erreur chargement produits:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const staggerContainer = {
     hidden: { opacity: 0 },
     show: {
@@ -78,44 +121,52 @@ export default function MenuPage() {
     },
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-amber-500" />
+      </div>
+    );
+  }
+
   // Organiser les produits par catégorie
-  const cafes = menuProducts.filter((p) => p.category === "Boissons - Cafés");
-  const boissonsLactees = menuProducts.filter(
+  const cafes = products.filter((p) => p.category === "Boissons - Cafés");
+  const boissonsLactees = products.filter(
     (p) => p.category === "Boissons - Boissons Lactées"
   );
-  const milkshakes = menuProducts.filter(
+  const milkshakes = products.filter(
     (p) => p.category === "Boissons - Milkshakes"
   );
-  const boissonsSpeciales = menuProducts.filter(
+  const boissonsSpeciales = products.filter(
     (p) => p.category === "Boissons - Spécialisées"
   );
 
-  const desserts = menuProducts.filter((p) => p.category === "Desserts");
-  const dessertsCans = menuProducts.filter(
+  const desserts = products.filter((p) => p.category === "Desserts");
+  const dessertsCans = products.filter(
     (p) => p.category === "Desserts - Cans"
   );
 
-  const briodogsSales = menuProducts.filter(
+  const briodogsSales = products.filter(
     (p) => p.category === "Briodogs Salés"
   );
-  const briodogsSucres = menuProducts.filter(
+  const briodogsSucres = products.filter(
     (p) => p.category === "Briodogs Sucrés"
   );
 
-  const modificateurs = menuProducts.filter(
+  const modificateurs = products.filter(
     (p) => p.category === "Modificateurs"
   );
 
-  const shotsVitamines = menuProducts.filter(
+  const shotsVitamines = products.filter(
     (p) => p.category === "Shots Vitaminés"
   );
-  const eauxSoftDrinks = menuProducts.filter(
+  const eauxSoftDrinks = products.filter(
     (p) => p.category === "Eaux & Soft Drinks"
   );
-  const jusFrais = menuProducts.filter(
+  const jusFrais = products.filter(
     (p) => p.category === "Jus Frais Pressés"
   );
-  const boissonsIceLactees = menuProducts.filter(
+  const boissonsIceLactees = products.filter(
     (p) => p.category === "Boissons Ice Lactées"
   );
 
