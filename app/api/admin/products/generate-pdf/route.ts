@@ -81,6 +81,7 @@ export async function GET(request: NextRequest) {
       description: product.description,
       price: product.price,
       category: product.category,
+      image: product.image,
       variants: product.variants.map((v) => ({
         option1Name: v.option1Name,
         option1Value: v.option1Value,

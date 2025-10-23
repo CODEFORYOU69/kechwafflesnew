@@ -4,6 +4,7 @@ import {
   Page,
   Text,
   View,
+  Image,
   StyleSheet,
 } from "@react-pdf/renderer";
 
@@ -27,6 +28,7 @@ type Product = {
   description: string | null;
   price: number | null;
   category: string;
+  image: string | null;
   variants: ProductVariant[];
 };
 
@@ -119,6 +121,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E5E5E5",
   },
+  productImage: {
+    width: "100%",
+    height: 80,
+    objectFit: "cover",
+    borderRadius: 4,
+    marginBottom: 8,
+  },
   productName: {
     fontSize: 12,
     fontWeight: "bold",
@@ -204,6 +213,12 @@ const ProductsByCategory = ({ category, products }: { category: string; products
       <View style={styles.productGrid}>
         {products.map((product, index) => (
           <View key={index} style={styles.productCard}>
+            {product.image && (
+              <Image
+                src={`/images/menu-items/${product.image}`}
+                style={styles.productImage}
+              />
+            )}
             <Text style={styles.productName}>{product.name}</Text>
             {product.description && (
               <Text style={styles.productDescription}>
@@ -239,8 +254,14 @@ const ProductsByCategory = ({ category, products }: { category: string; products
 
 // Document PDF complet
 export const MenuPDF = ({ products }: MenuPDFProps) => {
+  // Filtrer les produits pour exclure "Autres" et ne garder que les produits avec prix
+  const filteredProducts = products.filter(
+    (p) => p.category !== "Autres" && !p.category.startsWith("Modificateurs") &&
+    ((p.variants && p.variants.length > 0) || p.price)
+  );
+
   // Grouper les produits par catégorie
-  const productsByCategory = products.reduce((acc, product) => {
+  const productsByCategory = filteredProducts.reduce((acc, product) => {
     if (!acc[product.category]) {
       acc[product.category] = [];
     }
@@ -248,7 +269,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
     return acc;
   }, {} as Record<string, Product[]>);
 
-  // Ordre des catégories
+  // Ordre des catégories (sans Modificateurs)
   const categoryOrder = [
     "Boissons - Cafés",
     "Boissons - Boissons Lactées",
@@ -262,7 +283,6 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
     "Desserts - Cans",
     "Briodogs Salés",
     "Briodogs Sucrés",
-    "Modificateurs",
   ];
 
   const sortedCategories = Object.keys(productsByCategory).sort((a, b) => {
@@ -282,9 +302,6 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
   );
   const briodogsCategories = sortedCategories.filter((cat) =>
     cat.startsWith("Briodogs")
-  );
-  const modificateursCategories = sortedCategories.filter((cat) =>
-    cat.startsWith("Modificateurs")
   );
 
   return (
@@ -352,30 +369,6 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
             <Text style={styles.headerTitle}>Nos Briodogs</Text>
           </View>
           {briodogsCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
-
-      {/* Modificateurs */}
-      {modificateursCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Extras & Modificateurs</Text>
-          </View>
-          {modificateursCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
