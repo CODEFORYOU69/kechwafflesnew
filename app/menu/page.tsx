@@ -153,7 +153,7 @@ export default function MenuPage() {
     (p) => p.category === "Briodogs Sucrés"
   );
 
-  const modificateurs = products.filter(
+  const supplements = products.filter(
     (p) => p.category === "Modificateurs"
   );
 
@@ -468,7 +468,7 @@ export default function MenuPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-2xl font-bold mb-6"
                   >
-                    Extras & Modificateurs
+                    Suppléments
                   </motion.h2>
 
                   <motion.div
@@ -477,15 +477,15 @@ export default function MenuPage() {
                     animate="show"
                     className="space-y-6"
                   >
-                    <motion.div key="modificateurs" variants={fadeInUp}>
+                    <motion.div key="supplements" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Toppings, Sauces & Extras</CardTitle>
+                            <CardTitle>Toppings, Sauces & Suppléments</CardTitle>
                           </motion.div>
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {modificateurs.map((product, idx) => (
+                          {supplements.map((product, idx) => (
                             <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>

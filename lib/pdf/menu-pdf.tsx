@@ -254,14 +254,8 @@ const ProductsByCategory = ({ category, products }: { category: string; products
 
 // Document PDF complet
 export const MenuPDF = ({ products }: MenuPDFProps) => {
-  // Filtrer les produits pour exclure "Autres" et ne garder que les produits avec prix
-  const filteredProducts = products.filter(
-    (p) => p.category !== "Autres" && !p.category.startsWith("Modificateurs") &&
-    ((p.variants && p.variants.length > 0) || p.price)
-  );
-
-  // Grouper les produits par catégorie
-  const productsByCategory = filteredProducts.reduce((acc, product) => {
+  // Grouper les produits par catégorie (garder tous les produits)
+  const productsByCategory = products.reduce((acc, product) => {
     if (!acc[product.category]) {
       acc[product.category] = [];
     }
@@ -269,7 +263,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
     return acc;
   }, {} as Record<string, Product[]>);
 
-  // Ordre des catégories (sans Modificateurs)
+  // Ordre des catégories
   const categoryOrder = [
     "Boissons - Cafés",
     "Boissons - Boissons Lactées",
@@ -283,6 +277,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
     "Desserts - Cans",
     "Briodogs Salés",
     "Briodogs Sucrés",
+    "Modificateurs",
   ];
 
   const sortedCategories = Object.keys(productsByCategory).sort((a, b) => {
@@ -302,6 +297,9 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
   );
   const briodogsCategories = sortedCategories.filter((cat) =>
     cat.startsWith("Briodogs")
+  );
+  const modificateursCategories = sortedCategories.filter((cat) =>
+    cat.startsWith("Modificateurs") || cat === "Autres"
   );
 
   return (
@@ -369,6 +367,30 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
             <Text style={styles.headerTitle}>Nos Briodogs</Text>
           </View>
           {briodogsCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          <Text style={styles.footer}>
+            Kech Waffles • Marrakech • www.kechwaffles.com
+          </Text>
+          <Text
+            style={styles.pageNumber}
+            render={({ pageNumber }) => `${pageNumber - 1}`}
+            fixed
+          />
+        </Page>
+      )}
+
+      {/* Suppléments */}
+      {modificateursCategories.length > 0 && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Suppléments</Text>
+          </View>
+          {modificateursCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
