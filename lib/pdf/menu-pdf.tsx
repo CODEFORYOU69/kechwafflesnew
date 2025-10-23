@@ -219,7 +219,7 @@ const ProductsByCategory = ({ category, products }: { category: string; products
   const categoryDisplay = category.split(" - ").pop() || category;
 
   return (
-    <View style={styles.categorySection}>
+    <View style={styles.categorySection} wrap={false}>
       <Text style={styles.categoryTitle}>{categoryDisplay}</Text>
       <View style={styles.productGrid}>
         {products.map((product, index) => (
