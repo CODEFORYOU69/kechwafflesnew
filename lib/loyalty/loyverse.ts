@@ -419,7 +419,8 @@ export async function createLoyverseItem(data: {
         sku?: string;
         option1_value?: string;
         option2_value?: string;
-        default_price: string;
+        default_pricing_type: string;
+        default_price: number;
       }>;
     } = {
       item_name: data.name,
@@ -437,7 +438,8 @@ export async function createLoyverseItem(data: {
         sku: v.sku,
         option1_value: v.option1_value,
         option2_value: v.option2_value,
-        default_price: v.price.toFixed(2),
+        default_pricing_type: "FIXED",
+        default_price: v.price,
       }));
     } else {
       // Sinon créer un variant par défaut
@@ -445,7 +447,8 @@ export async function createLoyverseItem(data: {
         {
           reference_variant_id: data.sku,
           sku: data.sku,
-          default_price: data.price.toFixed(2),
+          default_pricing_type: "FIXED",
+          default_price: data.price,
         },
       ];
     }
@@ -559,6 +562,41 @@ export async function deleteLoyverseItem(itemId: string): Promise<void> {
     }
   } catch (error) {
     console.error("Erreur suppression item Loyverse:", error);
+    throw error;
+  }
+}
+
+/**
+ * Upload une image pour un item dans Loyverse
+ */
+export async function uploadLoyverseItemImage(
+  itemId: string,
+  imageBuffer: Buffer,
+  filename: string
+): Promise<void> {
+  try {
+    const token = await getLoyverseToken();
+
+    // Créer un FormData avec l'image
+    const formData = new FormData();
+    const blob = new Blob([imageBuffer], { type: "image/png" });
+    formData.append("image", blob, filename);
+
+    const response = await fetch(`${LOYVERSE_API_URL}/items/${itemId}/image`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        // Ne pas définir Content-Type, il sera automatiquement défini par FormData
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Loyverse API error (${response.status}): ${error}`);
+    }
+  } catch (error) {
+    console.error("Erreur upload image item Loyverse:", error);
     throw error;
   }
 }
