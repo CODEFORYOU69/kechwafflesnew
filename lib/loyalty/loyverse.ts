@@ -579,7 +579,7 @@ export async function uploadLoyverseItemImage(
 
     // Créer un FormData avec l'image
     const formData = new FormData();
-    const blob = new Blob([imageBuffer], { type: "image/png" });
+    const blob = new Blob([new Uint8Array(imageBuffer)], { type: "image/png" });
     formData.append("image", blob, filename);
 
     const response = await fetch(`${LOYVERSE_API_URL}/items/${itemId}/image`, {
