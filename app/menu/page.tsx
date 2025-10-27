@@ -146,11 +146,8 @@ export default function MenuPage() {
     (p) => p.category === "Desserts - Cans"
   );
 
-  const briodogsSales = products.filter(
-    (p) => p.category === "Briodogs Salés"
-  );
-  const briodogsSucres = products.filter(
-    (p) => p.category === "Briodogs Sucrés"
+  const pizzaWaffles = products.filter(
+    (p) => p.category === "Pizza Waffles"
   );
 
   const supplements = products.filter(
@@ -201,9 +198,9 @@ export default function MenuPage() {
                       Desserts
                     </motion.span>
                   </TabsTrigger>
-                  <TabsTrigger value="briodogs" className="flex-1">
+                  <TabsTrigger value="pizzas" className="flex-1">
                     <motion.span whileHover={{ scale: 1.05 }}>
-                      Briodogs
+                      Pizza Waffles
                     </motion.span>
                   </TabsTrigger>
                   <TabsTrigger value="extras" className="flex-1">
@@ -407,9 +404,9 @@ export default function MenuPage() {
                   </motion.div>
                 </TabsContent>
 
-                {/* BRIODOGS SECTION */}
+                {/* PIZZA WAFFLES SECTION */}
                 <TabsContent
-                  value="briodogs"
+                  value="pizzas"
                   className="bg-white/90 rounded-lg p-6"
                 >
                   <motion.h2
@@ -417,7 +414,7 @@ export default function MenuPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-2xl font-bold mb-6"
                   >
-                    Nos Briodogs
+                    Nos Pizza Waffles 🍕
                   </motion.h2>
 
                   <motion.div
@@ -426,30 +423,15 @@ export default function MenuPage() {
                     animate="show"
                     className="space-y-6"
                   >
-                    <motion.div key="briodogs-sales" variants={fadeInUp}>
+                    <motion.div key="pizza-waffles" variants={fadeInUp}>
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardHeader>
                           <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Briodogs Salés</CardTitle>
+                            <CardTitle>Pizza Waffles</CardTitle>
                           </motion.div>
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {briodogsSales.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div key="briodogs-sucres" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Briodogs Sucrés</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {briodogsSucres.map((product, idx) => (
+                          {pizzaWaffles.map((product, idx) => (
                             <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>

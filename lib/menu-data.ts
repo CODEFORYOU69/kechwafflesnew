@@ -27,7 +27,7 @@ export const menuProducts: Product[] = [
     category: "Boissons - Boissons Lactées",
     description: "Café avec lait",
     image: "caféaulait.png",
-    price: 25,
+    price: 18,
   },
 
   {
@@ -40,17 +40,17 @@ export const menuProducts: Product[] = [
       {
         option1Name: "Taille",
         option1Value: "Small",
-        price: 25,
+        price: 20,
       },
       {
         option1Name: "Taille",
         option1Value: "Medium",
-        price: 30,
+        price: 25,
       },
       {
         option1Name: "Taille",
         option1Value: "Large",
-        price: 35,
+        price: 30,
       }
     ],
   },
@@ -65,12 +65,12 @@ export const menuProducts: Product[] = [
       {
         option1Name: "Température",
         option1Value: "Chaud",
-        price: 25,
+        price: 18,
       },
       {
         option1Name: "Température",
         option1Value: "Froid",
-        price: 25,
+        price: 18,
       }
     ],
   },
@@ -85,12 +85,12 @@ export const menuProducts: Product[] = [
       {
         option1Name: "Température",
         option1Value: "Froid",
-        price: 30,
+        price: 22,
       },
       {
         option1Name: "Température",
         option1Value: "Chaud",
-        price: 30,
+        price: 22,
       }
     ],
   },
@@ -417,7 +417,7 @@ export const menuProducts: Product[] = [
     category: "Boissons Ice Lactées",
     description: "Café glacé fouetté style Dalgona",
     image: "DALGONA.png",
-    price: 25,
+    price: 20,
   },
 
   {
@@ -478,146 +478,6 @@ export const menuProducts: Product[] = [
     description: "Café glacé chocolat blanc lait",
     image: "icewhitemocha.png",
     price: 40,
-  },
-
-  {
-    handle: "brio-indien",
-    sku: "BDG-IND",
-    name: "Brio Indien",
-    category: "Briodogs Salés",
-    description: "Briodog tandoori",
-    image: "briodogsalé.png",
-    price: 70,
-  },
-
-  {
-    handle: "brio-classic",
-    sku: "BDG-CLA",
-    name: "BriO'Classic",
-    category: "Briodogs Salés",
-    description: "Briodog saucisse",
-    image: "briodogsalé.png",
-    price: 60,
-  },
-
-  {
-    handle: "brio-falafel",
-    sku: "BDG-FAL",
-    name: "BriO'Falafel",
-    category: "Briodogs Salés",
-    description: "Briodog falafels",
-    image: "briodogsalé.png",
-    price: 60,
-  },
-
-  {
-    handle: "brio-italiano",
-    sku: "BDG-ITA",
-    name: "BriO'Italiano",
-    category: "Briodogs Salés",
-    description: "Briodog mozzarella",
-    image: "briodogsalé.png",
-    price: 65,
-  },
-
-  {
-    handle: "brio-lyonnais",
-    sku: "BDG-LYO",
-    name: "BriO'Lyonnais",
-    category: "Briodogs Salés",
-    description: "Briodog Saint-Marcellin",
-    image: "briodogsalé.png",
-    price: 65,
-  },
-
-  {
-    handle: "brio-malay",
-    sku: "BDG-MAL",
-    name: "BriO'Malay",
-    category: "Briodogs Salés",
-    description: "Briodog rendang",
-    image: "briodogsalé.png",
-    price: 70,
-  },
-
-  {
-    handle: "brio-savoyard",
-    sku: "BDG-SAV",
-    name: "BriO'Savoyard",
-    category: "Briodogs Salés",
-    description: "Briodog Reblochon",
-    image: "briodogsalé.png",
-    price: 65,
-  },
-
-  {
-    handle: "brio-veggie",
-    sku: "BDG-VEG",
-    name: "BriO'Veggie",
-    category: "Briodogs Salés",
-    description: "Briodog végétarien",
-    image: "briodogsalé.png",
-    price: 60,
-  },
-
-  {
-    handle: "brio-amlou",
-    sku: "BDG-AML",
-    name: "Brio'Amlou",
-    category: "Briodogs Sucrés",
-    description: "Briodog Amlou",
-    image: "briodogsucree.jpg",
-    price: 50,
-  },
-
-  {
-    handle: "brio-caramel",
-    sku: "BDG-CAR",
-    name: "Brio'Caramel",
-    category: "Briodogs Sucrés",
-    description: "Briodog caramel",
-    image: "briodogsucree.jpg",
-    price: 50,
-  },
-
-  {
-    handle: "brio-choco-banane",
-    sku: "BDG-CHB",
-    name: "Brio'Choco-Banane",
-    category: "Briodogs Sucrés",
-    description: "Briodog chocolat",
-    image: "briodogsucree.jpg",
-    price: 50,
-  },
-
-  {
-    handle: "brio-coco",
-    sku: "BDG-COC",
-    name: "Brio'Coco-Tropical",
-    category: "Briodogs Sucrés",
-    description: "Briodog coco",
-    image: "briodogsucree.jpg",
-    price: 50,
-  },
-
-  {
-    handle: "brio-fraises",
-    sku: "BDG-FRA",
-    name: "Brio'Fraises",
-    category: "Briodogs Sucrés",
-    description: "Briodog fraises",
-    image: "briodogsucree.jpg",
-    price: 50,
-  },
-
-  {
-    handle: "brio-pomme",
-    sku: "BDG-POM",
-    name: "Brio'Pomme-Cannelle",
-    category: "Briodogs Sucrés",
-    description: "Briodog pommes",
-    image: "briodogsucree.jpg",
-    price: 50,
   },
 
   {
@@ -899,6 +759,116 @@ export const menuProducts: Product[] = [
   },
 
   {
+    handle: "extra-champignons",
+    sku: "EXT-CHA",
+    name: "Extra Champignons",
+    category: "Modificateurs",
+    description: "Supplément champignons",
+    image: "champignons.png",
+    price: 5,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-jambon",
+    sku: "EXT-JAM",
+    name: "Extra Jambon",
+    category: "Modificateurs",
+    description: "Supplément jambon",
+    image: "jambon.png",
+    price: 8,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-legumes-grilles",
+    sku: "EXT-LEG",
+    name: "Extra Légumes Grillés",
+    category: "Modificateurs",
+    description: "Supplément légumes grillés",
+    image: "legumes-grilles.png",
+    price: 5,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-mozzarella",
+    sku: "EXT-MOZ",
+    name: "Extra Mozzarella",
+    category: "Modificateurs",
+    description: "Supplément mozzarella",
+    image: "mozzarella.png",
+    price: 5,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-olives",
+    sku: "EXT-OLI",
+    name: "Extra Olives",
+    category: "Modificateurs",
+    description: "Supplément olives",
+    image: "olives.png",
+    price: 3,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-pepperoni",
+    sku: "EXT-PEP",
+    name: "Extra Pepperoni",
+    category: "Modificateurs",
+    description: "Supplément pepperoni",
+    image: "pepperoni.png",
+    price: 8,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-poulet-pizza",
+    sku: "EXT-POU",
+    name: "Extra Poulet",
+    category: "Modificateurs",
+    description: "Supplément poulet",
+    image: "poulet.png",
+    price: 10,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-sauce-tomate",
+    sku: "EXT-STO",
+    name: "Extra Sauce Tomate",
+    category: "Modificateurs",
+    description: "Supplément sauce tomate",
+    image: "sauce-tomate.png",
+    price: 2,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-thon",
+    sku: "EXT-THO",
+    name: "Extra Thon",
+    category: "Modificateurs",
+    description: "Supplément thon",
+    image: "thon.png",
+    price: 8,
+    isModifier: true,
+  },
+
+  {
+    handle: "extra-viande-hachee",
+    sku: "EXT-VHA",
+    name: "Extra Viande Hachée",
+    category: "Modificateurs",
+    description: "Supplément viande hachée",
+    image: "viande-hachee.png",
+    price: 10,
+    isModifier: true,
+  },
+
+  {
     handle: "extra-falafel",
     sku: "EXT-FAL",
     name: "Falafel Extra",
@@ -1099,6 +1069,37 @@ export const menuProducts: Product[] = [
     description: "BBQ",
     image: "saucebbq.png",
     price: 5,
+    isModifier: true,
+  },
+
+  {
+    handle: "sauce-gruyere",
+    sku: "SAU-GRU",
+    name: "Sauce Gruyère Lyonnaise",
+    category: "Modificateurs",
+    image: "sauce-gruyere.png",
+    variants: [
+      {
+        option1Name: "Taille",
+        option1Value: "Petite (50ml)",
+        price: 8,
+      },
+      {
+        option1Name: "Taille",
+        option1Value: "Standard (100ml)",
+        price: 15,
+      },
+      {
+        option1Name: "Taille",
+        option1Value: "Grande (150ml)",
+        price: 20,
+      },
+      {
+        option1Name: "Taille",
+        option1Value: "Pot familial (400ml)",
+        price: 50,
+      }
+    ],
     isModifier: true,
   },
 
@@ -1405,6 +1406,96 @@ export const menuProducts: Product[] = [
     image: "TOPSPECULOOS.png",
     price: 10,
     isModifier: true,
+  },
+
+  {
+    handle: "pizza-waffle-4-fromages",
+    sku: "PW-4FR",
+    name: "Pizza Waffle 4 Fromages",
+    category: "Pizza Waffles",
+    description: "Mozzarella, gorgonzola, chèvre, parmesan, noix, miel",
+    image: "pizza-4fromages.png",
+    price: 40,
+  },
+
+  {
+    handle: "pizza-waffle-boisee",
+    sku: "PW-BOI",
+    name: "Pizza Waffle Boisée (Lyon) ⭐",
+    category: "Pizza Waffles",
+    description: "Poulet, mozzarella, poivron, champignons + sauce gruyère généreuse",
+    image: "pizza-boisee.png",
+    price: 45,
+  },
+
+  {
+    handle: "pizza-waffle-champignons-jambon",
+    sku: "PW-CHJ",
+    name: "Pizza Waffle Champignons & Jambon",
+    category: "Pizza Waffles",
+    description: "Crème fraîche, champignons, jambon, mozzarella, emmental",
+    image: "pizza-champignons.png",
+    price: 40,
+  },
+
+  {
+    handle: "pizza-waffle-margherita",
+    sku: "PW-MAR",
+    name: "Pizza Waffle Margherita",
+    category: "Pizza Waffles",
+    description: "Sauce tomate basilic, mozzarella, tomates cerises, basilic frais",
+    image: "pizza-margherita.png",
+    price: 35,
+  },
+
+  {
+    handle: "pizza-waffle-pepperoni",
+    sku: "PW-PEP",
+    name: "Pizza Waffle Pepperoni",
+    category: "Pizza Waffles",
+    description: "Sauce tomate, mozzarella, pepperoni, poivron rouge, oignon",
+    image: "pizza-pepperoni.png",
+    price: 38,
+  },
+
+  {
+    handle: "pizza-waffle-poulet-bbq",
+    sku: "PW-BBQ",
+    name: "Pizza Waffle Poulet BBQ",
+    category: "Pizza Waffles",
+    description: "Sauce BBQ, poulet, mozzarella, cheddar, oignon rouge, maïs",
+    image: "pizza-poulet-bbq.png",
+    price: 42,
+  },
+
+  {
+    handle: "pizza-waffle-thon-olives",
+    sku: "PW-THO",
+    name: "Pizza Waffle Thon & Olives",
+    category: "Pizza Waffles",
+    description: "Thon, mozzarella, olives noires, câpres, oignon, tomates cerises",
+    image: "pizza-thon.png",
+    price: 38,
+  },
+
+  {
+    handle: "pizza-waffle-vegetarienne",
+    sku: "PW-VEG",
+    name: "Pizza Waffle Végétarienne",
+    category: "Pizza Waffles",
+    description: "Courgette, poivrons, champignons, olives, roquette, parmesan",
+    image: "pizza-vegetarienne.png",
+    price: 37,
+  },
+
+  {
+    handle: "pizza-waffle-viande-hachee",
+    sku: "PW-VHA",
+    name: "Pizza Waffle Viande Hachée",
+    category: "Pizza Waffles",
+    description: "Viande hachée bœuf, mozzarella, cheddar, oignon, poivron, maïs",
+    image: "pizza-viande.png",
+    price: 42,
   },
 
   {
