@@ -70,9 +70,8 @@ async function syncToLoyverse() {
 
           // Mettre à jour l'item existant
           await updateLoyverseItem(product.loyverseItemId, {
-            item_name: product.name,
-            description: product.description || undefined,
-            reference_id: product.sku,
+            name: product.name,
+            sku: product.sku,
             category_id: undefined, // À adapter selon vos catégories Loyverse
           });
 
