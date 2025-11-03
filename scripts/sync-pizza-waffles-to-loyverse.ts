@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import {
   createLoyverseItem,
-  createLoyverseVariant,
   updateLoyverseItem,
 } from "../lib/loyalty/loyverse";
 
