@@ -27,6 +27,8 @@ type Product = {
   isModifier?: boolean;
   hasTax?: boolean;
   image?: string | null;
+  outOfStock?: boolean;
+  isActive?: boolean;
 };
 
 interface ProductCardProps {
@@ -49,7 +51,9 @@ const ProductCard = ({ product }: ProductCardProps) => (
   <motion.div
     variants={fadeInUp}
     whileHover={cardHover}
-    className="p-4 border rounded-lg bg-white/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300"
+    className={`p-4 border rounded-lg bg-white/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 ${
+      product.outOfStock ? "opacity-70" : ""
+    }`}
   >
     {product.image && (
       <div className="relative w-full h-32 mb-3 overflow-hidden rounded-md">
@@ -58,23 +62,39 @@ const ProductCard = ({ product }: ProductCardProps) => (
             src={`/images/menu-items/${product.image}`}
             alt={product.name}
             fill
-            className="object-cover"
+            className={`object-cover ${product.outOfStock ? "grayscale" : ""}`}
           />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+
+        {/* Badge "Victime de son succès" */}
+        {product.outOfStock && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28">
+            <Image
+              src="/images/victime.png"
+              alt="Victime de son succès"
+              fill
+              className="object-contain drop-shadow-lg"
+            />
+          </div>
+        )}
       </div>
     )}
     <motion.div whileHover={{ scale: 1.02 }}>
-      <h3 className="font-semibold text-lg mb-1">{product.name}</h3>
+      <h3 className={`font-semibold text-lg mb-1 ${product.outOfStock ? "text-gray-500" : ""}`}>
+        {product.name}
+      </h3>
       {product.description && (
-        <p className="text-sm text-gray-600 mb-2">{product.description}</p>
+        <p className={`text-sm mb-2 ${product.outOfStock ? "text-gray-400" : "text-gray-600"}`}>
+          {product.description}
+        </p>
       )}
 
       {product.variants && product.variants.length > 0 && (
         <div className="space-y-1">
           {product.variants.map((variant, index) => (
             <div key={index} className="text-sm">
-              <span className="text-gray-700">
+              <span className={product.outOfStock ? "text-gray-400" : "text-gray-700"}>
                 {variant.option1Value}
                 {variant.option2Value && ` - ${variant.option2Value}`}
               </span>
@@ -126,42 +146,42 @@ export default function MenuPage() {
     );
   }
 
-  // Organiser les produits par catégorie
-  const cafes = products.filter((p) => p.category === "Boissons - Cafés");
+  // Organiser les produits par catégorie (filtrer les produits inactifs)
+  const cafes = products.filter((p) => p.category === "Boissons - Cafés" && p.isActive !== false);
   const boissonsLactees = products.filter(
-    (p) => p.category === "Boissons - Boissons Lactées"
+    (p) => p.category === "Boissons - Boissons Lactées" && p.isActive !== false
   );
   const milkshakes = products.filter(
-    (p) => p.category === "Boissons - Milkshakes"
+    (p) => p.category === "Boissons - Milkshakes" && p.isActive !== false
   );
   const boissonsSpeciales = products.filter(
-    (p) => p.category === "Boissons - Spécialisées"
+    (p) => p.category === "Boissons - Spécialisées" && p.isActive !== false
   );
 
-  const desserts = products.filter((p) => p.category === "Desserts");
+  const desserts = products.filter((p) => p.category === "Desserts" && p.isActive !== false);
   const dessertsCans = products.filter(
-    (p) => p.category === "Desserts - Cans"
+    (p) => p.category === "Desserts - Cans" && p.isActive !== false
   );
 
   const pizzaWaffles = products.filter(
-    (p) => p.category === "Pizza Waffles"
+    (p) => p.category === "Pizza Waffles" && p.isActive !== false
   );
 
   const supplements = products.filter(
-    (p) => p.category === "Modificateurs"
+    (p) => p.category === "Modificateurs" && p.isActive !== false
   );
 
   const shotsVitamines = products.filter(
-    (p) => p.category === "Shots Vitaminés"
+    (p) => p.category === "Shots Vitaminés" && p.isActive !== false
   );
   const eauxSoftDrinks = products.filter(
-    (p) => p.category === "Eaux & Soft Drinks"
+    (p) => p.category === "Eaux & Soft Drinks" && p.isActive !== false
   );
   const jusFrais = products.filter(
-    (p) => p.category === "Jus Frais Pressés"
+    (p) => p.category === "Jus Frais Pressés" && p.isActive !== false
   );
   const boissonsIceLactees = products.filter(
-    (p) => p.category === "Boissons Ice Lactées"
+    (p) => p.category === "Boissons Ice Lactées" && p.isActive !== false
   );
 
   return (

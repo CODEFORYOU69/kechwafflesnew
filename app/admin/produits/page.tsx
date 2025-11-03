@@ -30,6 +30,9 @@ import {
   Trash2,
   Search,
   FileDown,
+  ShoppingBag,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -58,6 +61,7 @@ type Product = {
   isModifier: boolean;
   hasTax: boolean;
   isActive: boolean;
+  outOfStock: boolean;
   displayOrder: number;
   loyverseItemId: string | null;
   lastSyncAt: string | null;
@@ -282,6 +286,48 @@ export default function ProduitsAdminPage() {
     }
   };
 
+  const handleToggleOutOfStock = async (product: Product) => {
+    try {
+      const response = await fetch(`/api/admin/products/${product.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          outOfStock: !product.outOfStock,
+        }),
+      });
+
+      if (response.ok) {
+        fetchProducts();
+      } else {
+        const data = await response.json();
+        alert(`Erreur : ${data.error || "Impossible de modifier le statut"}`);
+      }
+    } catch {
+      alert("Erreur lors de la modification");
+    }
+  };
+
+  const handleToggleActive = async (product: Product) => {
+    try {
+      const response = await fetch(`/api/admin/products/${product.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          isActive: !product.isActive,
+        }),
+      });
+
+      if (response.ok) {
+        fetchProducts();
+      } else {
+        const data = await response.json();
+        alert(`Erreur : ${data.error || "Impossible de modifier le statut"}`);
+      }
+    } catch {
+      alert("Erreur lors de la modification");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -487,6 +533,24 @@ export default function ProduitsAdminPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleToggleOutOfStock(product)}
+                            className={product.outOfStock ? "bg-orange-50 border-orange-300" : ""}
+                            title={product.outOfStock ? "Remettre en stock" : "Marquer victime de son succès"}
+                          >
+                            <ShoppingBag className={`h-4 w-4 ${product.outOfStock ? "text-orange-600" : ""}`} />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleToggleActive(product)}
+                            className={!product.isActive ? "bg-gray-100" : ""}
+                            title={product.isActive ? "Masquer du menu" : "Afficher sur le menu"}
+                          >
+                            {product.isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-gray-500" />}
+                          </Button>
                           <Button
                             size="sm"
                             variant="outline"

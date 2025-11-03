@@ -131,6 +131,7 @@ model Product {
   isModifier Boolean @default(false) // Est-ce un modificateur/topping ?
   hasTax     Boolean @default(true) // Soumis à la TVA ?
   isActive   Boolean @default(true) // Actif sur le menu ?
+  outOfStock Boolean @default(false) // Victime de son succès (affiché grisé)
 
   // Ordre d'affichage
   displayOrder Int @default(0)

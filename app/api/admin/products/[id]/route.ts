@@ -261,3 +261,60 @@ export async function DELETE(
     );
   }
 }
+
+/**
+ * PATCH: Met à jour partiellement un produit (outOfStock, isActive)
+ */
+export async function PATCH(
+  request: NextRequest,
+  context: RouteContext
+) {
+  try {
+    // Vérifier l'authentification admin
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Non authentifié" },
+        { status: 401 }
+      );
+    }
+
+    const isAdmin = await isUserAdmin(session.user.id);
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: "Accès admin requis" },
+        { status: 403 }
+      );
+    }
+
+    const { id } = await context.params;
+    const body = await request.json();
+
+    // Mise à jour partielle
+    const product = await prisma.product.update({
+      where: { id },
+      data: {
+        ...(body.outOfStock !== undefined && { outOfStock: body.outOfStock }),
+        ...(body.isActive !== undefined && { isActive: body.isActive }),
+      },
+      include: { variants: true },
+    });
+
+    return NextResponse.json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    console.error("Erreur mise à jour partielle produit:", error);
+    return NextResponse.json(
+      {
+        error: "Erreur lors de la mise à jour",
+        message: error instanceof Error ? error.message : "Erreur inconnue",
+      },
+      { status: 500 }
+    );
+  }
+}
