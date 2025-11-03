@@ -70,20 +70,17 @@ const ProductCard = ({ product }: ProductCardProps) => (
         <p className="text-sm text-gray-600 mb-2">{product.description}</p>
       )}
 
-      {product.variants && product.variants.length > 0 ? (
+      {product.variants && product.variants.length > 0 && (
         <div className="space-y-1">
           {product.variants.map((variant, index) => (
-            <div key={index} className="flex justify-between text-sm">
+            <div key={index} className="text-sm">
               <span className="text-gray-700">
                 {variant.option1Value}
                 {variant.option2Value && ` - ${variant.option2Value}`}
               </span>
-              <span className="font-medium">{variant.price} Dh</span>
             </div>
           ))}
         </div>
-      ) : (
-        <p className="text-lg font-medium text-green-600">{product.price} Dh</p>
       )}
     </motion.div>
   </motion.div>

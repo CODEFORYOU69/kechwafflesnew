@@ -29,8 +29,8 @@ export async function generateUniqueCardNumber(): Promise<string> {
  * Génère un QR code unique pour la carte
  */
 export async function generateUniqueQRCode(cardNumber: string): Promise<string> {
-  // Le QR code contient l'URL pour scanner la carte
-  const qrData = `${process.env.NEXT_PUBLIC_APP_URL}/loyalty/scan/${cardNumber}`;
+  // Le QR code contient uniquement le numéro de carte
+  const qrData = cardNumber;
 
   try {
     // Générer le QR code en Data URL
