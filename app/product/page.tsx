@@ -25,8 +25,8 @@ const products: Product[] = [
     name: "TiCanMisu",
     description: "Notre tiramisu signature en bocal",
     imageUrl: {
-      front: "/images/ticanmisu.jpg",
-      back: "/images/ticanmisu.jpg",
+      front: "/images/menu-items/ticandaim.png",
+      back: "/images/menu-items/ticandaim.png",
       backDescription:
         "Préparé avec amour, chaque couche est soigneusement assemblée...",
     },
@@ -35,16 +35,16 @@ const products: Product[] = [
   },
   {
     id: 2,
-    name: "Brioches Fourrées",
-    description: "Délices sucrés et salés",
+    name: "Waffle Pizza",
+    description: "L'audace sucrée-salée réinventée",
     imageUrl: {
-      front: "/images/brioche.jpg",
-      back: "/images/brioche.jpg",
+      front: "/images/menu-items/wafflepizza.png",
+      back: "/images/menu-items/wafflepizza.png",
       backDescription:
-        "Nos brioches artisanales, moelleuses à souhait, garnies de saveurs sucrées comme le Nutella, Speculoos, Amlou, ou salées avec des garnitures gourmandes. Une explosion de saveurs à chaque bouchée !",
+        "Une création audacieuse qui marie la texture croustillante de la gaufre avec la générosité d'une pizza. Garnie de fromage fondant, tomates fraîches, et basilic, cette fusion culinaire unique saura surprendre vos papilles !",
     },
     backDescription:
-      "Nos brioches artisanales, moelleuses à souhait, garnies de saveurs sucrées comme le Nutella, Speculoos, Amlou, ou salées avec des garnitures gourmandes. Une explosion de saveurs à chaque bouchée !",
+      "Une création audacieuse qui marie la texture croustillante de la gaufre avec la générosité d'une pizza. Garnie de fromage fondant, tomates fraîches, et basilic, cette fusion culinaire unique saura surprendre vos papilles !",
   },
 ];
 
