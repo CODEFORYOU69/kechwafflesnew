@@ -38,8 +38,8 @@ const products: Product[] = [
     name: "Waffle Pizza",
     description: "L'audace sucrée-salée réinventée",
     imageUrl: {
-      front: "/images/menu-items/wafflepizza.png",
-      back: "/images/menu-items/wafflepizza.png",
+      front: "/images/menu-items/wafflepizza.jpg",
+      back: "/images/menu-items/wafflepizza.jpg",
       backDescription:
         "Une création audacieuse qui marie la texture croustillante de la gaufre avec la générosité d'une pizza. Garnie de fromage fondant, tomates fraîches, et basilic, cette fusion culinaire unique saura surprendre vos papilles !",
     },
