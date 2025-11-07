@@ -286,8 +286,8 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
     "Shots Vitaminés",
     "Desserts",
     "Desserts - Cans",
-    "Briodogs Salés",
-    "Briodogs Sucrés",
+    "Pizza Waffles",
+    "Potato Waffles",
     "Modificateurs",
   ];
 
@@ -306,8 +306,8 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
   const dessertsCategories = sortedCategories.filter((cat) =>
     cat.startsWith("Desserts")
   );
-  const briodogsCategories = sortedCategories.filter((cat) =>
-    cat.startsWith("Briodogs")
+  const wafflesCategories = sortedCategories.filter((cat) =>
+    cat === "Pizza Waffles" || cat === "Potato Waffles"
   );
   const modificateursCategories = sortedCategories.filter((cat) =>
     cat.startsWith("Modificateurs") || cat === "Autres"
@@ -379,17 +379,17 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         </Page>
       )}
 
-      {/* Briodogs */}
-      {briodogsCategories.length > 0 && (
+      {/* Waffles Salées (Pizza & Potato) */}
+      {wafflesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
             />
-            <Text style={styles.headerTitle}>Nos Briodogs</Text>
+            <Text style={styles.headerTitle}>Nos Waffles Salées</Text>
           </View>
-          {briodogsCategories.map((category) => (
+          {wafflesCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
