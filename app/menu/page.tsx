@@ -167,6 +167,10 @@ export default function MenuPage() {
     (p) => p.category === "Pizza Waffles" && p.isActive !== false
   );
 
+  const potatoWaffles = products.filter(
+    (p) => p.category === "Potato Waffles" && p.isActive !== false
+  );
+
   const supplements = products.filter(
     (p) => p.category === "Modificateurs" && p.isActive !== false
   );
@@ -218,6 +222,11 @@ export default function MenuPage() {
                   <TabsTrigger value="pizzas" className="flex-1">
                     <motion.span whileHover={{ scale: 1.05 }}>
                       Pizza Waffles
+                    </motion.span>
+                  </TabsTrigger>
+                  <TabsTrigger value="potato" className="flex-1">
+                    <motion.span whileHover={{ scale: 1.05 }}>
+                      Potato Waffles
                     </motion.span>
                   </TabsTrigger>
                   <TabsTrigger value="extras" className="flex-1">
@@ -449,6 +458,42 @@ export default function MenuPage() {
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {pizzaWaffles.map((product, idx) => (
+                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
+                          ))}
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </motion.div>
+                </TabsContent>
+
+                {/* POTATO WAFFLES SECTION */}
+                <TabsContent
+                  value="potato"
+                  className="bg-white/90 rounded-lg p-6"
+                >
+                  <motion.h2
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="text-2xl font-bold mb-6"
+                  >
+                    Nos Potato Waffles 🥔
+                  </motion.h2>
+
+                  <motion.div
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="show"
+                    className="space-y-6"
+                  >
+                    <motion.div key="potato-waffles" variants={fadeInUp}>
+                      <Card className="hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                          <motion.div whileHover={{ scale: 1.01 }}>
+                            <CardTitle>Potato Waffles</CardTitle>
+                          </motion.div>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {potatoWaffles.map((product, idx) => (
                             <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
                           ))}
                         </CardContent>

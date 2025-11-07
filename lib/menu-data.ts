@@ -1498,6 +1498,148 @@ export const menuProducts: Product[] = [
     price: 42,
   },
 
+  // ===== POTATO WAFFLES - BASE FROMAGÈRE =====
+  {
+    handle: "potato-waffle-fromage-pepperoni",
+    sku: "PTW-FRO-PEP",
+    name: "Potato Waffle Fromagère Pepperoni",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce fromagère crémeuse, pepperoni, mozzarella",
+    image: "potatowaffle.png",
+    price: 38,
+  },
+
+  {
+    handle: "potato-waffle-fromage-thon",
+    sku: "PTW-FRO-THO",
+    name: "Potato Waffle Fromagère Thon",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce fromagère crémeuse, thon, olives, mozzarella",
+    image: "potatowaffle.png",
+    price: 38,
+  },
+
+  {
+    handle: "potato-waffle-fromage-poulet",
+    sku: "PTW-FRO-POU",
+    name: "Potato Waffle Fromagère Poulet",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce fromagère crémeuse, poulet grillé, mozzarella",
+    image: "potatowaffle.png",
+    price: 40,
+  },
+
+  {
+    handle: "potato-waffle-fromage-viande",
+    sku: "PTW-FRO-VHA",
+    name: "Potato Waffle Fromagère Viande Hachée",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce fromagère crémeuse, viande hachée bœuf, mozzarella",
+    image: "potatowaffle.png",
+    price: 40,
+  },
+
+  {
+    handle: "potato-waffle-fromage-champignons",
+    sku: "PTW-FRO-CHA",
+    name: "Potato Waffle Fromagère Champignons",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce fromagère crémeuse, champignons frais, mozzarella",
+    image: "potatowaffle.png",
+    price: 35,
+  },
+
+  {
+    handle: "potato-waffle-fromage-vegetarienne",
+    sku: "PTW-FRO-VEG",
+    name: "Potato Waffle Fromagère Végétarienne",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce fromagère crémeuse, poivrons, courgettes, champignons, mozzarella",
+    image: "potatowaffle.png",
+    price: 37,
+  },
+
+  {
+    handle: "potato-waffle-fromage-3fromages",
+    sku: "PTW-FRO-3FR",
+    name: "Potato Waffle Fromagère 3 Fromages",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce fromagère crémeuse, cheddar, mozzarella, emmental",
+    image: "potatowaffle.png",
+    price: 40,
+  },
+
+  // ===== POTATO WAFFLES - BASE TOMATE =====
+  {
+    handle: "potato-waffle-tomate-pepperoni",
+    sku: "PTW-TOM-PEP",
+    name: "Potato Waffle Tomate Pepperoni",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce tomate basilic, pepperoni, mozzarella",
+    image: "potatowaffle.png",
+    price: 38,
+  },
+
+  {
+    handle: "potato-waffle-tomate-thon",
+    sku: "PTW-TOM-THO",
+    name: "Potato Waffle Tomate Thon",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce tomate basilic, thon, olives, mozzarella",
+    image: "potatowaffle.png",
+    price: 38,
+  },
+
+  {
+    handle: "potato-waffle-tomate-poulet",
+    sku: "PTW-TOM-POU",
+    name: "Potato Waffle Tomate Poulet",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce tomate basilic, poulet grillé, mozzarella",
+    image: "potatowaffle.png",
+    price: 40,
+  },
+
+  {
+    handle: "potato-waffle-tomate-viande",
+    sku: "PTW-TOM-VHA",
+    name: "Potato Waffle Tomate Viande Hachée",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce tomate basilic, viande hachée bœuf, mozzarella",
+    image: "potatowaffle.png",
+    price: 40,
+  },
+
+  {
+    handle: "potato-waffle-tomate-champignons",
+    sku: "PTW-TOM-CHA",
+    name: "Potato Waffle Tomate Champignons",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce tomate basilic, champignons frais, mozzarella",
+    image: "potatowaffle.png",
+    price: 35,
+  },
+
+  {
+    handle: "potato-waffle-tomate-vegetarienne",
+    sku: "PTW-TOM-VEG",
+    name: "Potato Waffle Tomate Végétarienne",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce tomate basilic, poivrons, courgettes, champignons, mozzarella",
+    image: "potatowaffle.png",
+    price: 37,
+  },
+
+  {
+    handle: "potato-waffle-tomate-3fromages",
+    sku: "PTW-TOM-3FR",
+    name: "Potato Waffle Tomate 3 Fromages",
+    category: "Potato Waffles",
+    description: "Gaufre de pomme de terre vapeur croustillante, sauce tomate basilic, cheddar, mozzarella, emmental",
+    image: "potatowaffle.png",
+    price: 40,
+  },
+
   {
     handle: "shot-betterave",
     sku: "SHOT-BET",
