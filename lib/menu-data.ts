@@ -819,7 +819,7 @@ export const menuProducts: Product[] = [
     name: "Extra Pepperoni",
     category: "Modificateurs",
     description: "Supplément pepperoni",
-    image: "pepperoni.png",
+    image: "extrapepperoni.png",
     price: 8,
     isModifier: true,
   },
