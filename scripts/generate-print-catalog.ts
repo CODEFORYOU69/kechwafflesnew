@@ -25,11 +25,10 @@ async function generatePrintCatalog() {
     // Créer le dossier principal
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
-    // Récupérer tous les produits actifs (sauf modificateurs pour l'instant)
+    // Récupérer tous les produits actifs (incluant les modificateurs)
     const products = await prisma.product.findMany({
       where: {
         isActive: true,
-        isModifier: false,
       },
       include: {
         variants: {
