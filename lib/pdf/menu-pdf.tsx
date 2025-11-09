@@ -206,6 +206,7 @@ const CoverPage = () => (
     <Image
       src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
       style={styles.coverLogo}
+      cache={false}
     />
     <Text style={styles.coverSubtitle}>Notre Menu</Text>
     <Text style={styles.coverCity}>Marrakech</Text>
@@ -218,8 +219,11 @@ const ProductsByCategory = ({ category, products }: { category: string; products
   // Diviser le nom de catégorie (ex: "Boissons - Cafés" → "Cafés")
   const categoryDisplay = category.split(" - ").pop() || category;
 
+  // Si trop de produits, ne pas forcer wrap={false} pour éviter débordement
+  const hasManyProducts = products.length > 12;
+
   return (
-    <View style={styles.categorySection} wrap={false}>
+    <View style={styles.categorySection} wrap={!hasManyProducts}>
       <Text style={styles.categoryTitle}>{categoryDisplay}</Text>
       <View style={styles.productGrid}>
         {products.map((product, index) => (
@@ -228,6 +232,7 @@ const ProductsByCategory = ({ category, products }: { category: string; products
               <Image
                 src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/${product.image}`}
                 style={styles.productImage}
+                cache={false}
               />
             )}
             <Text style={styles.productName}>{product.name}</Text>
@@ -300,8 +305,13 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
   });
 
   // Diviser en sections principales pour une meilleure pagination
-  const boissonsCategories = sortedCategories.filter((cat) =>
-    cat.startsWith("Boissons") || cat.includes("Shots") || cat.includes("Jus") || cat.includes("Eaux")
+  // Diviser les boissons en 2 groupes pour éviter le débordement
+  const boissonsChaudesCategories = sortedCategories.filter((cat) =>
+    cat === "Boissons - Cafés" || cat === "Boissons - Boissons Lactées" || cat === "Boissons - Milkshakes"
+  );
+  const boissonsFroidesCategories = sortedCategories.filter((cat) =>
+    cat === "Boissons - Spécialisées" || cat === "Boissons Ice Lactées" ||
+    cat.includes("Eaux") || cat.includes("Jus") || cat.includes("Shots")
   );
   const dessertsCategories = sortedCategories.filter((cat) =>
     cat.startsWith("Desserts")
@@ -323,17 +333,47 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {/* Page de couverture */}
       <CoverPage />
 
-      {/* Boissons */}
-      {boissonsCategories.length > 0 && (
+      {/* Boissons Chaudes - Page 1 */}
+      {boissonsChaudesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
-          <View style={styles.header}>
+          <View style={styles.header} wrap={false}>
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
+              cache={false}
             />
-            <Text style={styles.headerTitle}>Nos Boissons</Text>
+            <Text style={styles.headerTitle}>Nos Boissons Chaudes</Text>
           </View>
-          {boissonsCategories.map((category) => (
+          {boissonsChaudesCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          <Text style={styles.footer}>
+            Kech Waffles • Marrakech • www.kechwaffles.com
+          </Text>
+          <Text
+            style={styles.pageNumber}
+            render={({ pageNumber }) => `${pageNumber - 1}`}
+            fixed
+          />
+        </Page>
+      )}
+
+      {/* Boissons Froides - Page 2 */}
+      {boissonsFroidesCategories.length > 0 && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header} wrap={false}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+              cache={false}
+            />
+            <Text style={styles.headerTitle}>Nos Boissons Fraîches</Text>
+          </View>
+          {boissonsFroidesCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
@@ -354,10 +394,11 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {/* Desserts */}
       {dessertsCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
-          <View style={styles.header}>
+          <View style={styles.header} wrap={false}>
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
+              cache={false}
             />
             <Text style={styles.headerTitle}>Nos Desserts</Text>
           </View>
@@ -382,10 +423,11 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {/* Waffles Salées (Pizza & Potato) */}
       {wafflesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
-          <View style={styles.header}>
+          <View style={styles.header} wrap={false}>
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
+              cache={false}
             />
             <Text style={styles.headerTitle}>Nos Waffles Salées</Text>
           </View>
@@ -410,10 +452,11 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {/* Suppléments */}
       {modificateursCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
-          <View style={styles.header}>
+          <View style={styles.header} wrap={false}>
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
+              cache={false}
             />
             <Text style={styles.headerTitle}>Suppléments</Text>
           </View>
