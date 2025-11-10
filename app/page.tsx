@@ -10,7 +10,6 @@ import {
 import { Container } from "@/components/ui/container";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Hero from "./components/Hero";
 import { QRCode } from "./components/QRCode";
 
