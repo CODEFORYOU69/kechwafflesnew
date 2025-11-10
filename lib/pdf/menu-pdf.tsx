@@ -207,7 +207,6 @@ const CoverPage = () => (
       src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
       style={styles.coverLogo}
       cache={false}
-      alt="Kech Waffles Logo"
     />
     <Text style={styles.coverSubtitle}>Notre Menu</Text>
     <Text style={styles.coverCity}>Marrakech</Text>
@@ -234,7 +233,6 @@ const ProductsByCategory = ({ category, products }: { category: string; products
                 src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/${product.image}`}
                 style={styles.productImage}
                 cache={false}
-                alt={product.name}
               />
             )}
             <Text style={styles.productName}>{product.name}</Text>
@@ -343,7 +341,6 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
               cache={false}
-              alt="Kech Waffles"
             />
             <Text style={styles.headerTitle}>Nos Boissons Chaudes</Text>
           </View>
@@ -373,7 +370,6 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
               cache={false}
-              alt="Kech Waffles"
             />
             <Text style={styles.headerTitle}>Nos Boissons Fraîches</Text>
           </View>
@@ -403,7 +399,6 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
               cache={false}
-              alt="Kech Waffles"
             />
             <Text style={styles.headerTitle}>Nos Desserts</Text>
           </View>
@@ -433,7 +428,6 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
               cache={false}
-              alt="Kech Waffles"
             />
             <Text style={styles.headerTitle}>Nos Waffles Salées</Text>
           </View>
@@ -463,7 +457,6 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
               cache={false}
-              alt="Kech Waffles"
             />
             <Text style={styles.headerTitle}>Suppléments</Text>
           </View>
