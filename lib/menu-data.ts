@@ -1286,6 +1286,17 @@ export const menuProducts: Product[] = [
   },
 
   {
+    handle: "topping-daim",
+    sku: "TOP-DAI",
+    name: "Topping Daim",
+    category: "Modificateurs",
+    description: "Morceaux de Daim",
+    image: "daim.png",
+    price: 10,
+    isModifier: true,
+  },
+
+  {
     handle: "topping-coco",
     sku: "TOP-COC",
     name: "Topping Coco",
