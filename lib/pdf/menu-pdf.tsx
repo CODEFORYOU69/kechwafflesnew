@@ -105,7 +105,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#FFFFFF",
     backgroundColor: "#1a1a1a",
-    padding: 6,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 6,
+    paddingRight: 6,
     marginBottom: 8,
     borderLeftWidth: 4,
     borderLeftColor: "#D4AF37",
@@ -217,7 +220,12 @@ const CoverPage = () => (
 // Groupe de produits par catégorie
 const ProductsByCategory = ({ category, products }: { category: string; products: Product[] }) => {
   // Diviser le nom de catégorie (ex: "Boissons - Cafés" → "Cafés")
-  const categoryDisplay = category.split(" - ").pop() || category;
+  let categoryDisplay = category.split(" - ").pop() || category;
+
+  // Remplacer "Modificateurs" par "Suppléments"
+  if (categoryDisplay === "Modificateurs") {
+    categoryDisplay = "Suppléments";
+  }
 
   // Si trop de produits, ne pas forcer wrap={false} pour éviter débordement
   const hasManyProducts = products.length > 12;
