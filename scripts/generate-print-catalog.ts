@@ -6,6 +6,7 @@
 import { PrismaClient } from "@prisma/client";
 import * as fs from "fs";
 import * as path from "path";
+import sharp from "sharp";
 
 const prisma = new PrismaClient();
 
@@ -100,7 +101,7 @@ async function generatePrintCatalog() {
 
         categoryInfo += `\n📦 SKU: ${product.sku}\n`;
 
-        // Copier l'image si elle existe
+        // Copier et redimensionner l'image si elle existe (min 500x500)
         if (product.image) {
           const sourceImage = path.join(IMAGES_SOURCE, product.image);
           if (fs.existsSync(sourceImage)) {
@@ -112,7 +113,15 @@ async function generatePrintCatalog() {
               categoryDir,
               `${safeProductName}${ext}`
             );
-            fs.copyFileSync(sourceImage, destImage);
+
+            // Redimensionner l'image à minimum 500x500 pixels
+            await sharp(sourceImage)
+              .resize(500, 500, {
+                fit: "inside",
+                withoutEnlargement: false,
+              })
+              .toFile(destImage);
+
             categoryInfo += `🖼️  Image: ${safeProductName}${ext}\n`;
             totalFiles++;
           } else {
