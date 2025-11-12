@@ -10,6 +10,7 @@ import {
 import { Container } from "@/components/ui/container";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Hero from "./components/Hero";
 import { QRCode } from "./components/QRCode";
 
@@ -101,7 +102,14 @@ export default function Home() {
                       <span>Tiramisu Waffle</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <span>🌰</span>
+                      <div className="relative w-5 h-5 flex-shrink-0">
+                        <Image
+                          src="/images/menu-items/toppistache.png"
+                          alt="Pistache"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
                       <span>Pistache Premium</span>
                     </div>
                     <div className="flex items-start gap-2">
@@ -109,7 +117,14 @@ export default function Home() {
                       <span>Cafés de qualité</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <span>🥫</span>
+                      <div className="relative w-5 h-5 flex-shrink-0">
+                        <Image
+                          src="/images/menu-items/ticanmisu.jpg"
+                          alt="Canette"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
                       <span>Canettes Tiramisu</span>
                     </div>
                     <div className="flex items-start gap-2">
