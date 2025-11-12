@@ -1465,7 +1465,7 @@ export const menuProducts: Product[] = [
     sku: "PW-BOI",
     name: "Pizza Waffle Boisée (Lyon) ⭐",
     category: "Pizza Waffles",
-    description: "Poulet, mozzarella, poivron, champignons + sauce gruyère généreuse",
+    description: "Poulet, mozzarella, poivron, pomme de terre + sauce gruyère généreuse",
     image: "wafflepizza.png",
     price: 45,
   },
