@@ -391,6 +391,27 @@ export const menuProducts: Product[] = [
   },
 
   {
+    handle: "the-menthe",
+    sku: "THE-MEN",
+    name: "Thé à la Menthe",
+    category: "Boissons - Spécialisées",
+    description: "Thé à la menthe traditionnel",
+    image: "waffles.png",
+    variants: [
+      {
+        option1Name: "Taille",
+        option1Value: "Petit",
+        price: 10,
+      },
+      {
+        option1Name: "Taille",
+        option1Value: "Grand",
+        price: 15,
+      }
+    ],
+  },
+
+  {
     handle: "ice-caramel-macchiato",
     sku: "ICE-MAC",
     name: "Ice Caramel Macchiato",
