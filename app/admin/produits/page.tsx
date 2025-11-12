@@ -77,6 +77,7 @@ export default function ProduitsAdminPage() {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [generatingPDF, setGeneratingPDF] = useState(false);
+  const [generatingPDFGlovo, setGeneratingPDFGlovo] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -163,6 +164,23 @@ export default function ProduitsAdminPage() {
     } catch {
       alert("Erreur lors de la génération du PDF");
       setGeneratingPDF(false);
+    }
+  };
+
+  const handleGeneratePDFGlovo = async () => {
+    try {
+      setGeneratingPDFGlovo(true);
+
+      // Ouvrir l'URL dans un nouvel onglet pour télécharger le PDF Glovo
+      window.open("/api/admin/products/generate-pdf-glovo", "_blank");
+
+      // Attendre un peu pour l'effet de chargement
+      setTimeout(() => {
+        setGeneratingPDFGlovo(false);
+      }, 2000);
+    } catch {
+      alert("Erreur lors de la génération du PDF Glovo");
+      setGeneratingPDFGlovo(false);
     }
   };
 
@@ -400,6 +418,24 @@ export default function ProduitsAdminPage() {
               <>
                 <FileDown className="mr-2 h-4 w-4" />
                 Générer PDF Menu
+              </>
+            )}
+          </Button>
+
+          <Button
+            onClick={handleGeneratePDFGlovo}
+            disabled={generatingPDFGlovo}
+            variant="outline"
+          >
+            {generatingPDFGlovo ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Génération...
+              </>
+            ) : (
+              <>
+                <FileDown className="mr-2 h-4 w-4" />
+                Générer PDF Glovo
               </>
             )}
           </Button>
