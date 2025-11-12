@@ -1705,11 +1705,11 @@ export const menuProducts: Product[] = [
   {
     handle: "shot-citron-menthe",
     sku: "SHOT-CIT",
-    name: "Shot Citron Gingembre Menthe",
+    name: "Shot Citron Gingembre Menthe Pomme",
     category: "Shots Vitaminés",
-    description: "Digestion : citron gingembre menthe miel",
+    description: "Digestion & Immunité : citron gingembre menthe pomme miel",
     image: "shotcitmentgin.png",
-    price: 22,
+    price: 25,
   },
 
   {
@@ -1720,16 +1720,6 @@ export const menuProducts: Product[] = [
     description: "Immunité : eau coco ananas citron gingembre",
     image: "shotananascoco.png",
     price: 27,
-  },
-
-  {
-    handle: "shot-gingembre",
-    sku: "SHOT-GIN",
-    name: "Shot Gingembre Citron Pomme",
-    category: "Shots Vitaminés",
-    description: "Boost immunitaire : pomme citron gingembre miel",
-    image: "shotginmenthecitron.png",
-    price: 25,
   },
 
   {

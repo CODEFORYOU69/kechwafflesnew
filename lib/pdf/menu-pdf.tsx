@@ -309,20 +309,34 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
     return indexA - indexB;
   });
 
-  // Diviser en sections principales pour une meilleure pagination
-  // Diviser les boissons en 2 groupes pour éviter le débordement
-  const boissonsChaudesCategories = sortedCategories.filter((cat) =>
-    cat === "Boissons - Cafés" || cat === "Boissons - Boissons Lactées" || cat === "Boissons - Milkshakes"
+  // Grouper les sections pour optimiser la pagination
+  // Chaque groupe commence en début de page
+  const cafesCategories = sortedCategories.filter((cat) =>
+    cat === "Boissons - Cafés"
   );
-  const boissonsFroidesCategories = sortedCategories.filter((cat) =>
-    cat === "Boissons - Spécialisées" || cat === "Boissons Ice Lactées" ||
-    cat.includes("Eaux") || cat.includes("Jus") || cat.includes("Shots")
+  const boissonsLacteesCategories = sortedCategories.filter((cat) =>
+    cat === "Boissons - Boissons Lactées"
+  );
+  const milkshakesSpecialeesCategories = sortedCategories.filter((cat) =>
+    cat === "Boissons - Milkshakes" || cat === "Boissons - Spécialisées"
+  );
+  const boissonsIceCategories = sortedCategories.filter((cat) =>
+    cat === "Boissons Ice Lactées"
+  );
+  const eauxJusCategories = sortedCategories.filter((cat) =>
+    cat.includes("Eaux") || cat.includes("Jus")
+  );
+  const shotsCategories = sortedCategories.filter((cat) =>
+    cat.includes("Shots")
   );
   const dessertsCategories = sortedCategories.filter((cat) =>
     cat.startsWith("Desserts")
   );
-  const wafflesCategories = sortedCategories.filter((cat) =>
-    cat === "Pizza Waffles" || cat === "Potato Waffles"
+  const pizzaWafflesCategories = sortedCategories.filter((cat) =>
+    cat === "Pizza Waffles"
+  );
+  const potatoWafflesCategories = sortedCategories.filter((cat) =>
+    cat === "Potato Waffles"
   );
   const modificateursCategories = sortedCategories.filter((cat) =>
     cat.startsWith("Modificateurs") || cat === "Autres"
@@ -338,8 +352,8 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {/* Page de couverture */}
       <CoverPage />
 
-      {/* Boissons Chaudes - Page 1 */}
-      {boissonsChaudesCategories.length > 0 && (
+      {/* Cafés - Page 1 */}
+      {cafesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
             <Image
@@ -347,9 +361,9 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               style={styles.headerLogo}
               cache
             />
-            <Text style={styles.headerTitle}>Nos Boissons Chaudes</Text>
+            <Text style={styles.headerTitle}>Nos Cafés</Text>
           </View>
-          {boissonsChaudesCategories.map((category) => (
+          {cafesCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
@@ -367,8 +381,8 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         </Page>
       )}
 
-      {/* Boissons Froides - Page 2 */}
-      {boissonsFroidesCategories.length > 0 && (
+      {/* Boissons Lactées - Page 2 */}
+      {boissonsLacteesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
             <Image
@@ -376,9 +390,9 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               style={styles.headerLogo}
               cache
             />
-            <Text style={styles.headerTitle}>Nos Boissons Fraîches</Text>
+            <Text style={styles.headerTitle}>Nos Boissons Lactées</Text>
           </View>
-          {boissonsFroidesCategories.map((category) => (
+          {boissonsLacteesCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
@@ -396,7 +410,123 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         </Page>
       )}
 
-      {/* Desserts */}
+      {/* Milkshakes & Spécialisées - Page 3 */}
+      {milkshakesSpecialeesCategories.length > 0 && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header} wrap={false}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+              cache
+            />
+            <Text style={styles.headerTitle}>Milkshakes & Spécialités</Text>
+          </View>
+          {milkshakesSpecialeesCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          <Text style={styles.footer}>
+            Kech Waffles • Marrakech • www.kechwaffles.com
+          </Text>
+          <Text
+            style={styles.pageNumber}
+            render={({ pageNumber }) => `${pageNumber - 1}`}
+            fixed
+          />
+        </Page>
+      )}
+
+      {/* Boissons Ice Lactées - Page 4 */}
+      {boissonsIceCategories.length > 0 && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header} wrap={false}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+              cache
+            />
+            <Text style={styles.headerTitle}>Boissons Ice Lactées</Text>
+          </View>
+          {boissonsIceCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          <Text style={styles.footer}>
+            Kech Waffles • Marrakech • www.kechwaffles.com
+          </Text>
+          <Text
+            style={styles.pageNumber}
+            render={({ pageNumber }) => `${pageNumber - 1}`}
+            fixed
+          />
+        </Page>
+      )}
+
+      {/* Jus & Eaux - Page 5 */}
+      {eauxJusCategories.length > 0 && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header} wrap={false}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+              cache
+            />
+            <Text style={styles.headerTitle}>Jus Frais & Eaux</Text>
+          </View>
+          {eauxJusCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          <Text style={styles.footer}>
+            Kech Waffles • Marrakech • www.kechwaffles.com
+          </Text>
+          <Text
+            style={styles.pageNumber}
+            render={({ pageNumber }) => `${pageNumber - 1}`}
+            fixed
+          />
+        </Page>
+      )}
+
+      {/* Shots Vitaminés - Page 6 */}
+      {shotsCategories.length > 0 && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header} wrap={false}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+              cache
+            />
+            <Text style={styles.headerTitle}>Shots Vitaminés</Text>
+          </View>
+          {shotsCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          <Text style={styles.footer}>
+            Kech Waffles • Marrakech • www.kechwaffles.com
+          </Text>
+          <Text
+            style={styles.pageNumber}
+            render={({ pageNumber }) => `${pageNumber - 1}`}
+            fixed
+          />
+        </Page>
+      )}
+
+      {/* Desserts - Page 7 */}
       {dessertsCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
@@ -425,8 +555,8 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         </Page>
       )}
 
-      {/* Waffles Salées (Pizza & Potato) */}
-      {wafflesCategories.length > 0 && (
+      {/* Pizza Waffles - Page 8 */}
+      {pizzaWafflesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
             <Image
@@ -434,9 +564,9 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               style={styles.headerLogo}
               cache
             />
-            <Text style={styles.headerTitle}>Nos Waffles Salées</Text>
+            <Text style={styles.headerTitle}>Pizza Waffles</Text>
           </View>
-          {wafflesCategories.map((category) => (
+          {pizzaWafflesCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
@@ -454,7 +584,36 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         </Page>
       )}
 
-      {/* Suppléments */}
+      {/* Potato Waffles - Page 9 */}
+      {potatoWafflesCategories.length > 0 && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header} wrap={false}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+              cache
+            />
+            <Text style={styles.headerTitle}>Potato Waffles</Text>
+          </View>
+          {potatoWafflesCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          <Text style={styles.footer}>
+            Kech Waffles • Marrakech • www.kechwaffles.com
+          </Text>
+          <Text
+            style={styles.pageNumber}
+            render={({ pageNumber }) => `${pageNumber - 1}`}
+            fixed
+          />
+        </Page>
+      )}
+
+      {/* Suppléments - Page 10 */}
       {modificateursCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
