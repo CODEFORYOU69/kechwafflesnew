@@ -64,7 +64,7 @@ async function addGaufreLiegeoise() {
         variants: {
           create: [
             {
-              sku: "GAU-LIE",
+              variantSku: "GAU-LIE",
               option1Name: null,
               option1Value: null,
               option2Name: null,
