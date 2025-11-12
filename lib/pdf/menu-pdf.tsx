@@ -227,15 +227,12 @@ const ProductsByCategory = ({ category, products }: { category: string; products
     categoryDisplay = "Suppléments";
   }
 
-  // Si trop de produits, ne pas forcer wrap={false} pour éviter débordement
-  const hasManyProducts = products.length > 12;
-
   return (
-    <View style={styles.categorySection} wrap={!hasManyProducts}>
+    <View style={styles.categorySection}>
       <Text style={styles.categoryTitle}>{categoryDisplay}</Text>
       <View style={styles.productGrid}>
         {products.map((product, index) => (
-          <View key={index} style={styles.productCard}>
+          <View key={index} style={styles.productCard} wrap={false}>
             {product.image && (
               <Image
                 src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/${product.image}`}
