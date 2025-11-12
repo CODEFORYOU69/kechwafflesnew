@@ -531,6 +531,16 @@ export const menuProducts: Product[] = [
   },
 
   {
+    handle: "gaufre-liegeoise",
+    sku: "GAU-LIE",
+    name: "Gaufre Liégeoise",
+    category: "Desserts",
+    description: "Authentique gaufre liégeoise avec perles de sucre caramélisées",
+    image: "waffles.png",
+    price: 30,
+  },
+
+  {
     handle: "pancake-tiramisu",
     sku: "PAN-TIR",
     name: "Pancake Tiramisu",
