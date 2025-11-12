@@ -396,7 +396,7 @@ export const menuProducts: Product[] = [
     name: "Thé à la Menthe",
     category: "Boissons - Spécialisées",
     description: "Thé à la menthe traditionnel",
-    image: "waffles.png",
+    image: "thémenthe.png",
     variants: [
       {
         option1Name: "Taille",
