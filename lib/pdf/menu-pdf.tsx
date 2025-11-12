@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#1a1a1a",
   },
   coverLogo: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height: 200,
     marginBottom: 30,
   },
   coverSubtitle: {
@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
     borderColor: "#E5E5E5",
   },
   productImage: {
-    width: 45,
-    height: 45,
+    width: 35,
+    height: 35,
     objectFit: "cover",
     borderRadius: 3,
     marginBottom: 4,
@@ -209,7 +209,7 @@ const CoverPage = () => (
     <Image
       src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
       style={styles.coverLogo}
-      cache={false}
+      cache
     />
     <Text style={styles.coverSubtitle}>Notre Menu</Text>
     <Text style={styles.coverCity}>Marrakech</Text>
@@ -240,7 +240,7 @@ const ProductsByCategory = ({ category, products }: { category: string; products
               <Image
                 src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/${product.image}`}
                 style={styles.productImage}
-                cache={false}
+                cache
               />
             )}
             <Text style={styles.productName}>{product.name}</Text>
@@ -348,7 +348,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
-              cache={false}
+              cache
             />
             <Text style={styles.headerTitle}>Nos Boissons Chaudes</Text>
           </View>
@@ -377,7 +377,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
-              cache={false}
+              cache
             />
             <Text style={styles.headerTitle}>Nos Boissons Fraîches</Text>
           </View>
@@ -406,7 +406,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
-              cache={false}
+              cache
             />
             <Text style={styles.headerTitle}>Nos Desserts</Text>
           </View>
@@ -435,7 +435,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
-              cache={false}
+              cache
             />
             <Text style={styles.headerTitle}>Nos Waffles Salées</Text>
           </View>
@@ -464,7 +464,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
               style={styles.headerLogo}
-              cache={false}
+              cache
             />
             <Text style={styles.headerTitle}>Suppléments</Text>
           </View>
