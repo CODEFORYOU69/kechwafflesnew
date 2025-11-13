@@ -114,10 +114,10 @@ async function generatePrintCatalog() {
               `${safeProductName}${ext}`
             );
 
-            // Redimensionner l'image à minimum 500x500 pixels
+            // Redimensionner l'image à minimum 500x500 pixels en gardant le ratio
             await sharp(sourceImage)
               .resize(500, 500, {
-                fit: "inside",
+                fit: "outside",
                 withoutEnlargement: false,
               })
               .toFile(destImage);
