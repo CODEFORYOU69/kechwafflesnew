@@ -6,14 +6,19 @@ import {
   View,
   Image,
   StyleSheet,
+  Font,
 } from "@react-pdf/renderer";
 
-// Enregistrer les polices (optionnel, utilise Helvetica par défaut)
-// import { Font } from "@react-pdf/renderer";
-// Font.register({
-//   family: "Poppins",
-//   src: "https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrFJA.ttf",
-// });
+// Enregistrer les polices locales
+Font.register({
+  family: "Great Vibes",
+  src: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/fonts/GreatVibes-Regular.ttf`,
+});
+
+Font.register({
+  family: "Montserrat",
+  src: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/fonts/Montserrat-VariableFont_wght.ttf`,
+});
 
 type ProductVariant = {
   option1Name: string | null;
@@ -40,9 +45,12 @@ type MenuPDFProps = {
 // Styles élégants et sobres
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
-    backgroundColor: "#FFFFFF",
-    fontFamily: "Helvetica",
+    paddingTop: 30,
+    paddingBottom: 30,
+    paddingLeft: 40,
+    paddingRight: 40,
+    backgroundColor: "#F5F5DC",
+    fontFamily: "Montserrat",
   },
 
   // Page de couverture
@@ -91,7 +99,8 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#1a1a1a",
+    fontFamily: "Montserrat",
+    color: "#000000",
     flex: 1,
     textAlign: "center",
   },
@@ -103,8 +112,9 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 14,
     fontWeight: "bold",
+    fontFamily: "Montserrat",
     color: "#FFFFFF",
-    backgroundColor: "#1a1a1a",
+    backgroundColor: "#000000",
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 6,
@@ -140,14 +150,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   productName: {
-    fontSize: 9,
-    fontWeight: "bold",
-    color: "#1a1a1a",
+    fontSize: 10,
+    fontFamily: "Montserrat",
+    color: "#000000",
     marginBottom: 3,
   },
   productDescription: {
-    fontSize: 7,
-    color: "#666666",
+    fontSize: 8,
+    fontFamily: "Montserrat",
+    color: "#000000",
     marginBottom: 4,
     lineHeight: 1.2,
   },
@@ -157,12 +168,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingTop: 4,
     borderTopWidth: 1,
-    borderTopColor: "#E5E5E5",
+    borderTopColor: "#000000",
   },
   priceSimple: {
     fontSize: 11,
-    fontWeight: "bold",
-    color: "#D4AF37",
+    fontFamily: "Montserrat",
+    color: "#000000",
   },
   variantRow: {
     flexDirection: "row",
@@ -170,13 +181,14 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   variantName: {
-    fontSize: 7,
-    color: "#666666",
+    fontSize: 8,
+    fontFamily: "Montserrat",
+    color: "#000000",
   },
   variantPrice: {
-    fontSize: 8,
-    fontWeight: "bold",
-    color: "#1a1a1a",
+    fontSize: 9,
+    fontFamily: "Montserrat",
+    color: "#000000",
   },
 
   // Footer
@@ -201,6 +213,90 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#999999",
   },
+
+  // Page de présentation
+  presentationPage: {
+    padding: 50,
+    backgroundColor: "#F5F5DC",
+  },
+  presentationTitle: {
+    fontSize: 32,
+    fontFamily: "Great Vibes",
+    color: "#000000",
+    textAlign: "center",
+    marginBottom: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: "#D4AF37",
+    paddingBottom: 10,
+  },
+  presentationSection: {
+    marginBottom: 15,
+  },
+  presentationSectionTitle: {
+    fontSize: 16,
+    fontWeight: 700,
+    fontFamily: "Great Vibes",
+    color: "#000000",
+    marginBottom: 8,
+  },
+  presentationText: {
+    fontSize: 9,
+    fontFamily: "Montserrat",
+    fontWeight: 400,
+    color: "#000000",
+    lineHeight: 1.5,
+    textAlign: "justify",
+  },
+  presentationList: {
+    fontSize: 8,
+    fontFamily: "Montserrat",
+    fontWeight: 400,
+    color: "#000000",
+    lineHeight: 1.6,
+    marginLeft: 10,
+  },
+
+  // Page de fin
+  endPage: {
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#1a1a1a",
+    padding: 60,
+  },
+  endLogo: {
+    width: 150,
+    height: 150,
+    marginTop: 200,
+  },
+  endInfoContainer: {
+    alignItems: "center",
+    marginBottom: 40,
+  },
+  endTitle: {
+    fontSize: 20,
+    fontFamily: "Great Vibes",
+    color: "#FFFFFF",
+    marginBottom: 20,
+  },
+  endInfoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  endInfoLabel: {
+    fontSize: 10,
+    fontWeight: 700,
+    fontFamily: "Montserrat",
+    color: "#D4AF37",
+    width: 80,
+  },
+  endInfoText: {
+    fontSize: 10,
+    fontFamily: "Montserrat",
+    fontWeight: 400,
+    color: "#FFFFFF",
+  },
 });
 
 // Page de couverture
@@ -214,6 +310,91 @@ const CoverPage = () => (
     <Text style={styles.coverSubtitle}>Notre Menu</Text>
     <Text style={styles.coverCity}>Marrakech</Text>
     <Text style={styles.coverYear}>{new Date().getFullYear()}</Text>
+  </Page>
+);
+
+// Page de présentation
+const PresentationPage = () => (
+  <Page size="A4" style={styles.presentationPage}>
+    <Text style={styles.presentationTitle}>Kech Waffles - L'art de la gaufre à Marrakech</Text>
+
+    <View style={styles.presentationSection}>
+      <Text style={styles.presentationSectionTitle}>Notre Philosophie : Le Fait Maison Avant Tout</Text>
+      <Text style={styles.presentationText}>
+        Chez Kech Waffles, chaque gaufre est une création unique, préparée avec amour et patience.
+        Nous croyons en la valeur du fait maison et refusons tout compromis sur la qualité.
+      </Text>
+    </View>
+
+    <View style={styles.presentationSection}>
+      <Text style={styles.presentationList}>• Pâtes préparées quotidiennement dans notre laboratoire</Text>
+      <Text style={styles.presentationList}>• Sauces chocolat & pistache créées maison avec recettes exclusives</Text>
+      <Text style={styles.presentationList}>• Garnitures fraîches sélectionnées chaque matin</Text>
+      <Text style={styles.presentationList}>• Cuisson minute pour une fraîcheur incomparable</Text>
+      <Text style={styles.presentationList}>• Glaces artisanales préparées avec soin</Text>
+    </View>
+
+    <View style={styles.presentationSection}>
+      <Text style={styles.presentationSectionTitle}>Des Ingrédients d'Exception</Text>
+      <Text style={styles.presentationText}>
+        Notre engagement : n'utiliser que les meilleurs produits pour vous offrir une expérience gustative inoubliable.
+      </Text>
+    </View>
+
+    <View style={styles.presentationSection}>
+      <Text style={styles.presentationList}>• CHOCOLAT CALLEBAUT (Belgique) - Le chocolat des plus grands chocolatiers du monde</Text>
+      <Text style={styles.presentationList}>• CRÈME PISTACHE DE QUALITÉ - Une crème pistache authentique au goût intense</Text>
+      <Text style={styles.presentationList}>• MASCARPONE DE QUALITÉ - Pour notre crème tiramisu maison</Text>
+      <Text style={styles.presentationList}>• PERLES DE SUCRE - Pour nos gaufres liégeoises authentiques</Text>
+    </View>
+
+    <View style={styles.presentationSection}>
+      <Text style={styles.presentationSectionTitle}>Nos Créations Signature</Text>
+      <Text style={styles.presentationList}>• PIZZA WAFFLES - Notre concept innovant qui fusionne l'Italie et la Belgique</Text>
+      <Text style={styles.presentationList}>• POTATO WAFFLES - Notre création originale avec pommes de terre</Text>
+      <Text style={styles.presentationList}>• BUBBLE WAFFLES - Le dessert tendance de Hong Kong revisité</Text>
+      <Text style={styles.presentationList}>• TIRAMISU WAFFLE - Notre création exclusive avec crème tiramisu maison</Text>
+    </View>
+
+    <View style={styles.presentationSection}>
+      <Text style={styles.presentationSectionTitle}>Notre Engagement Qualité</Text>
+      <Text style={styles.presentationList}>✓ FRAÎCHEUR GARANTIE - Pâtes préparées le jour même, cuisson minute</Text>
+      <Text style={styles.presentationList}>✓ INGRÉDIENTS NOBLES - Les meilleurs produits du Maroc et d'ailleurs</Text>
+      <Text style={styles.presentationList}>✓ TRANSPARENCE TOTALE - Nous sommes fiers de nos recettes</Text>
+      <Text style={styles.presentationList}>✓ FAIT MAISON VÉRITABLE - Pas de poudres industrielles</Text>
+      <Text style={styles.presentationList}>✓ HYGIÈNE IRRÉPROCHABLE - Laboratoire aux normes</Text>
+    </View>
+  </Page>
+);
+
+// Page de fin
+const EndPage = () => (
+  <Page size="A4" style={styles.endPage}>
+    <View style={{ flex: 1 }} />
+    <Image
+      src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
+      style={styles.endLogo}
+      cache
+    />
+    <View style={styles.endInfoContainer}>
+      <Text style={styles.endTitle}>Où nous trouver</Text>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>Adresse :</Text>
+        <Text style={styles.endInfoText}>MAG 33 AL BADII, Marrakech, Maroc</Text>
+      </View>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>Instagram :</Text>
+        <Text style={styles.endInfoText}>@kechwaffles</Text>
+      </View>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>Facebook :</Text>
+        <Text style={styles.endInfoText}>kechwaffles</Text>
+      </View>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>TikTok :</Text>
+        <Text style={styles.endInfoText}>@kechwaffles</Text>
+      </View>
+    </View>
   </Page>
 );
 
@@ -275,24 +456,41 @@ const ProductsByCategory = ({ category, products }: { category: string; products
 
 // Document PDF complet
 export const MenuPDF = ({ products }: MenuPDFProps) => {
-  // Grouper les produits par catégorie (garder tous les produits)
+  // Regrouper les produits selon les nouvelles règles
   const productsByCategory = products.reduce((acc, product) => {
-    if (!acc[product.category]) {
-      acc[product.category] = [];
+    let targetCategory = product.category;
+
+    // Fusionner "Jus Frais Pressés" dans "Eaux & Soft Drinks"
+    if (product.category === "Jus Frais Pressés") {
+      targetCategory = "Eaux & Soft Drinks";
     }
-    acc[product.category].push(product);
+
+    // Séparer "Boissons - Spécialisées"
+    if (product.category === "Boissons - Spécialisées") {
+      // Thé à la menthe va dans "Autres Boissons Chaudes"
+      if (product.name.toLowerCase().includes("thé") || product.name.toLowerCase().includes("menthe")) {
+        targetCategory = "Autres Boissons Chaudes";
+      } else {
+        // Autres produits spécialisés vont dans "Boissons - Boissons Lactées"
+        targetCategory = "Boissons - Boissons Lactées";
+      }
+    }
+
+    if (!acc[targetCategory]) {
+      acc[targetCategory] = [];
+    }
+    acc[targetCategory].push(product);
     return acc;
   }, {} as Record<string, Product[]>);
 
   // Ordre des catégories
   const categoryOrder = [
     "Boissons - Cafés",
+    "Autres Boissons Chaudes",
     "Boissons - Boissons Lactées",
     "Boissons - Milkshakes",
-    "Boissons - Spécialisées",
     "Boissons Ice Lactées",
     "Eaux & Soft Drinks",
-    "Jus Frais Pressés",
     "Shots Vitaminés",
     "Desserts",
     "Desserts - Cans",
@@ -314,23 +512,29 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
   const cafesCategories = sortedCategories.filter((cat) =>
     cat === "Boissons - Cafés"
   );
+  const autresBoissonsChaudesCategories = sortedCategories.filter((cat) =>
+    cat === "Autres Boissons Chaudes"
+  );
   const boissonsLacteesCategories = sortedCategories.filter((cat) =>
     cat === "Boissons - Boissons Lactées"
   );
-  const milkshakesSpecialeesCategories = sortedCategories.filter((cat) =>
-    cat === "Boissons - Milkshakes" || cat === "Boissons - Spécialisées"
+  const milkshakesCategories = sortedCategories.filter((cat) =>
+    cat === "Boissons - Milkshakes"
   );
   const boissonsIceCategories = sortedCategories.filter((cat) =>
     cat === "Boissons Ice Lactées"
   );
   const eauxJusCategories = sortedCategories.filter((cat) =>
-    cat.includes("Eaux") || cat.includes("Jus")
+    cat === "Eaux & Soft Drinks"
   );
   const shotsCategories = sortedCategories.filter((cat) =>
     cat.includes("Shots")
   );
   const dessertsCategories = sortedCategories.filter((cat) =>
-    cat.startsWith("Desserts")
+    cat === "Desserts"
+  );
+  const dessertsCansCategories = sortedCategories.filter((cat) =>
+    cat === "Desserts - Cans"
   );
   const pizzaWafflesCategories = sortedCategories.filter((cat) =>
     cat === "Pizza Waffles"
@@ -352,7 +556,10 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
       {/* Page de couverture */}
       <CoverPage />
 
-      {/* Cafés - Page 1 */}
+      {/* Page de présentation */}
+      <PresentationPage />
+
+      {/* Cafés & Autres Boissons Chaudes - Page 1 */}
       {cafesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
@@ -361,9 +568,16 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               style={styles.headerLogo}
               cache
             />
-            <Text style={styles.headerTitle}>Nos Cafés</Text>
+            <Text style={styles.headerTitle}>Nos Boissons Chaudes</Text>
           </View>
           {cafesCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          {autresBoissonsChaudesCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
@@ -410,8 +624,8 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         </Page>
       )}
 
-      {/* Milkshakes & Spécialisées - Page 3 */}
-      {milkshakesSpecialeesCategories.length > 0 && (
+      {/* Milkshakes - Page 3 */}
+      {milkshakesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
             <Image
@@ -419,9 +633,9 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               style={styles.headerLogo}
               cache
             />
-            <Text style={styles.headerTitle}>Milkshakes & Spécialités</Text>
+            <Text style={styles.headerTitle}>Nos Milkshakes</Text>
           </View>
-          {milkshakesSpecialeesCategories.map((category) => (
+          {milkshakesCategories.map((category) => (
             <ProductsByCategory
               key={category}
               category={category}
@@ -468,7 +682,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         </Page>
       )}
 
-      {/* Jus & Eaux - Page 5 */}
+      {/* Eaux & Soft Drinks - Page 5 */}
       {eauxJusCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
@@ -477,7 +691,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
               style={styles.headerLogo}
               cache
             />
-            <Text style={styles.headerTitle}>Jus Frais & Eaux</Text>
+            <Text style={styles.headerTitle}>Eaux, Soft Drinks & Jus Frais</Text>
           </View>
           {eauxJusCategories.map((category) => (
             <ProductsByCategory
@@ -555,7 +769,36 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         </Page>
       )}
 
-      {/* Pizza Waffles - Page 8 */}
+      {/* Desserts - Cans - Page 8 */}
+      {dessertsCansCategories.length > 0 && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header} wrap={false}>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
+              style={styles.headerLogo}
+              cache
+            />
+            <Text style={styles.headerTitle}>Nos Canettes</Text>
+          </View>
+          {dessertsCansCategories.map((category) => (
+            <ProductsByCategory
+              key={category}
+              category={category}
+              products={productsByCategory[category]}
+            />
+          ))}
+          <Text style={styles.footer}>
+            Kech Waffles • Marrakech • www.kechwaffles.com
+          </Text>
+          <Text
+            style={styles.pageNumber}
+            render={({ pageNumber }) => `${pageNumber - 1}`}
+            fixed
+          />
+        </Page>
+      )}
+
+      {/* Pizza Waffles - Page 9 */}
       {pizzaWafflesCategories.length > 0 && (
         <Page size="A4" style={styles.page}>
           <View style={styles.header} wrap={false}>
@@ -641,6 +884,14 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
           />
         </Page>
       )}
+
+      {/* Page vide avant-dernière */}
+      <Page size="A4" style={styles.page}>
+        <View style={{ flex: 1 }} />
+      </Page>
+
+      {/* Page de fin avec informations de contact */}
+      <EndPage />
     </Document>
   );
 };

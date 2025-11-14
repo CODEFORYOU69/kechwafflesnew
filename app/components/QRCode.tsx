@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/hover-card";
 
 export function QRCode() {
-  const menuUrl = "https://localhost:3000/menu"; // À remplacer par l'URL réelle
+  const menuUrl = "https://www.kechwaffles.com/menu";
 
   return (
     <HoverCard>

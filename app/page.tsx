@@ -18,16 +18,26 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="min-h-screen">
-        <Hero />
+      <section className="min-h-screen relative">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          style={{
+            transform: "translateZ(0)",
+          }}
+        >
+          <Hero />
+        </motion.div>
       </section>
 
       {/* Spécialités Section */}
-      <section className="min-h-screen bg-white/80 backdrop-blur-sm">
+      <section className="min-h-screen bg-white/80 backdrop-blur-sm relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="py-20"
         >
           <Container>
@@ -158,20 +168,27 @@ export default function Home() {
       </section>
 
       {/* QR Code Section */}
-      <section className="min-h-screen bg-muted/50">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter">
-                Découvrez Notre Carte
-              </h2>
-              <p className="text-muted-foreground">
-                Scannez le QR code pour explorer notre menu complet
-              </p>
+      <section className="min-h-screen bg-muted/50 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: false, amount: 0.5 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <Container>
+            <div className="max-w-3xl mx-auto text-center space-y-8">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter">
+                  Découvrez Notre Carte
+                </h2>
+                <p className="text-muted-foreground">
+                  Scannez le QR code pour explorer notre menu complet
+                </p>
+              </div>
+              <QRCode />
             </div>
-            <QRCode />
-          </div>
-        </Container>
+          </Container>
+        </motion.div>
       </section>
     </>
   );
