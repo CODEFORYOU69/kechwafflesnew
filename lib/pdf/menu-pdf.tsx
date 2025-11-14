@@ -302,6 +302,7 @@ const styles = StyleSheet.create({
 // Page de couverture
 const CoverPage = () => (
   <Page size="A4" style={styles.coverPage}>
+    {/* eslint-disable-next-line jsx-a11y/alt-text */}
     <Image
       src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
       style={styles.coverLogo}
@@ -316,7 +317,7 @@ const CoverPage = () => (
 // Page de présentation
 const PresentationPage = () => (
   <Page size="A4" style={styles.presentationPage}>
-    <Text style={styles.presentationTitle}>Kech Waffles - L'art de la gaufre à Marrakech</Text>
+    <Text style={styles.presentationTitle}>Kech Waffles - L&apos;art de la gaufre à Marrakech</Text>
 
     <View style={styles.presentationSection}>
       <Text style={styles.presentationSectionTitle}>Notre Philosophie : Le Fait Maison Avant Tout</Text>
@@ -335,9 +336,9 @@ const PresentationPage = () => (
     </View>
 
     <View style={styles.presentationSection}>
-      <Text style={styles.presentationSectionTitle}>Des Ingrédients d'Exception</Text>
+      <Text style={styles.presentationSectionTitle}>Des Ingrédients d&apos;Exception</Text>
       <Text style={styles.presentationText}>
-        Notre engagement : n'utiliser que les meilleurs produits pour vous offrir une expérience gustative inoubliable.
+        Notre engagement : n&apos;utiliser que les meilleurs produits pour vous offrir une expérience gustative inoubliable.
       </Text>
     </View>
 
@@ -350,7 +351,7 @@ const PresentationPage = () => (
 
     <View style={styles.presentationSection}>
       <Text style={styles.presentationSectionTitle}>Nos Créations Signature</Text>
-      <Text style={styles.presentationList}>• PIZZA WAFFLES - Notre concept innovant qui fusionne l'Italie et la Belgique</Text>
+      <Text style={styles.presentationList}>• PIZZA WAFFLES - Notre concept innovant qui fusionne l&apos;Italie et la Belgique</Text>
       <Text style={styles.presentationList}>• POTATO WAFFLES - Notre création originale avec pommes de terre</Text>
       <Text style={styles.presentationList}>• BUBBLE WAFFLES - Le dessert tendance de Hong Kong revisité</Text>
       <Text style={styles.presentationList}>• TIRAMISU WAFFLE - Notre création exclusive avec crème tiramisu maison</Text>
@@ -359,7 +360,7 @@ const PresentationPage = () => (
     <View style={styles.presentationSection}>
       <Text style={styles.presentationSectionTitle}>Notre Engagement Qualité</Text>
       <Text style={styles.presentationList}>✓ FRAÎCHEUR GARANTIE - Pâtes préparées le jour même, cuisson minute</Text>
-      <Text style={styles.presentationList}>✓ INGRÉDIENTS NOBLES - Les meilleurs produits du Maroc et d'ailleurs</Text>
+      <Text style={styles.presentationList}>✓ INGRÉDIENTS NOBLES - Les meilleurs produits du Maroc et d&apos;ailleurs</Text>
       <Text style={styles.presentationList}>✓ TRANSPARENCE TOTALE - Nous sommes fiers de nos recettes</Text>
       <Text style={styles.presentationList}>✓ FAIT MAISON VÉRITABLE - Pas de poudres industrielles</Text>
       <Text style={styles.presentationList}>✓ HYGIÈNE IRRÉPROCHABLE - Laboratoire aux normes</Text>
@@ -371,6 +372,7 @@ const PresentationPage = () => (
 const EndPage = () => (
   <Page size="A4" style={styles.endPage}>
     <View style={{ flex: 1 }} />
+    {/* eslint-disable-next-line jsx-a11y/alt-text */}
     <Image
       src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
       style={styles.endLogo}
@@ -415,6 +417,7 @@ const ProductsByCategory = ({ category, products }: { category: string; products
         {products.map((product, index) => (
           <View key={index} style={styles.productCard} wrap={false}>
             {product.image && (
+              /* eslint-disable-next-line jsx-a11y/alt-text */
               <Image
                 src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/${product.image}`}
                 style={styles.productImage}
