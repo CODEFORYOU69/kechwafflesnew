@@ -99,7 +99,7 @@ export const menuProducts: Product[] = [
     handle: "cold-brew",
     sku: "COL-001",
     name: "Cold Brew",
-    category: "Boissons - Boissons Lactées",
+    category: "Boissons - Cafés",
     description: "Café infusé froid",
     image: "coldbrew.png",
     price: 35,
@@ -527,7 +527,7 @@ export const menuProducts: Product[] = [
     name: "Craffle Tiramisu",
     category: "Desserts",
     description: "Craffle tiramisu",
-    image: "crauffles.jpg",
+    image: "croffle.jpg",
     price: 60,
   },
 
@@ -803,7 +803,7 @@ export const menuProducts: Product[] = [
   {
     handle: "extra-jambon",
     sku: "EXT-JAM",
-    name: "Extra Jambon",
+    name: "Extra Jambon (halal)",
     category: "Modificateurs",
     description: "Supplément jambon",
     image: "extrajambon.png",
@@ -1220,17 +1220,17 @@ export const menuProducts: Product[] = [
     variants: [
       {
         option1Name: "Parfum",
-        option1Value: "Vanille",
-        price: 5,
-      },
-      {
-        option1Name: "Parfum",
         option1Value: "Caramel",
         price: 5,
       },
       {
         option1Name: "Parfum",
         option1Value: "Noisette",
+        price: 5,
+      },
+      {
+        option1Name: "Parfum",
+        option1Value: "Vanille",
         price: 5,
       },
       {
@@ -1455,7 +1455,7 @@ export const menuProducts: Product[] = [
     sku: "PW-4FR",
     name: "Pizza Waffle 4 Fromages",
     category: "Pizza Waffles",
-    description: "Mozzarella, gorgonzola, chèvre, parmesan, noix, miel",
+    description: "Mozzarella, bleu, chèvre, parmesan",
     image: "wafflepizza.png",
     price: 40,
   },
@@ -1515,7 +1515,7 @@ export const menuProducts: Product[] = [
     sku: "PW-THO",
     name: "Pizza Waffle Thon & Olives",
     category: "Pizza Waffles",
-    description: "Thon, mozzarella, olives noires, câpres, oignon, tomates cerises",
+    description: "Thon, mozzarella, olives noires, oignon, tomates",
     image: "wafflepizza.png",
     price: 38,
   },
@@ -1525,7 +1525,7 @@ export const menuProducts: Product[] = [
     sku: "PW-VEG",
     name: "Pizza Waffle Végétarienne",
     category: "Pizza Waffles",
-    description: "Courgette, poivrons, champignons, olives, roquette, parmesan",
+    description: "Aubergines, poivrons, olives, parmesan",
     image: "wafflepizza.png",
     price: 37,
   },

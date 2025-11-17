@@ -33,6 +33,7 @@ import {
   ShoppingBag,
   Eye,
   EyeOff,
+  Upload,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -76,6 +77,7 @@ export default function ProduitsAdminPage() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
+  const [pushing, setPushing] = useState(false);
   const [generatingPDF, setGeneratingPDF] = useState(false);
   const [generatingPDFGlovo, setGeneratingPDFGlovo] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -147,6 +149,39 @@ export default function ProduitsAdminPage() {
       alert("Erreur lors de la synchronisation");
     } finally {
       setSyncing(false);
+    }
+  };
+
+  const handlePushToLoyverse = async () => {
+    if (!confirm("Pousser les prix de l'app vers Loyverse ? Cela écrasera les prix sur Loyverse.")) {
+      return;
+    }
+
+    try {
+      setPushing(true);
+      const response = await fetch("/api/admin/products/push-to-loyverse", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(
+          `✅ Synchronisation vers Loyverse terminée !\n\n` +
+          `Total variants: ${data.stats.total}\n` +
+          `Mis à jour: ${data.stats.updated}\n` +
+          `Ignorés: ${data.stats.skipped}\n` +
+          `Erreurs: ${data.stats.errors.length}\n\n` +
+          (data.errors.length > 0 ? `Erreurs:\n${data.errors.slice(0, 3).join("\n")}` : "")
+        );
+        fetchProducts();
+      } else {
+        const data = await response.json();
+        alert(`Erreur : ${data.message || "Impossible de synchroniser"}`);
+      }
+    } catch {
+      alert("Erreur lors de la synchronisation");
+    } finally {
+      setPushing(false);
     }
   };
 
@@ -388,7 +423,7 @@ export default function ProduitsAdminPage() {
         <CardContent className="flex flex-wrap gap-3">
           <Button
             onClick={handleSyncLoyverse}
-            disabled={syncing}
+            disabled={syncing || pushing}
             className="bg-gradient-to-r from-green-600 via-amber-500 to-red-600"
           >
             {syncing ? (
@@ -399,7 +434,26 @@ export default function ProduitsAdminPage() {
             ) : (
               <>
                 <RefreshCw className="mr-2 h-4 w-4" />
-                Sync avec Loyverse
+                Loyverse → App
+              </>
+            )}
+          </Button>
+
+          <Button
+            onClick={handlePushToLoyverse}
+            disabled={syncing || pushing}
+            variant="outline"
+            className="border-blue-500 text-blue-600 hover:bg-blue-50"
+          >
+            {pushing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Envoi...
+              </>
+            ) : (
+              <>
+                <Upload className="mr-2 h-4 w-4" />
+                App → Loyverse
               </>
             )}
           </Button>
