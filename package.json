@@ -45,7 +45,7 @@
     "lucide-react": "^0.471.0",
     "motion": "^12.23.22",
     "nanoid": "^5.1.6",
-    "next": "15.1.4",
+    "next": "15.1.9",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
