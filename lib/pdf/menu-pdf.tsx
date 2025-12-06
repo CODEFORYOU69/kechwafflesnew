@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import {
   Document,
@@ -9,17 +10,18 @@ import {
   Font,
 } from "@react-pdf/renderer";
 
-// Enregistrer les polices locales
-Font.register({
-  family: "Great Vibes",
-  src: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/fonts/GreatVibes-Regular.ttf`,
-});
-
+// Enregistrer les polices (variable font)
 Font.register({
   family: "Montserrat",
   src: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/fonts/Montserrat-VariableFont_wght.ttf`,
 });
 
+Font.register({
+  family: "Great Vibes",
+  src: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/fonts/GreatVibes-Regular.ttf`,
+});
+
+// Types
 type ProductVariant = {
   option1Name: string | null;
   option1Value: string | null;
@@ -42,952 +44,1091 @@ type MenuPDFProps = {
   generatedAt: string;
 };
 
-// Styles élégants et sobres
+// Couleurs Kech Waffles (Maroc)
+const colors = {
+  primary: "#1B5E20",
+  gold: "#D4AF37",
+  red: "#C62828",
+  black: "#1a1a1a",
+  white: "#FFFFFF",
+  cream: "#FDF5E6",
+  lightGray: "#F8F8F8",
+  darkGray: "#333333",
+};
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com';
+
+// Styles optimisés pour A4 pleine page
 const styles = StyleSheet.create({
+  // === PAGE ===
   page: {
-    paddingTop: 30,
-    paddingBottom: 30,
-    paddingLeft: 40,
-    paddingRight: 40,
-    backgroundColor: "#F5F5DC",
+    paddingTop: 20,
+    paddingBottom: 25,
+    paddingLeft: 25,
+    paddingRight: 25,
+    backgroundColor: colors.cream,
     fontFamily: "Montserrat",
   },
 
-  // Page de couverture
+  // === COUVERTURE ===
   coverPage: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#1a1a1a",
+    backgroundColor: colors.black,
   },
   coverLogo: {
-    width: 200,
-    height: 200,
-    marginBottom: 30,
+    width: 250,
+    height: 250,
+    marginBottom: 40,
+  },
+  coverTitle: {
+    fontSize: 42,
+    fontWeight: 700,
+    color: colors.white,
+    marginBottom: 15,
   },
   coverSubtitle: {
-    fontSize: 28,
-    color: "#FFFFFF",
-    marginBottom: 10,
-    fontWeight: "bold",
-  },
-  coverCity: {
-    fontSize: 16,
-    color: "#D4AF37",
-    marginTop: 40,
-  },
-  coverYear: {
-    fontSize: 14,
-    color: "#FFFFFF",
-    marginTop: 10,
+    fontSize: 20,
+    color: colors.gold,
+    marginTop: 25,
   },
 
-  // En-tête de page
-  header: {
+  // === EN-TÊTE ===
+  pageHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
-    paddingBottom: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: "#D4AF37",
+    marginBottom: 12,
+    paddingBottom: 8,
+    borderBottomWidth: 3,
+    borderBottomColor: colors.gold,
   },
   headerLogo: {
-    width: 50,
-    height: 50,
-    marginRight: 12,
+    width: 40,
+    height: 40,
+    marginRight: 10,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "Montserrat",
-    color: "#000000",
+    fontSize: 32,
+    fontFamily: "Great Vibes",
+    color: colors.black,
     flex: 1,
-    textAlign: "center",
   },
 
-  // Catégories
-  categorySection: {
-    marginBottom: 10,
-  },
-  categoryTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    fontFamily: "Montserrat",
-    color: "#FFFFFF",
-    backgroundColor: "#000000",
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 6,
-    paddingRight: 6,
-    marginBottom: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: "#D4AF37",
-  },
-
-  // Grille de produits
-  productGrid: {
+  // === BANDEAU D'IMAGES ===
+  imageBanner: {
     flexDirection: "row",
-    flexWrap: "wrap",
+    marginBottom: 12,
     gap: 6,
+    height: 70,
+  },
+  bannerImage: {
+    flex: 1,
+    height: 70,
+    objectFit: "cover",
+    borderRadius: 5,
   },
 
-  // Carte produit
-  productCard: {
-    width: "48%",
+  // === TITRES DE SECTION ===
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 700,
+    color: colors.white,
+    backgroundColor: colors.primary,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    marginBottom: 8,
+    marginTop: 8,
+    borderRadius: 3,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.gold,
+  },
+  sectionSubtitle: {
+    fontSize: 13,
+    fontWeight: 600,
+    color: colors.primary,
     marginBottom: 6,
-    padding: 6,
-    backgroundColor: "#FAFAFA",
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: "#E5E5E5",
+    marginTop: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.gold,
+    paddingBottom: 3,
   },
-  productImage: {
-    width: 35,
-    height: 35,
+
+  // === GRILLE BASES (Pizza/Potato) ===
+  basesRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 8,
+  },
+  baseCard: {
+    flex: 1,
+    backgroundColor: colors.white,
+    borderRadius: 6,
+    padding: 10,
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: colors.gold,
+  },
+  baseImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 6,
+    marginBottom: 6,
     objectFit: "cover",
-    borderRadius: 3,
-    marginBottom: 4,
-    alignSelf: "center",
   },
-  productName: {
-    fontSize: 10,
-    fontFamily: "Montserrat",
-    color: "#000000",
+  baseName: {
+    fontSize: 14,
+    fontWeight: 700,
+    color: colors.black,
+    textAlign: "center",
     marginBottom: 3,
   },
-  productDescription: {
-    fontSize: 8,
-    fontFamily: "Montserrat",
-    color: "#000000",
+  basePrice: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: colors.red,
+  },
+  // === BASES COMPACTES (image + texte en ligne) ===
+  basesCompactRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 6,
+  },
+  baseCompactItem: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  baseCompactImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: colors.gold,
+    objectFit: "cover",
+  },
+  baseCompactInfo: {
+    flex: 1,
+  },
+  baseCompactName: {
+    fontSize: 11,
+    fontWeight: 700,
+    color: colors.black,
+  },
+  baseCompactPrice: {
+    fontSize: 10,
+    fontWeight: 700,
+    color: colors.red,
+  },
+
+  // === PRODUIT SIGNATURE (avec image) ===
+  signatureGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  signatureCard: {
+    width: "31%",
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    padding: 8,
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+  },
+  signatureImage: {
+    width: "100%",
+    height: 60,
+    borderRadius: 4,
+    marginBottom: 5,
+    objectFit: "cover",
+  },
+  signatureName: {
+    fontSize: 10,
+    fontWeight: 700,
+    color: colors.black,
+    marginBottom: 2,
+  },
+  signatureDescription: {
+    fontSize: 7,
+    fontWeight: 400,
+    color: colors.darkGray,
     marginBottom: 4,
     lineHeight: 1.2,
   },
-
-  // Prix
-  priceContainer: {
-    marginTop: 4,
-    paddingTop: 4,
-    borderTopWidth: 1,
-    borderTopColor: "#000000",
-  },
-  priceSimple: {
+  signaturePrice: {
     fontSize: 11,
-    fontFamily: "Montserrat",
-    color: "#000000",
+    fontWeight: 700,
+    color: colors.red,
+    textAlign: "right",
   },
-  variantRow: {
+
+  // === LISTE PRODUITS (texte) ===
+  productList: {
+    marginTop: 4,
+  },
+  productRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8E8E8",
+  },
+  productRowAlt: {
+    backgroundColor: colors.lightGray,
+  },
+  productName: {
+    fontSize: 11,
+    fontWeight: 600,
+    color: colors.black,
+    flex: 1,
+  },
+  productDesc: {
+    fontSize: 8,
+    fontWeight: 400,
+    color: colors.darkGray,
+    flex: 2,
+    marginHorizontal: 8,
+  },
+  productPrice: {
+    fontSize: 11,
+    fontWeight: 700,
+    color: colors.red,
+    minWidth: 55,
+    textAlign: "right",
+  },
+
+  // === GRILLE SUPPLÉMENTS ===
+  supplementsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 5,
+  },
+  supplementItem: {
+    width: "32%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    backgroundColor: colors.white,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+  },
+  supplementName: {
+    fontSize: 9,
+    fontWeight: 500,
+    color: colors.black,
+    flex: 1,
+  },
+  supplementPrice: {
+    fontSize: 10,
+    fontWeight: 700,
+    color: colors.red,
+  },
+
+  // === TYPES GAUFRES ===
+  waffleTypesRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 10,
+  },
+  waffleTypeCard: {
+    flex: 1,
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    padding: 8,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: colors.gold,
+  },
+  waffleTypeName: {
+    fontSize: 10,
+    fontWeight: 700,
+    color: colors.black,
+    textAlign: "center",
     marginBottom: 2,
   },
-  variantName: {
-    fontSize: 8,
-    fontFamily: "Montserrat",
-    color: "#000000",
-  },
-  variantPrice: {
-    fontSize: 9,
-    fontFamily: "Montserrat",
-    color: "#000000",
+  waffleTypePrice: {
+    fontSize: 11,
+    fontWeight: 700,
+    color: colors.red,
   },
 
-  // Footer
+  // === BOISSONS (liste compacte) ===
+  drinkSection: {
+    marginBottom: 8,
+  },
+  drinkCategoryTitle: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: colors.primary,
+    marginBottom: 4,
+    paddingBottom: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.gold,
+  },
+  drinkGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  drinkItem: {
+    width: "50%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 3,
+    paddingRight: 10,
+  },
+  drinkName: {
+    fontSize: 10,
+    fontWeight: 500,
+    color: colors.black,
+  },
+  drinkPrice: {
+    fontSize: 10,
+    fontWeight: 700,
+    color: colors.red,
+  },
+
+  // === COMPOSITION ===
+  composeBox: {
+    backgroundColor: colors.lightGray,
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 8,
+    borderWidth: 1,
+    borderColor: colors.gold,
+  },
+  composeTitle: {
+    fontSize: 14,
+    fontWeight: 700,
+    color: colors.primary,
+    marginBottom: 4,
+    textAlign: "center",
+  },
+  composeText: {
+    fontSize: 9,
+    color: colors.darkGray,
+    textAlign: "center",
+  },
+
+  // === FOOTER ===
   footer: {
     position: "absolute",
-    bottom: 30,
-    left: 40,
-    right: 40,
-    textAlign: "center",
-    fontSize: 8,
-    color: "#999999",
+    bottom: 12,
+    left: 25,
+    right: 25,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: 6,
     borderTopWidth: 1,
-    borderTopColor: "#E5E5E5",
-    paddingTop: 10,
+    borderTopColor: colors.gold,
   },
-
-  // Numéro de page
+  footerText: {
+    fontSize: 7,
+    color: colors.darkGray,
+  },
   pageNumber: {
-    position: "absolute",
-    bottom: 20,
-    right: 40,
-    fontSize: 10,
-    color: "#999999",
+    fontSize: 9,
+    fontWeight: 600,
+    color: colors.primary,
   },
 
-  // Page de présentation
+  // === PAGE PRÉSENTATION ===
   presentationPage: {
-    padding: 50,
-    backgroundColor: "#F5F5DC",
+    paddingTop: 30,
+    paddingBottom: 30,
+    paddingLeft: 35,
+    paddingRight: 35,
+    backgroundColor: colors.cream,
+    fontFamily: "Montserrat",
   },
   presentationTitle: {
-    fontSize: 32,
+    fontSize: 28,
     fontFamily: "Great Vibes",
-    color: "#000000",
+    color: colors.primary,
     textAlign: "center",
     marginBottom: 20,
-    borderBottomWidth: 2,
-    borderBottomColor: "#D4AF37",
-    paddingBottom: 10,
   },
-  presentationSection: {
-    marginBottom: 15,
-  },
-  presentationSectionTitle: {
-    fontSize: 16,
+  presentationSubtitle: {
+    fontSize: 14,
     fontWeight: 700,
-    fontFamily: "Great Vibes",
-    color: "#000000",
+    color: colors.black,
     marginBottom: 8,
+    marginTop: 12,
+    borderBottomWidth: 2,
+    borderBottomColor: colors.gold,
+    paddingBottom: 4,
   },
   presentationText: {
     fontSize: 9,
-    fontFamily: "Montserrat",
-    fontWeight: 400,
-    color: "#000000",
-    lineHeight: 1.5,
-    textAlign: "justify",
+    color: colors.darkGray,
+    marginBottom: 4,
+    lineHeight: 1.4,
   },
-  presentationList: {
-    fontSize: 8,
-    fontFamily: "Montserrat",
-    fontWeight: 400,
-    color: "#000000",
-    lineHeight: 1.6,
+  presentationBullet: {
+    fontSize: 9,
+    color: colors.darkGray,
+    marginBottom: 3,
+    marginLeft: 10,
+    lineHeight: 1.3,
+  },
+  presentationHighlight: {
+    fontSize: 9,
+    fontWeight: 600,
+    color: colors.primary,
+    marginBottom: 3,
     marginLeft: 10,
   },
+  presentationIcon: {
+    fontSize: 9,
+    color: colors.gold,
+    marginRight: 5,
+  },
+  engagementRow: {
+    flexDirection: "row",
+    marginBottom: 4,
+    alignItems: "flex-start",
+  },
+  engagementIcon: {
+    fontSize: 10,
+    color: colors.gold,
+    marginRight: 6,
+    width: 12,
+  },
+  engagementText: {
+    fontSize: 9,
+    color: colors.darkGray,
+    flex: 1,
+  },
 
-  // Page de fin
+  // === PAGE FIN ===
   endPage: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#1a1a1a",
-    padding: 60,
+    backgroundColor: colors.black,
+    padding: 40,
   },
   endLogo: {
-    width: 150,
-    height: 150,
-    marginTop: 200,
-  },
-  endInfoContainer: {
-    alignItems: "center",
-    marginBottom: 40,
+    width: 180,
+    height: 180,
+    marginBottom: 35,
   },
   endTitle: {
-    fontSize: 20,
+    fontSize: 28,
     fontFamily: "Great Vibes",
-    color: "#FFFFFF",
-    marginBottom: 20,
+    color: colors.gold,
+    marginBottom: 30,
+  },
+  endInfo: {
+    alignItems: "center",
   },
   endInfoRow: {
     flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 10,
   },
   endInfoLabel: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: 700,
-    fontFamily: "Montserrat",
-    color: "#D4AF37",
-    width: 80,
+    color: colors.gold,
+    width: 100,
   },
   endInfoText: {
-    fontSize: 10,
-    fontFamily: "Montserrat",
-    fontWeight: 400,
-    color: "#FFFFFF",
+    fontSize: 12,
+    color: colors.white,
   },
 });
 
-// Page de couverture
+// === COMPOSANTS ===
+
 const CoverPage = () => (
   <Page size="A4" style={styles.coverPage}>
-    {/* eslint-disable-next-line jsx-a11y/alt-text */}
     <Image
-      src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
+      src={`${BASE_URL}/images/menu-items/TransparentWhite.png`}
       style={styles.coverLogo}
       cache
     />
-    <Text style={styles.coverSubtitle}>Notre Menu</Text>
-    <Text style={styles.coverCity}>Marrakech</Text>
-    <Text style={styles.coverYear}>{new Date().getFullYear()}</Text>
+    <Text style={styles.coverTitle}>Notre Menu</Text>
+    <Text style={styles.coverSubtitle}>Marrakech • {new Date().getFullYear()}</Text>
   </Page>
 );
 
-// Page de présentation
-const PresentationPage = () => (
-  <Page size="A4" style={styles.presentationPage}>
-    <Text style={styles.presentationTitle}>Kech Waffles - L&apos;art de la gaufre à Marrakech</Text>
-
-    <View style={styles.presentationSection}>
-      <Text style={styles.presentationSectionTitle}>Notre Philosophie : Le Fait Maison Avant Tout</Text>
-      <Text style={styles.presentationText}>
-        Chez Kech Waffles, chaque gaufre est une création unique, préparée avec amour et patience.
-        Nous croyons en la valeur du fait maison et refusons tout compromis sur la qualité.
-      </Text>
-    </View>
-
-    <View style={styles.presentationSection}>
-      <Text style={styles.presentationList}>• Pâtes préparées quotidiennement dans notre laboratoire</Text>
-      <Text style={styles.presentationList}>• Sauces chocolat & pistache créées maison avec recettes exclusives</Text>
-      <Text style={styles.presentationList}>• Garnitures fraîches sélectionnées chaque matin</Text>
-      <Text style={styles.presentationList}>• Cuisson minute pour une fraîcheur incomparable</Text>
-      <Text style={styles.presentationList}>• Glaces artisanales préparées avec soin</Text>
-    </View>
-
-    <View style={styles.presentationSection}>
-      <Text style={styles.presentationSectionTitle}>Des Ingrédients d&apos;Exception</Text>
-      <Text style={styles.presentationText}>
-        Notre engagement : n&apos;utiliser que les meilleurs produits pour vous offrir une expérience gustative inoubliable.
-      </Text>
-    </View>
-
-    <View style={styles.presentationSection}>
-      <Text style={styles.presentationList}>• CHOCOLAT CALLEBAUT (Belgique) - Le chocolat des plus grands chocolatiers du monde</Text>
-      <Text style={styles.presentationList}>• CRÈME PISTACHE DE QUALITÉ - Une crème pistache authentique au goût intense</Text>
-      <Text style={styles.presentationList}>• MASCARPONE DE QUALITÉ - Pour notre crème tiramisu maison</Text>
-      <Text style={styles.presentationList}>• PERLES DE SUCRE - Pour nos gaufres liégeoises authentiques</Text>
-    </View>
-
-    <View style={styles.presentationSection}>
-      <Text style={styles.presentationSectionTitle}>Nos Créations Signature</Text>
-      <Text style={styles.presentationList}>• PIZZA WAFFLES - Notre concept innovant qui fusionne l&apos;Italie et la Belgique</Text>
-      <Text style={styles.presentationList}>• POTATO WAFFLES - Notre création originale avec pommes de terre</Text>
-      <Text style={styles.presentationList}>• BUBBLE WAFFLES - Le dessert tendance de Hong Kong revisité</Text>
-      <Text style={styles.presentationList}>• TIRAMISU WAFFLE - Notre création exclusive avec crème tiramisu maison</Text>
-    </View>
-
-    <View style={styles.presentationSection}>
-      <Text style={styles.presentationSectionTitle}>Notre Engagement Qualité</Text>
-      <Text style={styles.presentationList}>✓ FRAÎCHEUR GARANTIE - Pâtes préparées le jour même, cuisson minute</Text>
-      <Text style={styles.presentationList}>✓ INGRÉDIENTS NOBLES - Les meilleurs produits du Maroc et d&apos;ailleurs</Text>
-      <Text style={styles.presentationList}>✓ TRANSPARENCE TOTALE - Nous sommes fiers de nos recettes</Text>
-      <Text style={styles.presentationList}>✓ FAIT MAISON VÉRITABLE - Pas de poudres industrielles</Text>
-      <Text style={styles.presentationList}>✓ HYGIÈNE IRRÉPROCHABLE - Laboratoire aux normes</Text>
-    </View>
-  </Page>
-);
-
-// Page de fin
-const EndPage = () => (
-  <Page size="A4" style={styles.endPage}>
-    <View style={{ flex: 1 }} />
-    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+const PageHeader = ({ title }: { title: string }) => (
+  <View style={styles.pageHeader}>
     <Image
-      src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/TransparentWhite.png`}
-      style={styles.endLogo}
+      src={`${BASE_URL}/images/menu-items/transparentlogo.jpg`}
+      style={styles.headerLogo}
       cache
     />
-    <View style={styles.endInfoContainer}>
-      <Text style={styles.endTitle}>Où nous trouver</Text>
-      <View style={styles.endInfoRow}>
-        <Text style={styles.endInfoLabel}>Adresse :</Text>
-        <Text style={styles.endInfoText}>MAG 33 AL BADII, Marrakech, Maroc</Text>
-      </View>
-      <View style={styles.endInfoRow}>
-        <Text style={styles.endInfoLabel}>Instagram :</Text>
-        <Text style={styles.endInfoText}>@kechwaffles</Text>
-      </View>
-      <View style={styles.endInfoRow}>
-        <Text style={styles.endInfoLabel}>Facebook :</Text>
-        <Text style={styles.endInfoText}>kechwaffles</Text>
-      </View>
-      <View style={styles.endInfoRow}>
-        <Text style={styles.endInfoLabel}>TikTok :</Text>
-        <Text style={styles.endInfoText}>@kechwaffles</Text>
-      </View>
-    </View>
-  </Page>
+    <Text style={styles.headerTitle}>{title}</Text>
+  </View>
 );
 
-// Groupe de produits par catégorie
-const ProductsByCategory = ({ category, products }: { category: string; products: Product[] }) => {
-  // Diviser le nom de catégorie (ex: "Boissons - Cafés" → "Cafés")
-  let categoryDisplay = category.split(" - ").pop() || category;
+const PageFooter = ({ pageNum }: { pageNum: number }) => (
+  <View style={styles.footer} fixed>
+    <Text style={styles.footerText}>Kech Waffles • Marrakech • www.kechwaffles.com</Text>
+    <Text style={styles.pageNumber}>{pageNum}</Text>
+  </View>
+);
 
-  // Remplacer "Modificateurs" par "Suppléments"
-  if (categoryDisplay === "Modificateurs") {
-    categoryDisplay = "Suppléments";
+const ImageBanner = ({ images }: { images: string[] }) => (
+  <View style={styles.imageBanner}>
+    {images.map((img, idx) => (
+      <Image
+        key={idx}
+        src={`${BASE_URL}/images/menu-items/${img}`}
+        style={styles.bannerImage}
+        cache
+      />
+    ))}
+  </View>
+);
+
+// Fonction pour supprimer les emojis
+const removeEmojis = (text: string) => {
+  return text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]|[\u{231A}-\u{231B}]|[\u{23E9}-\u{23F3}]|[\u{23F8}-\u{23FA}]|[\u{25AA}-\u{25AB}]|[\u{25B6}]|[\u{25C0}]|[\u{25FB}-\u{25FE}]|[\u{2614}-\u{2615}]|[\u{2648}-\u{2653}]|[\u{267F}]|[\u{2693}]|[\u{26A1}]|[\u{26AA}-\u{26AB}]|[\u{26BD}-\u{26BE}]|[\u{26C4}-\u{26C5}]|[\u{26CE}]|[\u{26D4}]|[\u{26EA}]|[\u{26F2}-\u{26F3}]|[\u{26F5}]|[\u{26FA}]|[\u{26FD}]|[\u{2702}]|[\u{2705}]|[\u{2708}-\u{270D}]|[\u{270F}]|[\u{2712}]|[\u{2714}]|[\u{2716}]|[\u{271D}]|[\u{2721}]|[\u{2728}]|[\u{2733}-\u{2734}]|[\u{2744}]|[\u{2747}]|[\u{274C}]|[\u{274E}]|[\u{2753}-\u{2755}]|[\u{2757}]|[\u{2763}-\u{2764}]|[\u{2795}-\u{2797}]|[\u{27A1}]|[\u{27B0}]|[\u{27BF}]|[\u{2934}-\u{2935}]|[\u{2B05}-\u{2B07}]|[\u{2B1B}-\u{2B1C}]|[\u{2B50}]|[\u{2B55}]|[\u{3030}]|[\u{303D}]|[\u{3297}]|[\u{3299}]/gu, "").trim();
+};
+
+const ProductRow = ({ product, alt, cleanPrefix = false, wrap = true }: { product: Product; alt?: boolean; cleanPrefix?: boolean; wrap?: boolean }) => {
+  const rowStyles = alt
+    ? [styles.productRow, styles.productRowAlt]
+    : [styles.productRow];
+
+  // Nettoyer le nom (enlever emojis et préfixes si demandé)
+  let displayName = removeEmojis(product.name);
+  if (cleanPrefix) {
+    displayName = displayName.replace(/^Pizza Waffle\s+/i, "").replace(/^Potato Waffle\s+/i, "");
   }
 
-  return (
-    <View style={styles.categorySection}>
-      <Text style={styles.categoryTitle}>{categoryDisplay}</Text>
-      <View style={styles.productGrid}>
-        {products.map((product, index) => (
-          <View key={index} style={styles.productCard} wrap={false}>
-            {product.image && (
-              /* eslint-disable-next-line jsx-a11y/alt-text */
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/${product.image}`}
-                style={styles.productImage}
-                cache
-              />
-            )}
-            <Text style={styles.productName}>{product.name}</Text>
-            {product.description && (
-              <Text style={styles.productDescription}>
-                {product.description}
-              </Text>
-            )}
+  // Si le produit a des variantes avec des tailles différentes, afficher le détail
+  if (product.variants && product.variants.length > 1 && product.variants[0].option1Value) {
+    const variantDetails = product.variants
+      .map(v => `${v.option1Value}: ${v.price} Dh`)
+      .join(" | ");
 
-            <View style={styles.priceContainer}>
-              {product.variants && product.variants.length > 0 ? (
-                // Produit avec variants
-                product.variants.map((variant, vIndex) => (
-                  <View key={vIndex} style={styles.variantRow}>
-                    <Text style={styles.variantName}>
-                      {variant.option1Value}
-                      {variant.option2Value && ` - ${variant.option2Value}`}
-                    </Text>
-                    <Text style={styles.variantPrice}>{variant.price} Dh</Text>
-                  </View>
-                ))
-              ) : (
-                // Produit simple
-                <Text style={styles.priceSimple}>
-                  {product.price} Dh
-                </Text>
-              )}
-            </View>
-          </View>
-        ))}
+    return (
+      <View style={rowStyles} wrap={wrap}>
+        <Text style={styles.productName}>{displayName}</Text>
+        {product.description && (
+          <Text style={styles.productDesc}>{product.description}</Text>
+        )}
+        <Text style={[styles.productPrice, { fontSize: 9 }]}>{variantDetails}</Text>
       </View>
+    );
+  }
+
+  // Prix simple
+  const price = product.price
+    ? `${product.price} Dh`
+    : product.variants.length > 0
+      ? `${product.variants[0].price} Dh`
+      : "";
+
+  return (
+    <View style={rowStyles} wrap={wrap}>
+      <Text style={styles.productName}>{displayName}</Text>
+      {product.description && (
+        <Text style={styles.productDesc}>{product.description}</Text>
+      )}
+      <Text style={styles.productPrice}>{price}</Text>
     </View>
   );
 };
 
-// Document PDF complet
-export const MenuPDF = ({ products }: MenuPDFProps) => {
-  // Liste des suppléments salés
-  const supplementsSales = [
-    "extra jambon",
-    "extra mozzarella",
-    "extra olives",
-    "extra pepperoni",
-    "extra poulet",
-    "extra thon",
-    "extra viande hachée",
-    "fromage cheddar",
-    "oignons caramélisés",
-    "sauce gruyère lyonnaise",
-    "sauce harissa",
-    "sauce mayo",
-    "sauce pesto",
-    "saucisse extra",
-    "fromage mozzarella",
-  ];
+// Ligne boisson simple (sans image)
+const DrinkItem = ({ product }: { product: Product }) => {
+  // Si le produit a des variantes avec des tailles différentes, afficher le détail
+  if (product.variants && product.variants.length > 1 && product.variants[0].option1Value) {
+    const variantDetails = product.variants
+      .map(v => `${v.option1Value}: ${v.price}`)
+      .join(" | ");
 
-  // Regrouper les produits selon les nouvelles règles
-  const productsByCategory = products.reduce((acc, product) => {
-    let targetCategory = product.category;
+    return (
+      <View style={styles.drinkItem}>
+        <Text style={styles.drinkName}>{product.name}</Text>
+        <Text style={[styles.drinkPrice, { fontSize: 8 }]}>{variantDetails} Dh</Text>
+      </View>
+    );
+  }
 
-    // Fusionner "Jus Frais Pressés" dans "Eaux & Soft Drinks"
-    if (product.category === "Jus Frais Pressés") {
-      targetCategory = "Eaux & Soft Drinks";
-    }
-
-    // Séparer "Boissons - Spécialisées"
-    if (product.category === "Boissons - Spécialisées") {
-      // Thé à la menthe va dans "Autres Boissons Chaudes"
-      if (product.name.toLowerCase().includes("thé") || product.name.toLowerCase().includes("menthe")) {
-        targetCategory = "Autres Boissons Chaudes";
-      } else {
-        // Autres produits spécialisés vont dans "Boissons - Boissons Lactées"
-        targetCategory = "Boissons - Boissons Lactées";
-      }
-    }
-
-    // Séparer les modificateurs en Salés et Sucrés
-    if (product.category === "Modificateurs") {
-      const productNameLower = product.name.toLowerCase();
-      const isSale = supplementsSales.some(supplement =>
-        productNameLower.includes(supplement)
-      );
-
-      if (isSale) {
-        targetCategory = "Suppléments Salés";
-      } else {
-        targetCategory = "Suppléments Sucrés";
-      }
-    }
-
-    if (!acc[targetCategory]) {
-      acc[targetCategory] = [];
-    }
-    acc[targetCategory].push(product);
-    return acc;
-  }, {} as Record<string, Product[]>);
-
-  // Ordre des catégories
-  const categoryOrder = [
-    "Potato Waffles",
-    "Pizza Waffles",
-    "Suppléments Salés",
-    "Desserts",
-    "Desserts - Cans",
-    "Boissons - Cafés",
-    "Autres Boissons Chaudes",
-    "Boissons - Boissons Lactées",
-    "Boissons - Milkshakes",
-    "Boissons Ice Lactées",
-    "Eaux & Soft Drinks",
-    "Shots Vitaminés",
-    "Suppléments Sucrés",
-    "Modificateurs",
-  ];
-
-  const sortedCategories = Object.keys(productsByCategory).sort((a, b) => {
-    const indexA = categoryOrder.indexOf(a);
-    const indexB = categoryOrder.indexOf(b);
-    if (indexA === -1) return 1;
-    if (indexB === -1) return -1;
-    return indexA - indexB;
-  });
-
-  // Grouper les sections pour optimiser la pagination
-  // Chaque groupe commence en début de page
-  const cafesCategories = sortedCategories.filter((cat) =>
-    cat === "Boissons - Cafés"
-  );
-  const autresBoissonsChaudesCategories = sortedCategories.filter((cat) =>
-    cat === "Autres Boissons Chaudes"
-  );
-  const boissonsLacteesCategories = sortedCategories.filter((cat) =>
-    cat === "Boissons - Boissons Lactées"
-  );
-  const milkshakesCategories = sortedCategories.filter((cat) =>
-    cat === "Boissons - Milkshakes"
-  );
-  const boissonsIceCategories = sortedCategories.filter((cat) =>
-    cat === "Boissons Ice Lactées"
-  );
-  const eauxJusCategories = sortedCategories.filter((cat) =>
-    cat === "Eaux & Soft Drinks"
-  );
-  const shotsCategories = sortedCategories.filter((cat) =>
-    cat.includes("Shots")
-  );
-  const dessertsCategories = sortedCategories.filter((cat) =>
-    cat === "Desserts"
-  );
-  const dessertsCansCategories = sortedCategories.filter((cat) =>
-    cat === "Desserts - Cans"
-  );
-  const pizzaWafflesCategories = sortedCategories.filter((cat) =>
-    cat === "Pizza Waffles"
-  );
-  const potatoWafflesCategories = sortedCategories.filter((cat) =>
-    cat === "Potato Waffles"
-  );
-  const supplementsSalesCategories = sortedCategories.filter((cat) =>
-    cat === "Suppléments Salés"
-  );
-  const supplementsSucresCategories = sortedCategories.filter((cat) =>
-    cat === "Suppléments Sucrés"
-  );
-  const modificateursCategories = sortedCategories.filter((cat) =>
-    cat.startsWith("Modificateurs") || cat === "Autres"
-  );
+  let priceDisplay = "";
+  if (product.price) {
+    priceDisplay = `${product.price} Dh`;
+  } else if (product.variants.length > 0) {
+    priceDisplay = `${product.variants[0].price} Dh`;
+  }
 
   return (
-    <Document
-      title="Menu Kech Waffles"
-      author="Kech Waffles"
-      subject="Menu complet"
-      keywords="menu, kech waffles, marrakech"
-    >
-      {/* Page de couverture */}
+    <View style={styles.drinkItem}>
+      <Text style={styles.drinkName}>{product.name}</Text>
+      <Text style={styles.drinkPrice}>{priceDisplay}</Text>
+    </View>
+  );
+};
+
+const PresentationPage = ({ pageNum }: { pageNum: number }) => (
+  <Page size="A4" style={styles.presentationPage}>
+    <Text style={styles.presentationTitle}>Kech Waffles - L&apos;art de la gaufre à Marrakech</Text>
+
+    <Text style={styles.presentationSubtitle}>Notre Philosophie : Le Fait Maison Avant Tout</Text>
+    <Text style={styles.presentationText}>
+      Chez Kech Waffles, chaque gaufre est une création unique, préparée avec amour et patience.
+      Nous croyons en la valeur du fait maison et refusons tout compromis sur la qualité.
+    </Text>
+    <Text style={styles.presentationBullet}>• Pâtes préparées quotidiennement dans notre laboratoire</Text>
+    <Text style={styles.presentationBullet}>• Sauces chocolat & pistache créées maison avec recettes exclusives</Text>
+    <Text style={styles.presentationBullet}>• Garnitures fraîches sélectionnées chaque matin</Text>
+    <Text style={styles.presentationBullet}>• Cuisson minute pour une fraîcheur incomparable</Text>
+    <Text style={styles.presentationBullet}>• Glaces artisanales préparées avec soin</Text>
+
+    <Text style={styles.presentationSubtitle}>Des Ingrédients d&apos;Exception</Text>
+    <Text style={styles.presentationText}>
+      Notre engagement : n&apos;utiliser que les meilleurs produits pour vous offrir une expérience gustative inoubliable.
+    </Text>
+    <Text style={styles.presentationHighlight}>• CHOCOLAT CALLEBAUT (Belgique) - Le chocolat des plus grands chocolatiers du monde</Text>
+    <Text style={styles.presentationHighlight}>• CRÈME PISTACHE DE QUALITÉ - Une crème pistache authentique au goût intense</Text>
+    <Text style={styles.presentationHighlight}>• MASCARPONE DE QUALITÉ - Pour notre crème tiramisu maison</Text>
+    <Text style={styles.presentationHighlight}>• PERLES DE SUCRE - Pour nos gaufres liégeoises authentiques</Text>
+
+    <Text style={styles.presentationSubtitle}>Nos Créations Signature</Text>
+    <Text style={styles.presentationBullet}>• PIZZA WAFFLES - Notre concept innovant qui fusionne l&apos;Italie et la Belgique</Text>
+    <Text style={styles.presentationBullet}>• POTATO WAFFLES - Notre création originale avec pommes de terre</Text>
+    <Text style={styles.presentationBullet}>• BUBBLE WAFFLES - Le dessert tendance de Hong Kong revisité</Text>
+    <Text style={styles.presentationBullet}>• TIRAMISU WAFFLE - Notre création exclusive avec crème tiramisu maison</Text>
+
+    <Text style={styles.presentationSubtitle}>Notre Engagement Qualité</Text>
+    <View style={styles.engagementRow}>
+      <Text style={styles.engagementIcon}>✓</Text>
+      <Text style={styles.engagementText}>FRAÎCHEUR GARANTIE - Pâtes préparées le jour même, cuisson minute</Text>
+    </View>
+    <View style={styles.engagementRow}>
+      <Text style={styles.engagementIcon}>✓</Text>
+      <Text style={styles.engagementText}>INGRÉDIENTS NOBLES - Les meilleurs produits du Maroc et d&apos;ailleurs</Text>
+    </View>
+    <View style={styles.engagementRow}>
+      <Text style={styles.engagementIcon}>✓</Text>
+      <Text style={styles.engagementText}>TRANSPARENCE TOTALE - Nous sommes fiers de nos recettes</Text>
+    </View>
+    <View style={styles.engagementRow}>
+      <Text style={styles.engagementIcon}>✓</Text>
+      <Text style={styles.engagementText}>FAIT MAISON VÉRITABLE - Pas de poudres industrielles</Text>
+    </View>
+    <View style={styles.engagementRow}>
+      <Text style={styles.engagementIcon}>✓</Text>
+      <Text style={styles.engagementText}>HYGIÈNE IRRÉPROCHABLE - Laboratoire aux normes</Text>
+    </View>
+
+    <PageFooter pageNum={pageNum} />
+  </Page>
+);
+
+const EndPage = () => (
+  <Page size="A4" style={styles.endPage}>
+    <Image
+      src={`${BASE_URL}/images/menu-items/TransparentWhite.png`}
+      style={styles.endLogo}
+      cache
+    />
+    <Text style={styles.endTitle}>Merci de votre visite !</Text>
+    <View style={styles.endInfo}>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>Adresse</Text>
+        <Text style={styles.endInfoText}>MAG 33 AL BADII, Marrakech</Text>
+      </View>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>Instagram</Text>
+        <Text style={styles.endInfoText}>@kech_waffles</Text>
+      </View>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>Facebook</Text>
+        <Text style={styles.endInfoText}>kechwaffles</Text>
+      </View>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>TikTok</Text>
+        <Text style={styles.endInfoText}>@kechwaffles</Text>
+      </View>
+      <View style={styles.endInfoRow}>
+        <Text style={styles.endInfoLabel}>Snapchat</Text>
+        <Text style={styles.endInfoText}>kechwaffles</Text>
+      </View>
+    </View>
+  </Page>
+);
+
+// === DOCUMENT PRINCIPAL ===
+export const MenuPDF = ({ products }: MenuPDFProps) => {
+  // Classification des suppléments salés
+  const saltyKeywords = [
+    "jambon", "mozzarella", "olives", "pepperoni", "poulet", "thon",
+    "viande hachée", "viande hachee", "cheddar", "oignons", "gruyère",
+    "gruyere", "harissa", "mayo", "pesto", "saucisse", "fromage"
+  ];
+
+  // ===== SALÉES =====
+  const basesSalees = products.filter(p => p.category === "Bases Salées");
+  const saucesSalees = products.filter(p => p.category === "Sauces Salées");
+  const recettesSignaturesSalees = products.filter(p => p.category === "Recettes Salées - Signatures");
+  const recettesClassiquesSalees = products.filter(p => p.category === "Recettes Salées - Classiques");
+
+  // ===== SUCRÉES =====
+  const basesSucrees = products.filter(p => p.category === "Bases Sucrées");
+  const recettesSignaturesSucrees = products.filter(p => p.category === "Recettes Sucrées - Signatures");
+  const dessertsCans = products.filter(p => p.category === "Desserts - Cans");
+
+  // ===== BOISSONS =====
+  const cafes = products.filter(p => p.category === "Boissons - Cafés");
+  const boissonsLactees = products.filter(p => p.category === "Boissons - Boissons Lactées");
+  const boissonsSpecialisees = products.filter(p => p.category === "Boissons - Spécialisées");
+  const milkshakes = products.filter(p => p.category === "Boissons - Milkshakes");
+  const boissonsIce = products.filter(p => p.category === "Boissons Ice Lactées");
+  const eauxSoftDrinks = products.filter(p => p.category === "Eaux & Soft Drinks");
+  const jusFrais = products.filter(p => p.category === "Jus Frais Pressés");
+  const shots = products.filter(p => p.category === "Shots Vitaminés");
+
+  // ===== SUPPLÉMENTS =====
+  const allModifiers = products.filter(p => p.category === "Modificateurs");
+
+  const supplementsSales = allModifiers.filter(p => {
+    const nameLower = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return saltyKeywords.some(kw => nameLower.includes(kw.normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+  });
+
+  const supplementsSucres = allModifiers.filter(p => {
+    const nameLower = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // Exclure lait végétal des suppléments sucrés (il va dans les boissons)
+    if (nameLower.includes("lait vegetal") || nameLower.includes("lait végétal")) return false;
+    return !saltyKeywords.some(kw => nameLower.includes(kw.normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+  });
+
+  // Supplément lait végétal pour les boissons
+  const laitVegetal = allModifiers.find(p => {
+    const nameLower = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return nameLower.includes("lait vegetal") || nameLower.includes("lait végétal");
+  });
+
+  const thes = boissonsSpecialisees.filter(p =>
+    p.name.toLowerCase().includes("thé") || p.name.toLowerCase().includes("menthe")
+  );
+  const chocolats = boissonsSpecialisees.filter(p =>
+    !p.name.toLowerCase().includes("thé") && !p.name.toLowerCase().includes("menthe")
+  );
+
+  let pageNum = 1;
+
+  return (
+    <Document title="Menu Kech Waffles" author="Kech Waffles">
+      {/* PAGE 1: COUVERTURE */}
       <CoverPage />
 
-      {/* Page de présentation */}
-      <PresentationPage />
+      {/* PAGE 2: PRÉSENTATION */}
+      <PresentationPage pageNum={++pageNum} />
 
-      {/* Potato Waffles - Page 1 */}
-      {potatoWafflesCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Potato Waffles</Text>
+      {/* PAGE 3: VIDE */}
+      <Page size="A4" style={styles.page}>
+        <View style={{ flex: 1 }} />
+        <PageFooter pageNum={++pageNum} />
+      </Page>
+
+      {/* === PAGE 4: WAFFLES SALÉES === */}
+      <Page size="A4" style={styles.page}>
+        <PageHeader title="Nos Waffles Salées" />
+        <ImageBanner images={["image00016-small.jpg", "image00017-small.jpg", "image00001-small.jpg"]} />
+
+        {/* Choix de la base et sauce côte à côte */}
+        <View style={{ flexDirection: "row", gap: 20, marginBottom: 6 }}>
+          {/* Bases */}
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.sectionTitle, { marginTop: 0, marginBottom: 6, fontSize: 12, paddingVertical: 4 }]}>1. Choisissez votre base</Text>
+            <View style={styles.basesCompactRow}>
+              {basesSalees.map((base, idx) => (
+                <View key={idx} style={styles.baseCompactItem}>
+                  {base.image && (
+                    <Image
+                      src={`${BASE_URL}/images/menu-items/${base.image}`}
+                      style={styles.baseCompactImage}
+                      cache
+                    />
+                  )}
+                  <View style={styles.baseCompactInfo}>
+                    <Text style={styles.baseCompactName}>{base.name}</Text>
+                    <Text style={styles.baseCompactPrice}>{base.price} Dh</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
-          {potatoWafflesCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
 
-      {/* Pizza Waffles - Page 2 */}
-      {pizzaWafflesCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Pizza Waffles</Text>
+          {/* Sauces */}
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.sectionTitle, { marginTop: 0, marginBottom: 6, fontSize: 12, paddingVertical: 4 }]}>2. Choisissez votre sauce</Text>
+            <View style={styles.basesCompactRow}>
+              {saucesSalees.map((sauce, idx) => (
+                <View key={idx} style={styles.baseCompactItem}>
+                  {sauce.image && (
+                    <Image
+                      src={`${BASE_URL}/images/menu-items/${sauce.image}`}
+                      style={styles.baseCompactImage}
+                      cache
+                    />
+                  )}
+                  <View style={styles.baseCompactInfo}>
+                    <Text style={styles.baseCompactName}>{sauce.name}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
-          {pizzaWafflesCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+        </View>
 
-      {/* Suppléments Salés - Page 3 */}
-      {supplementsSalesCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Suppléments Salés</Text>
+        {/* Recettes signatures - liste simple */}
+        <Text style={[styles.sectionTitle, { marginTop: 4, fontSize: 12, paddingVertical: 4 }]}>3. Nos Recettes Signatures</Text>
+        <View style={styles.productList}>
+          {recettesSignaturesSalees.map((product, idx) => (
+            <ProductRow key={idx} product={product} alt={idx % 2 === 1} />
+          ))}
+        </View>
+
+        {/* Recettes classiques - liste simple */}
+        <Text style={[styles.sectionTitle, { marginTop: 4, fontSize: 12, paddingVertical: 4 }]}>4. Nos Recettes Classiques</Text>
+        <View style={styles.productList}>
+          {recettesClassiquesSalees.map((product, idx) => (
+            <ProductRow key={idx} product={product} alt={idx % 2 === 1} />
+          ))}
+        </View>
+
+        <PageFooter pageNum={++pageNum} />
+      </Page>
+
+      {/* === PAGE 5: SUPPLÉMENTS SALÉS === */}
+      <Page size="A4" style={styles.page}>
+        <PageHeader title="Suppléments Salés" />
+
+        <Text style={styles.sectionTitle}>Personnalisez votre waffle salée</Text>
+        <View style={styles.productList}>
+          {[...supplementsSales]
+            .sort((a, b) => (a.price || 0) - (b.price || 0))
+            .map((product, idx) => (
+              <ProductRow key={idx} product={product} alt={idx % 2 === 1} />
+            ))}
+        </View>
+
+        <PageFooter pageNum={++pageNum} />
+      </Page>
+
+      {/* === PAGE 6: WAFFLES SUCRÉES === */}
+      <Page size="A4" style={styles.page}>
+        <PageHeader title="Nos Waffles Sucrées" />
+        <ImageBanner images={["IMG_1919-small.jpg", "IMG_1674-small.jpg", "image00020-small.jpg"]} />
+
+        {/* Choix de la base */}
+        <Text style={styles.sectionTitle}>1. Choisissez votre base</Text>
+        <View style={styles.waffleTypesRow}>
+          {basesSucrees.map((base, idx) => (
+            <View key={idx} style={styles.waffleTypeCard}>
+              {base.image && (
+                <Image
+                  src={`${BASE_URL}/images/menu-items/${base.image}`}
+                  style={{ width: 50, height: 50, borderRadius: 4, marginBottom: 4, objectFit: "cover" }}
+                  cache
+                />
+              )}
+              <Text style={styles.waffleTypeName}>{base.name}</Text>
+              <Text style={styles.waffleTypePrice}>{base.price} Dh</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Suppléments sucrés */}
+        <Text style={styles.sectionTitle}>2. Toppings & Sauces</Text>
+        <View style={styles.productList}>
+          {[...supplementsSucres]
+            .sort((a, b) => (a.price || 0) - (b.price || 0))
+            .map((product, idx) => (
+              <ProductRow key={idx} product={product} alt={idx % 2 === 1} wrap={false} />
+            ))}
+        </View>
+
+        {/* Recettes signatures sucrées */}
+        <Text style={styles.sectionTitle}>3. Nos Créations Signatures</Text>
+        <View style={styles.productList}>
+          {recettesSignaturesSucrees.map((product, idx) => (
+            <ProductRow key={idx} product={product} alt={idx % 2 === 1} />
+          ))}
+        </View>
+
+        <PageFooter pageNum={++pageNum} />
+      </Page>
+
+      {/* === PAGE 7: CANS === */}
+      <Page size="A4" style={styles.page}>
+        <PageHeader title="Nos Cans" />
+        <ImageBanner images={["IMG_1778-small.jpg", "IMG_1779-small.jpg", "IMG_1780-small.jpg"]} />
+
+        <Text style={styles.sectionTitle}>Desserts en pot à emporter</Text>
+        <View style={styles.productList}>
+          {dessertsCans.map((product, idx) => {
+            // Si le produit a des variantes, les afficher
+            if (product.variants && product.variants.length > 0) {
+              return product.variants.map((variant, vIdx) => {
+                const variantName = variant.option1Value
+                  ? `${removeEmojis(product.name)} - ${variant.option1Value}`
+                  : removeEmojis(product.name);
+                return (
+                  <View key={`${idx}-${vIdx}`} style={(idx + vIdx) % 2 === 1 ? [styles.productRow, styles.productRowAlt] : [styles.productRow]}>
+                    <Text style={styles.productName}>{variantName}</Text>
+                    <Text style={styles.productPrice}>{variant.price} Dh</Text>
+                  </View>
+                );
+              });
+            }
+            return <ProductRow key={idx} product={product} alt={idx % 2 === 1} />;
+          })}
+        </View>
+
+        <PageFooter pageNum={++pageNum} />
+      </Page>
+
+      {/* === PAGE 8: BOISSONS CHAUDES === */}
+      <Page size="A4" style={styles.page}>
+        <PageHeader title="Nos Boissons Chaudes" />
+        <ImageBanner images={["espresso.png", "cappuccino.png", "chocolatchaud.png"]} />
+
+        {/* Cafés */}
+        <View style={styles.drinkSection}>
+          <Text style={styles.drinkCategoryTitle}>Cafés</Text>
+          <View style={styles.drinkGrid}>
+            {cafes.map((product, idx) => (
+              <DrinkItem key={idx} product={product} />
+            ))}
           </View>
-          {supplementsSalesCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+        </View>
 
-      {/* Desserts - Page 4 */}
-      {dessertsCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Nos Desserts</Text>
+        {/* Boissons Lactées */}
+        <View style={styles.drinkSection}>
+          <Text style={styles.drinkCategoryTitle}>Boissons Lactées</Text>
+          <View style={styles.drinkGrid}>
+            {boissonsLactees.map((product, idx) => (
+              <DrinkItem key={idx} product={product} />
+            ))}
           </View>
-          {dessertsCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+          {laitVegetal && (
+            <Text style={{ fontSize: 8, color: colors.darkGray, marginTop: 4, fontStyle: "italic" }}>
+              Supplément {removeEmojis(laitVegetal.name)}: +{laitVegetal.price} Dh
+            </Text>
+          )}
+        </View>
 
-      {/* Desserts - Cans - Page 5 */}
-      {dessertsCansCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Nos Canettes</Text>
+        {/* Thés */}
+        {thes.length > 0 && (
+          <View style={styles.drinkSection}>
+            <Text style={styles.drinkCategoryTitle}>Thés</Text>
+            <View style={styles.drinkGrid}>
+              {thes.map((product, idx) => (
+                <DrinkItem key={idx} product={product} />
+              ))}
+            </View>
           </View>
-          {dessertsCansCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+        )}
 
-      {/* Cafés & Autres Boissons Chaudes - Page 6 */}
-      {cafesCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Nos Boissons</Text>
+        {/* Chocolats */}
+        {chocolats.length > 0 && (
+          <View style={styles.drinkSection}>
+            <Text style={styles.drinkCategoryTitle}>Chocolats</Text>
+            <View style={styles.drinkGrid}>
+              {chocolats.map((product, idx) => (
+                <DrinkItem key={idx} product={product} />
+              ))}
+            </View>
           </View>
-          {cafesCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          {autresBoissonsChaudesCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+        )}
 
-      {/* Boissons Lactées - Page 7 */}
-      {boissonsLacteesCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Nos Boissons Lactées</Text>
+        <PageFooter pageNum={++pageNum} />
+      </Page>
+
+      {/* === PAGE 7: BOISSONS GLACÉES === */}
+      <Page size="A4" style={styles.page}>
+        <PageHeader title="Boissons Glacées & Milkshakes" />
+        <ImageBanner images={["DALGONA.png", "frappé.png", "chailattéfroid.png"]} />
+
+        {/* Ice Lactées */}
+        <View style={styles.drinkSection}>
+          <Text style={styles.drinkCategoryTitle}>Ice Lactées</Text>
+          <View style={styles.drinkGrid}>
+            {boissonsIce.map((product, idx) => (
+              <DrinkItem key={idx} product={product} />
+            ))}
           </View>
-          {boissonsLacteesCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+          {laitVegetal && (
+            <Text style={{ fontSize: 8, color: colors.darkGray, marginTop: 4, fontStyle: "italic" }}>
+              Supplément {removeEmojis(laitVegetal.name)}: +{laitVegetal.price} Dh
+            </Text>
+          )}
+        </View>
 
-      {/* Milkshakes - Page 8 */}
-      {milkshakesCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Nos Milkshakes</Text>
+        {/* Milkshakes */}
+        <View style={styles.drinkSection}>
+          <Text style={styles.drinkCategoryTitle}>Milkshakes</Text>
+          <View style={styles.drinkGrid}>
+            {milkshakes.map((product, idx) => (
+              <DrinkItem key={idx} product={product} />
+            ))}
           </View>
-          {milkshakesCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+        </View>
 
-      {/* Boissons Ice Lactées - Page 9 */}
-      {boissonsIceCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Boissons Ice Lactées</Text>
+        <PageFooter pageNum={++pageNum} />
+      </Page>
+
+      {/* === PAGE 8: SHOTS VITAMINÉS === */}
+      <Page size="A4" style={styles.page}>
+        <PageHeader title="Shots Vitaminés" />
+        <ImageBanner images={["shotlaidor.png", "shotvertdetox.png", "shotbetterave.png"]} />
+
+        <Text style={styles.sectionTitle}>Nos Shots Santé</Text>
+        <View style={styles.productList}>
+          {shots.map((product, idx) => (
+            <ProductRow key={idx} product={product} alt={idx % 2 === 1} />
+          ))}
+        </View>
+
+        <PageFooter pageNum={++pageNum} />
+      </Page>
+
+      {/* === PAGE 9: SOFT DRINKS & EAUX === */}
+      <Page size="A4" style={styles.page}>
+        <PageHeader title="Soft Drinks & Eaux" />
+
+        {/* Eaux & Soft Drinks */}
+        <View style={styles.drinkSection}>
+          <Text style={styles.drinkCategoryTitle}>Eaux & Soft Drinks</Text>
+          <View style={styles.drinkGrid}>
+            {eauxSoftDrinks.map((product, idx) => (
+              <DrinkItem key={idx} product={product} />
+            ))}
           </View>
-          {boissonsIceCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+        </View>
 
-      {/* Eaux & Soft Drinks - Page 10 */}
-      {eauxJusCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Eaux, Soft Drinks & Jus Frais</Text>
+        {/* Jus Frais */}
+        {jusFrais.length > 0 && (
+          <View style={styles.drinkSection}>
+            <Text style={styles.drinkCategoryTitle}>Jus Frais Pressés</Text>
+            <View style={styles.drinkGrid}>
+              {jusFrais.map((product, idx) => (
+                <DrinkItem key={idx} product={product} />
+              ))}
+            </View>
           </View>
-          {eauxJusCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+        )}
 
-      {/* Shots Vitaminés - Page 11 */}
-      {shotsCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Shots Vitaminés</Text>
-          </View>
-          {shotsCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
+        <PageFooter pageNum={++pageNum} />
+      </Page>
 
-      {/* Suppléments Sucrés - Page 12 */}
-      {supplementsSucresCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Suppléments Sucrés</Text>
-          </View>
-          {supplementsSucresCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
-
-      {/* Anciens modificateurs (fallback) */}
-      {modificateursCategories.length > 0 && (
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header} wrap={false}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/images/menu-items/transparentlogo.jpg`}
-              style={styles.headerLogo}
-              cache
-            />
-            <Text style={styles.headerTitle}>Suppléments</Text>
-          </View>
-          {modificateursCategories.map((category) => (
-            <ProductsByCategory
-              key={category}
-              category={category}
-              products={productsByCategory[category]}
-            />
-          ))}
-          <Text style={styles.footer}>
-            Kech Waffles • Marrakech • www.kechwaffles.com
-          </Text>
-          <Text
-            style={styles.pageNumber}
-            render={({ pageNumber }) => `${pageNumber - 1}`}
-            fixed
-          />
-        </Page>
-      )}
-
-      {/* Page de fin avec informations de contact */}
+      {/* PAGE DE FIN */}
       <EndPage />
     </Document>
   );
