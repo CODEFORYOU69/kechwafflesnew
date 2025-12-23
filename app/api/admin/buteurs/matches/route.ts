@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isUserAdmin } from "@/lib/admin";
 import { auth } from "@/lib/auth";
@@ -6,9 +6,11 @@ import { headers } from "next/headers";
 
 /**
  * GET /api/admin/buteurs/matches
- * Récupère les matchs à venir (non terminés) pour sélection des buteurs
+ * Récupère les matchs pour sélection des buteurs
+ * ?finished=true : matchs terminés (pour enregistrer les buteurs)
+ * ?finished=false ou pas de param : matchs non terminés
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     // Vérifier l'authentification
     const session = await auth.api.getSession({
@@ -25,10 +27,15 @@ export async function GET() {
       return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
     }
 
-    // Récupérer les matchs à venir (non terminés)
+    // Récupérer le paramètre finished
+    const { searchParams } = new URL(request.url);
+    const finishedParam = searchParams.get("finished");
+    const isFinished = finishedParam === "true";
+
+    // Récupérer les matchs selon le filtre
     const matches = await prisma.match.findMany({
       where: {
-        isFinished: false,
+        isFinished,
       },
       include: {
         homeTeam: {
