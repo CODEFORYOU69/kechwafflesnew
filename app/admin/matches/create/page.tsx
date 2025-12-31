@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +37,6 @@ const VENUES = [
 ];
 
 export default function CreateMatchPage() {
-  const router = useRouter();
   const [teams, setTeams] = useState<Team[]>([]);
   const [nextMatchNumber, setNextMatchNumber] = useState(37);
   const [loading, setLoading] = useState(false);
