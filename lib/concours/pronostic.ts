@@ -60,7 +60,7 @@ export async function createOrUpdatePronostic(data: {
     if (match.lockPronostics) {
       return {
         success: false,
-        message: "Les pronostics sont verrouillés pour ce match (commence dans moins d'1h)",
+        message: "Les pronostics sont verrouillés pour ce match (commence dans moins de 5 min)",
       };
     }
 
@@ -419,19 +419,19 @@ export async function getAvailableMatches(userId?: string) {
 }
 
 /**
- * Verrouille automatiquement les pronostics 1h avant le match
- * À appeler via un cron job toutes les 5 minutes
+ * Verrouille automatiquement les pronostics 5 minutes avant le match
+ * À appeler via un cron job toutes les minutes
  */
 export async function lockUpcomingMatches(): Promise<number> {
   const now = new Date();
-  const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+  const fiveMinutesFromNow = new Date(now.getTime() + 5 * 60 * 1000);
 
   const result = await prisma.match.updateMany({
     where: {
       isFinished: false,
       lockPronostics: false,
       scheduledAt: {
-        lte: oneHourFromNow,
+        lte: fiveMinutesFromNow,
       },
     },
     data: {

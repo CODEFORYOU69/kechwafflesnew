@@ -210,7 +210,8 @@ export default function PronosticsPage() {
           <div className="space-y-4">
             {matches.map((match) => {
               const timeLeft = new Date(match.scheduledAt).getTime() - Date.now();
-              const hoursLeft = Math.floor(timeLeft / (1000 * 60 * 60));
+              const minutesLeft = Math.floor(timeLeft / (1000 * 60));
+              const hoursLeft = Math.floor(minutesLeft / 60);
 
               return (
                 <Card key={match.id} className="hover:shadow-xl transition-shadow">
@@ -298,14 +299,19 @@ export default function PronosticsPage() {
                     ) : (
                       <Button
                         onClick={() => openPronosticModal(match)}
-                        disabled={hoursLeft < 1}
+                        disabled={minutesLeft < 5}
                         className="w-full"
                       >
-                        {hoursLeft < 1 ? "Pronostics fermés" : "Faire mon pronostic"}
+                        {minutesLeft < 5 ? "Pronostics fermés" : "Faire mon pronostic"}
                       </Button>
                     )}
 
-                    {hoursLeft < 24 && hoursLeft > 0 && (
+                    {minutesLeft < 60 && minutesLeft >= 5 && (
+                      <p className="text-center text-xs text-orange-600">
+                        ⏰ Encore {minutesLeft} min pour pronostiquer
+                      </p>
+                    )}
+                    {hoursLeft >= 1 && hoursLeft < 24 && (
                       <p className="text-center text-xs text-orange-600">
                         ⏰ Encore {hoursLeft}h pour pronostiquer
                       </p>
