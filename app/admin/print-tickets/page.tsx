@@ -34,6 +34,25 @@ export default function PrintTicketsPage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const printedCodesRef = useRef<Set<string>>(new Set());
 
+  const printTicket = useCallback((code: string) => {
+    setPrinting(code);
+
+    // Ouvrir la page d'impression dans une nouvelle fenêtre
+    window.open(
+      `/admin/print-ticket/${code}`,
+      "_blank",
+      "width=400,height=600"
+    );
+
+    // Marquer comme imprimé localement
+    printedCodesRef.current.add(code);
+
+    // Attendre un peu puis rafraîchir
+    setTimeout(() => {
+      setPrinting(null);
+    }, 2000);
+  }, []);
+
   const fetchTickets = useCallback(async () => {
     try {
       const res = await fetch("/api/admin/print-ticket/pending");
@@ -56,7 +75,7 @@ export default function PrintTicketsPage() {
         // Auto-impression si activé
         if (autoMode && newCodes.length > 0) {
           for (const code of newCodes) {
-            await printTicket(code);
+            printTicket(code);
           }
         }
       }
@@ -65,7 +84,7 @@ export default function PrintTicketsPage() {
     } finally {
       setLoading(false);
     }
-  }, [autoMode, soundEnabled]);
+  }, [autoMode, soundEnabled, printTicket]);
 
   // Polling toutes les 5 secondes
   useEffect(() => {
@@ -74,30 +93,9 @@ export default function PrintTicketsPage() {
     return () => clearInterval(interval);
   }, [fetchTickets]);
 
-  const printTicket = async (code: string) => {
-    setPrinting(code);
-
-    // Ouvrir la page d'impression dans une nouvelle fenêtre
-    const printWindow = window.open(
-      `/admin/print-ticket/${code}`,
-      "_blank",
-      "width=400,height=600"
-    );
-
-    // Marquer comme imprimé localement
-    printedCodesRef.current.add(code);
-
-    // Attendre un peu puis rafraîchir
-    setTimeout(() => {
-      setPrinting(null);
-      fetchTickets();
-    }, 2000);
-  };
-
-  const printAllPending = async () => {
+  const printAllPending = () => {
     for (const ticket of tickets) {
-      await printTicket(ticket.ticketCode);
-      await new Promise((r) => setTimeout(r, 1000)); // Pause entre chaque impression
+      printTicket(ticket.ticketCode);
     }
   };
 
