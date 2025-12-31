@@ -1,5 +1,3 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,142 +8,95 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// ==========================================
-// AUTHENTIFICATION (Better Auth)
-// ==========================================
-
 model User {
-  id            String   @id @default(cuid())
-  name          String
-  email         String   @unique
-  emailVerified Boolean  @default(false)
-  image         String?
-  role          UserRole @default(USER) // Rôle de l'utilisateur
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  // Inscription au Concours 1 (Pronostics) - Scan unique
-  registeredForPronostics Boolean   @default(false)
-  registeredAt            DateTime? // Date d'inscription au concours
-
-  // Relations Better Auth
-  accounts Account[]
-  sessions Session[]
-
-  // Relations Fidélité
-  memberCard    MemberCard?
-  loyaltyPoints LoyaltyTransaction[]
-
-  // Relations Concours
-  pronostics     Pronostic[]
-  finalPronostic FinalPronostic?
-  rewards        Reward[]
-
-  // Relations Nouveaux Concours
-  qrScans       QRScan[] // Scans QR journaliers (Concours 2)
-  buteurTickets ButeurTicket[] // Tickets buteur (Concours 3)
-  drawWinnings  DrawWinner[] // Gains des tirages au sort
+  id                      String               @id @default(cuid())
+  name                    String
+  email                   String               @unique
+  emailVerified           Boolean              @default(false)
+  image                   String?
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+  role                    UserRole             @default(USER)
+  registeredAt            DateTime?
+  registeredForPronostics Boolean              @default(false)
+  accounts                Account[]
+  buteurTickets           ButeurTicket[]
+  drawWinnings            DrawWinner[]
+  finalPronostic          FinalPronostic?
+  loyaltyPoints           LoyaltyTransaction[]
+  memberCard              MemberCard?
+  pronostics              Pronostic[]
+  qrScans                 QRScan[]
+  rewards                 Reward[]
+  sessions                Session[]
 
   @@index([email])
   @@index([role])
 }
 
-enum UserRole {
-  USER // Client normal
-  ADMIN // Administrateur
-}
-
 model Account {
   id                    String    @id @default(cuid())
   userId                String
-  accountId             String
-  providerId            String
+  password              String?
   accessToken           String?
-  refreshToken          String?
-  idToken               String?
   accessTokenExpiresAt  DateTime?
+  accountId             String
+  createdAt             DateTime  @default(now())
+  idToken               String?
+  providerId            String
+  refreshToken          String?
   refreshTokenExpiresAt DateTime?
   scope                 String?
-  password              String?
-  createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 model Session {
   id        String   @id @default(cuid())
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
   userId    String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  ipAddress String?
+  token     String   @unique
+  updatedAt DateTime @updatedAt
+  userAgent String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
-// ==========================================
-// INTÉGRATION LOYVERSE
-// ==========================================
-
 model LoyverseConfig {
-  id           String   @id @default("singleton") // Une seule config
-  accessToken  String // Token OAuth obtenu
-  refreshToken String? // Pour renouveler le token
-  expiresAt    DateTime // Expiration du token
-  storeId      String? // ID du magasin Loyverse
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default("singleton")
+  accessToken  String
+  refreshToken String?
+  expiresAt    DateTime
+  storeId      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
-// ==========================================
-// GESTION DES PRODUITS & MENU
-// ==========================================
-
 model Product {
-  id String @id @default(cuid())
-
-  // Identifiants
-  handle String  @unique // URL-friendly identifier (ex: "espresso")
-  sku    String  @unique // SKU unique (ex: "ESP-001")
-  name   String // Nom du produit
-
-  // Catégorisation
-  category String // Ex: "Boissons - Cafés", "Desserts", etc.
-
-  // Description et contenu
-  description String? @db.Text
-  image       String? // Chemin de l'image dans /images/menu-items/
-
-  // Prix (pour produits sans variants)
-  price Float? // Prix en MAD (null si le produit a des variants)
-
-  // Flags
-  isModifier Boolean @default(false) // Est-ce un modificateur/topping ?
-  hasTax     Boolean @default(true) // Soumis à la TVA ?
-  isActive   Boolean @default(true) // Actif sur le menu ?
-  outOfStock Boolean @default(false) // Victime de son succès (affiché grisé)
-
-  // Ordre d'affichage
-  displayOrder Int @default(0)
-
-  // Synchronisation Loyverse
-  loyverseItemId String?   @unique // ID de l'item dans Loyverse
-  lastSyncAt     DateTime? // Dernière synchronisation
-  syncSource     String    @default("MANUAL") // "MANUAL" | "LOYVERSE"
-
-  // Relations
-  variants ProductVariant[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String           @id @default(cuid())
+  handle         String           @unique
+  sku            String           @unique
+  name           String
+  category       String
+  description    String?
+  image          String?
+  price          Float?
+  isModifier     Boolean          @default(false)
+  hasTax         Boolean          @default(true)
+  isActive       Boolean          @default(true)
+  displayOrder   Int              @default(0)
+  loyverseItemId String?          @unique
+  lastSyncAt     DateTime?
+  syncSource     String           @default("MANUAL")
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  outOfStock     Boolean          @default(false)
+  variants       ProductVariant[]
 
   @@index([category])
   @@index([isActive])
@@ -154,230 +105,130 @@ model Product {
 }
 
 model ProductVariant {
-  id        String @id @default(cuid())
-  productId String
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  // Options de variant (ex: "Taille: Small", "Température: Chaud")
-  option1Name  String? // Nom de l'option 1 (ex: "Taille")
-  option1Value String? // Valeur de l'option 1 (ex: "Small")
-  option2Name  String? // Nom de l'option 2 (ex: "Température")
-  option2Value String? // Valeur de l'option 2 (ex: "Chaud")
-
-  // Prix du variant
-  price Float // Prix en MAD
-
-  // SKU unique du variant (optionnel)
-  variantSku String? @unique
-
-  // Synchronisation Loyverse
-  loyverseVariantId String? @unique // ID du variant dans Loyverse
-
-  // Disponibilité
-  isActive Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String   @id @default(cuid())
+  productId         String
+  option1Name       String?
+  option1Value      String?
+  option2Name       String?
+  option2Value      String?
+  price             Float
+  variantSku        String?  @unique
+  loyverseVariantId String?  @unique
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  product           Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([productId])
   @@index([loyverseVariantId])
 }
 
-// ==========================================
-// SYSTÈME DE FIDÉLITÉ
-// ==========================================
-
 model MemberCard {
-  id     String @id @default(cuid())
-  userId String @unique
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Numéro de carte unique (format: KW-XXXXXX)
-  cardNumber String @unique
-
-  // QR Code pour scanner en magasin
-  qrCode String @unique
-
-  // Points de fidélité
-  totalPoints   Int @default(0)
-  currentPoints Int @default(0) // Points disponibles
-
-  // Statistiques
-  totalSpent Float @default(0) // Montant total dépensé (MAD)
-  visitCount Int   @default(0) // Nombre de visites
-
-  // Loyverse
-  loyverseCustomerId String?   @unique // ID client dans Loyverse
-  lastSyncAt         DateTime? // Dernière synchronisation
-
-  // Niveau de fidélité
-  tier MemberTier @default(BRONZE)
-
-  // Dates
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String     @id @default(cuid())
+  userId             String     @unique
+  cardNumber         String     @unique
+  qrCode             String     @unique
+  totalPoints        Int        @default(0)
+  currentPoints      Int        @default(0)
+  totalSpent         Float      @default(0)
+  visitCount         Int        @default(0)
+  loyverseCustomerId String?    @unique
+  lastSyncAt         DateTime?
+  tier               MemberTier @default(BRONZE)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  user               User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([cardNumber])
   @@index([qrCode])
   @@index([loyverseCustomerId])
 }
 
-enum MemberTier {
-  BRONZE // 0-499 MAD
-  SILVER // 500-999 MAD
-  GOLD // 1000+ MAD
-  PLATINUM // 2000+ MAD
-}
-
 model LoyaltyTransaction {
-  id     String @id @default(cuid())
-  userId String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Type de transaction
-  type LoyaltyTransactionType
-
-  // Points
-  points Int // Positif = gain, Négatif = dépense
-
-  // Montant associé (si achat)
-  amount Float? // Montant en MAD
-
-  // Description
+  id          String                 @id @default(cuid())
+  userId      String
+  type        LoyaltyTransactionType
+  points      Int
+  amount      Float?
   description String
-
-  // Références externes
-  orderId  String? // ID commande Loyverse
-  rewardId String? // Si échange contre récompense
-
-  createdAt DateTime @default(now())
+  orderId     String?
+  rewardId    String?
+  createdAt   DateTime               @default(now())
+  user        User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt])
   @@index([type])
 }
 
-enum LoyaltyTransactionType {
-  PURCHASE // Achat en magasin
-  REWARD_REDEEMED // Échange de points contre récompense
-  BONUS // Bonus (anniversaire, parrainage, etc.)
-  CONTEST_WIN // Gain via concours CAN
-  MANUAL_ADJUSTMENT // Ajustement manuel
-}
-
 model LoyaltyReward {
-  id String @id @default(cuid())
-
-  // Info récompense
-  name        String
-  description String
-
-  // Coût en points
-  pointsCost Int
-
-  // Stock
-  isActive     Boolean @default(true)
-  stockLimit   Int? // Limite de stock (null = illimité)
-  currentStock Int?
-
-  // Image
-  image String?
-
-  // Validité
-  expiresInDays Int? // Expiration du coupon après échange
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  pointsCost    Int
+  isActive      Boolean  @default(true)
+  stockLimit    Int?
+  currentStock  Int?
+  image         String?
+  expiresInDays Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
-
-// ==========================================
-// CONCOURS CAN 2025
-// ==========================================
 
 model Team {
-  id     String  @id @default(cuid())
-  name   String
-  nameFr String // Nom en français
-  nameAr String? // Nom en arabe
-  code   String  @unique // Ex: "MAR", "SEN", "EGY"
-  flag   String // URL du drapeau
-  group  String? // "A", "B", "C", etc.
-
-  homeMatches Match[] @relation("HomeTeam")
-  awayMatches Match[] @relation("AwayTeam")
-
-  winnerPredictions      FinalPronostic[] @relation("WinnerPrediction")
+  id                     String           @id @default(cuid())
+  name                   String
+  nameFr                 String
+  nameAr                 String?
+  code                   String           @unique
+  flag                   String
+  group                  String?
   firstPlacePredictions  FinalPronostic[] @relation("FirstPlace")
   secondPlacePredictions FinalPronostic[] @relation("SecondPlace")
   thirdPlacePredictions  FinalPronostic[] @relation("ThirdPlace")
-
-  // Joueurs de l'équipe (Concours 3)
-  players Player[]
+  winnerPredictions      FinalPronostic[] @relation("WinnerPrediction")
+  awayMatches            Match[]          @relation("AwayTeam")
+  homeMatches            Match[]          @relation("HomeTeam")
+  players                Player[]
 }
 
 model Match {
-  id          String     @id @default(cuid())
-  matchNumber Int        @unique
-  phase       MatchPhase
-  homeTeamId  String
-  awayTeamId  String
-  scheduledAt DateTime
-  venue       String? // Stade
-  city        String? // Ville
-
-  homeTeam Team @relation("HomeTeam", fields: [homeTeamId], references: [id])
-  awayTeam Team @relation("AwayTeam", fields: [awayTeamId], references: [id])
-
-  // Résultat réel
-  homeScore  Int?
-  awayScore  Int?
-  isFinished Boolean   @default(false)
-  finishedAt DateTime?
-
-  // Verrouillage automatique 1h avant le match
-  lockPronostics Boolean @default(false)
-
-  pronostics Pronostic[]
-
-  // Tickets buteur pour ce match (Concours 3)
-  buteurTickets ButeurTicket[]
+  id             String         @id @default(cuid())
+  matchNumber    Int            @unique
+  phase          MatchPhase
+  homeTeamId     String
+  awayTeamId     String
+  scheduledAt    DateTime
+  venue          String?
+  city           String?
+  homeScore      Int?
+  awayScore      Int?
+  isFinished     Boolean        @default(false)
+  finishedAt     DateTime?
+  lockPronostics Boolean        @default(false)
+  buteurTickets  ButeurTicket[]
+  awayTeam       Team           @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  homeTeam       Team           @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  pronostics     Pronostic[]
 
   @@index([scheduledAt])
   @@index([phase])
   @@index([isFinished])
 }
 
-enum MatchPhase {
-  GROUP_STAGE
-  ROUND_OF_16
-  QUARTER_FINAL
-  SEMI_FINAL
-  THIRD_PLACE
-  FINAL
-}
-
 model Pronostic {
-  id      String @id @default(cuid())
-  userId  String
-  matchId String
-
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
-
-  // Pronostic
-  homeScore Int
-  awayScore Int
-
-  // Résultats (calculés après le match)
-  points          Int     @default(0)
-  isExactScore    Boolean @default(false)
-  isCorrectWinner Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(cuid())
+  userId          String
+  matchId         String
+  homeScore       Int
+  awayScore       Int
+  points          Int      @default(0)
+  isExactScore    Boolean  @default(false)
+  isCorrectWinner Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  match           Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, matchId])
   @@index([userId])
@@ -386,55 +237,39 @@ model Pronostic {
 }
 
 model FinalPronostic {
-  id     String @id @default(cuid())
-  userId String @unique
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Vainqueur final
-  winnerTeamId String
-  winnerTeam   Team   @relation("WinnerPrediction", fields: [winnerTeamId], references: [id])
-
-  // Score de la finale (optionnel pour grand prix)
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  winnerTeamId   String
   finalHomeScore Int?
   finalAwayScore Int?
-
-  // Podium (top 3)
-  firstPlaceId  String
-  secondPlaceId String
-  thirdPlaceId  String
-
-  firstPlace  Team @relation("FirstPlace", fields: [firstPlaceId], references: [id])
-  secondPlace Team @relation("SecondPlace", fields: [secondPlaceId], references: [id])
-  thirdPlace  Team @relation("ThirdPlace", fields: [thirdPlaceId], references: [id])
-
-  // Points bonus
-  bonusPoints Int     @default(0)
-  isLocked    Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  firstPlaceId   String
+  secondPlaceId  String
+  thirdPlaceId   String
+  bonusPoints    Int      @default(0)
+  isLocked       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  firstPlace     Team     @relation("FirstPlace", fields: [firstPlaceId], references: [id])
+  secondPlace    Team     @relation("SecondPlace", fields: [secondPlaceId], references: [id])
+  thirdPlace     Team     @relation("ThirdPlace", fields: [thirdPlaceId], references: [id])
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  winnerTeam     Team     @relation("WinnerPrediction", fields: [winnerTeamId], references: [id])
 }
 
 model Reward {
-  id     String @id @default(cuid())
-  userId String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id          String     @id @default(cuid())
+  userId      String
   type        RewardType
   description String
-  code        String     @unique // Code à 8 caractères (ex: KW-A3B5C)
+  code        String     @unique
   isRedeemed  Boolean    @default(false)
   redeemedAt  DateTime?
-  redeemedBy  String? // Nom du staff
-
-  // Lié au match ou final
-  matchId String?
-  reason  String
-
-  createdAt DateTime @default(now())
-  expiresAt DateTime // Expiration 30 jours après création
+  redeemedBy  String?
+  matchId     String?
+  reason      String
+  createdAt   DateTime   @default(now())
+  expiresAt   DateTime
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([code])
@@ -442,158 +277,96 @@ model Reward {
   @@index([expiresAt])
 }
 
-enum RewardType {
-  CAFE_GRATUIT
-  GAUFRE_GRATUITE
-  TIRAGE_GRAND_PRIX // Éligibilité au tirage
-}
-
 model Competition {
-  id        String   @id @default(cuid())
-  name      String   @default("CAN 2025")
-  startDate DateTime
-  endDate   DateTime
-  isActive  Boolean  @default(true)
-
-  // Verrouillage des pronostics finaux
-  lockFinalPronostics     Boolean  @default(false)
-  finalPronosticsDeadline DateTime // Date limite
-
-  // Résultats réels
-  actualWinnerId String?
-  actualSecondId String?
-  actualThirdId  String?
-  finalHomeScore Int?
-  finalAwayScore Int?
-
-  // Grand prix
-  grandPrixWinnerId String?
-  grandPrixDrawnAt  DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                      String    @id @default(cuid())
+  name                    String    @default("CAN 2025")
+  startDate               DateTime
+  endDate                 DateTime
+  isActive                Boolean   @default(true)
+  lockFinalPronostics     Boolean   @default(false)
+  finalPronosticsDeadline DateTime
+  actualWinnerId          String?
+  actualSecondId          String?
+  actualThirdId           String?
+  finalHomeScore          Int?
+  finalAwayScore          Int?
+  grandPrixWinnerId       String?
+  grandPrixDrawnAt        DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 }
-
-// ==========================================
-// QR CODE D'INSCRIPTION CONCOURS 1 (Scan unique)
-// ==========================================
 
 model ConcoursRegistrationQR {
-  id String @id @default(cuid())
-
-  // QR code unique pour l'inscription
-  qrCode    String @unique
-  qrCodeUrl String // Data URL de l'image QR
-
-  // Actif ou non
-  isActive Boolean @default(true)
-
-  // Stats
-  scanCount Int @default(0) // Nombre d'inscriptions
-
+  id        String   @id @default(cuid())
+  qrCode    String   @unique
+  qrCodeUrl String
+  isActive  Boolean  @default(true)
+  scanCount Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([qrCode])
 }
 
-// ==========================================
-// SYSTÈME QR CODE JOURNALIER (Concours 2)
-// ==========================================
-
 model DailyQRCode {
-  id String @id @default(cuid())
-
-  // QR code unique du jour
-  qrCode    String @unique
-  qrCodeUrl String // Data URL de l'image QR
-
-  // Validité
-  validDate DateTime @db.Date // Date de validité (uniquement ce jour)
+  id        String   @id @default(cuid())
+  qrCode    String   @unique
+  qrCodeUrl String
+  validDate DateTime @db.Date
   isActive  Boolean  @default(true)
-
-  // Stats
-  scanCount Int      @default(0) // Nombre de scans
-  scans     QRScan[]
-
+  scanCount Int      @default(0)
   createdAt DateTime @default(now())
+  scans     QRScan[]
 
   @@index([validDate])
   @@index([qrCode])
 }
 
 model QRScan {
-  id       String @id @default(cuid())
-  userId   String
-  qrCodeId String
-
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String      @id @default(cuid())
+  userId      String
+  qrCodeId    String
+  scannedAt   DateTime    @default(now())
+  hasAccess   Boolean     @default(true)
   dailyQRCode DailyQRCode @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  scannedAt DateTime @default(now())
-
-  // Permet de participer au concours 2
-  hasAccess Boolean @default(true)
-
-  // Un scan par jour par utilisateur
   @@unique([userId, qrCodeId])
   @@index([userId])
   @@index([scannedAt])
 }
 
-// ==========================================
-// CONCOURS 3 : JEU DU BUTEUR
-// ==========================================
-
 model Player {
-  id       String  @id @default(cuid())
+  id       String         @id @default(cuid())
   name     String
   nameFr   String
-  number   Int? // Numéro de maillot
-  position String? // "ATT", "MIL", "DEF", "GAR"
+  number   Int?
+  position String?
   teamId   String
-
-  team Team @relation(fields: [teamId], references: [id])
-
-  // Stats
-  goals Int @default(0) // Buts marqués dans la compétition
-
-  tickets ButeurTicket[]
+  goals    Int            @default(0)
+  tickets  ButeurTicket[]
+  team     Team           @relation(fields: [teamId], references: [id])
 
   @@index([teamId])
 }
 
 model ButeurTicket {
-  id String @id @default(cuid())
-
-  // Code unique du ticket (ex: BUT-ABC123)
-  ticketCode String @unique
-
-  // Utilisateur qui a reçu le ticket (optionnel si anonyme)
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  // Match concerné
-  matchId String
-  match   Match  @relation(fields: [matchId], references: [id])
-
-  // Buteur attribué (aléatoire)
-  playerId String
-  player   Player @relation(fields: [playerId], references: [id])
-
-  // Résultat
-  hasWon    Boolean @default(false)
-  isChecked Boolean @default(false)
-
-  // Lot gagné (si hasWon = true)
-  prizeType  String? // "SMOOTHIE", "GAUFRE", "BON_PARTENAIRE"
-  prizeValue Float? // Valeur du lot
-
-  // Réclamation
+  id         String    @id @default(cuid())
+  ticketCode String    @unique
+  userId     String?
+  matchId    String
+  playerId   String
+  hasWon     Boolean   @default(false)
+  isChecked  Boolean   @default(false)
+  prizeType  String?
+  prizeValue Float?
   isRedeemed Boolean   @default(false)
   redeemedAt DateTime?
-
-  createdAt DateTime @default(now())
+  isPrinted  Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  match      Match     @relation(fields: [matchId], references: [id])
+  player     Player    @relation(fields: [playerId], references: [id])
+  user       User?     @relation(fields: [userId], references: [id])
 
   @@index([ticketCode])
   @@index([userId])
@@ -612,90 +385,47 @@ model Verification {
   @@map("verification")
 }
 
-// ==========================================
-// SYSTÈME DE PARTENAIRES COMMERCIAUX
-// ==========================================
-
 model Partner {
-  id String @id @default(cuid())
-
-  // Informations de base
-  name        String // Nom du commerce
-  description String  @db.Text // Description du partenaire
-  logo        String? // URL du logo
-
-  // Coordonnées
-  address String? // Adresse complète
-  phone   String? // Numéro de téléphone
-  email   String? // Email de contact
-  website String? // Site web
-
-  // Niveau de partenariat
-  tier PartnerTier @default(BRONZE)
-
-  // Cadeau proposé pour le concours
-  prizeTitle       String // Titre du cadeau (ex: "Bon d'achat 50 MAD")
-  prizeDescription String? @db.Text // Description détaillée du cadeau
-  prizeValue       Float? // Valeur en MAD
-  prizeImage       String? // Image du cadeau
-
-  // Nombre de lots disponibles
-  prizeQuantity Int @default(1) // Nombre de cadeaux à distribuer
-
-  // Visibilité
-  isActive  Boolean @default(true)
-  isVisible Boolean @default(true) // Affiché sur la page concours
-
-  // Ordre d'affichage
-  displayOrder Int @default(0)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  drawWinners DrawWinner[]
+  id               String       @id @default(cuid())
+  name             String
+  description      String
+  logo             String?
+  address          String?
+  phone            String?
+  email            String?
+  website          String?
+  tier             PartnerTier  @default(BRONZE)
+  prizeTitle       String
+  prizeDescription String?
+  prizeValue       Float?
+  prizeImage       String?
+  prizeQuantity    Int          @default(1)
+  isActive         Boolean      @default(true)
+  isVisible        Boolean      @default(true)
+  displayOrder     Int          @default(0)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  drawWinners      DrawWinner[]
 
   @@index([tier])
   @@index([isActive])
   @@index([displayOrder])
 }
 
-enum PartnerTier {
-  PREMIUM // Partenaire premium (affichage prioritaire)
-  GOLD // Partenaire gold
-  SILVER // Partenaire silver
-  BRONZE // Partenaire bronze
-}
-
-// ==========================================
-// SYSTÈME DE TIRAGE AU SORT (Concours 2)
-// ==========================================
-
 model WeeklyDraw {
-  id String @id @default(cuid())
-
-  // Période du tirage
-  weekNumber Int // Numéro de la semaine dans l'année
-  year       Int // Année
-  startDate  DateTime @db.Date // Début de la semaine
-  endDate    DateTime @db.Date // Fin de la semaine
-
-  // Type de tirage
-  drawType DrawType @default(WEEKLY)
-
-  // Statut
-  isCompleted Boolean   @default(false)
-  drawnAt     DateTime? // Date du tirage
-
-  // Stats
-  totalParticipants Int @default(0) // Nombre de participants éligibles
-  totalScans        Int @default(0) // Nombre total de scans dans la période
-
-  // Gagnants
-  winners DrawWinner[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String       @id @default(cuid())
+  weekNumber        Int
+  year              Int
+  startDate         DateTime     @db.Date
+  endDate           DateTime     @db.Date
+  drawType          DrawType     @default(WEEKLY)
+  isCompleted       Boolean      @default(false)
+  drawnAt           DateTime?
+  totalParticipants Int          @default(0)
+  totalScans        Int          @default(0)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  winners           DrawWinner[]
 
   @@unique([year, weekNumber, drawType])
   @@index([weekNumber, year])
@@ -703,51 +433,74 @@ model WeeklyDraw {
 }
 
 model DrawWinner {
-  id String @id @default(cuid())
-
-  // Tirage
-  drawId String
-  draw   WeeklyDraw @relation(fields: [drawId], references: [id], onDelete: Cascade)
-
-  // Gagnant
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Position (1er, 2ème, 3ème...)
-  position Int
-
-  // Lot
-  prizeType        String // "WEEKLY_1", "WEEKLY_2", "GRAND_PRIZE"
-  prizeTitle       String // "Gaufre XXL", "Bon partenaire 100 MAD"
-  prizeDescription String? @db.Text
-  prizeValue       Float? // Valeur en MAD
-  prizeImage       String? // Image du lot
-
-  // Partenaire associé (si lot partenaire)
-  partnerId String?
-  partner   Partner? @relation(fields: [partnerId], references: [id], onDelete: SetNull)
-
-  // Notification et réclamation
-  notified   Boolean   @default(false)
-  notifiedAt DateTime?
-
-  isClaimed Boolean   @default(false)
-  claimedAt DateTime?
-
-  // Nombre de scans du gagnant pendant la période
-  scanCount Int @default(0)
-
-  createdAt DateTime @default(now())
+  id               String     @id @default(cuid())
+  drawId           String
+  userId           String
+  position         Int
+  prizeType        String
+  prizeTitle       String
+  prizeDescription String?
+  prizeValue       Float?
+  prizeImage       String?
+  partnerId        String?
+  notified         Boolean    @default(false)
+  notifiedAt       DateTime?
+  isClaimed        Boolean    @default(false)
+  claimedAt        DateTime?
+  scanCount        Int        @default(0)
+  createdAt        DateTime   @default(now())
+  draw             WeeklyDraw @relation(fields: [drawId], references: [id], onDelete: Cascade)
+  partner          Partner?   @relation(fields: [partnerId], references: [id])
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([drawId])
   @@index([userId])
   @@index([isClaimed])
 }
 
-// Relation manquante dans User
-// Ajouter drawWinnings DrawWinner[] à User
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum MemberTier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum LoyaltyTransactionType {
+  PURCHASE
+  REWARD_REDEEMED
+  BONUS
+  CONTEST_WIN
+  MANUAL_ADJUSTMENT
+}
+
+enum MatchPhase {
+  GROUP_STAGE
+  ROUND_OF_16
+  QUARTER_FINAL
+  SEMI_FINAL
+  THIRD_PLACE
+  FINAL
+}
+
+enum RewardType {
+  CAFE_GRATUIT
+  GAUFRE_GRATUITE
+  TIRAGE_GRAND_PRIX
+}
+
+enum PartnerTier {
+  PREMIUM
+  GOLD
+  SILVER
+  BRONZE
+}
 
 enum DrawType {
-  WEEKLY // Tirage hebdomadaire
-  GRAND_PRIZE // Grand tirage final
+  WEEKLY
+  GRAND_PRIZE
 }

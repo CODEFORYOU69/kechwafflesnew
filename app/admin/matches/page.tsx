@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert } from "@/components/ui/alert";
+import { Plus } from "lucide-react";
 
 interface Team {
   id: string;
@@ -149,11 +151,19 @@ export default function AdminMatchesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-red-50 p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 via-amber-500 to-red-600 bg-clip-text text-transparent mb-2">
-            Gestion des Matchs
-          </h1>
-          <p className="text-gray-600">Saisir les résultats et gérer les matchs de la CAN 2025</p>
+        <div className="flex justify-between items-start mb-8">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 via-amber-500 to-red-600 bg-clip-text text-transparent mb-2">
+              Gestion des Matchs
+            </h1>
+            <p className="text-gray-600">Saisir les résultats et gérer les matchs de la CAN 2025</p>
+          </div>
+          <Link href="/admin/matches/create">
+            <Button className="bg-gradient-to-r from-green-600 to-amber-600 hover:from-green-700 hover:to-amber-700">
+              <Plus className="h-4 w-4 mr-2" />
+              Créer un match
+            </Button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
