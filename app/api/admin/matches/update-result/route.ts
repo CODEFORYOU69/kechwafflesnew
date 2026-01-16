@@ -4,6 +4,9 @@ import { isUserAdmin } from "@/lib/admin";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { checkTicketsAfterMatch } from "@/lib/concours/buteur-ticket";
+import { customAlphabet } from "nanoid";
+
+const generateRewardCode = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 6);
 
 /**
  * POST /api/admin/matches/update-result
@@ -80,7 +83,7 @@ export async function POST(request: NextRequest) {
 /**
  * Calcule les points pour tous les pronostics d'un match
  * Règles:
- * - Score exact: 5 points
+ * - Score exact: 5 points + Gaufre offerte
  * - Bon vainqueur (ou match nul): 3 points
  * - Sinon: 0 point
  */
@@ -94,6 +97,8 @@ async function calculatePronosticsPoints(
     where: { matchId },
   });
 
+  let exactScoresCount = 0;
+
   // Calculer les points pour chaque pronostic
   for (const prono of pronostics) {
     let points = 0;
@@ -105,6 +110,10 @@ async function calculatePronosticsPoints(
       points = 5;
       isExactScore = true;
       isCorrectWinner = true;
+      exactScoresCount++;
+
+      // Générer une gaufre offerte pour score exact
+      await generateWaffleReward(prono.userId, matchId, homeScore, awayScore);
     }
     // Bon vainqueur ou match nul
     else {
@@ -135,6 +144,51 @@ async function calculatePronosticsPoints(
   }
 
   console.log(
-    `✅ Points calculated for ${pronostics.length} pronostics on match ${matchId}`
+    `✅ Points calculated for ${pronostics.length} pronostics on match ${matchId} (${exactScoresCount} exact scores)`
   );
+}
+
+/**
+ * Génère un code reward pour une gaufre offerte (Concours 1)
+ */
+async function generateWaffleReward(
+  userId: string,
+  matchId: string,
+  homeScore: number,
+  awayScore: number
+): Promise<void> {
+  // Vérifier si un reward existe déjà pour ce user/match
+  const existingReward = await prisma.reward.findFirst({
+    where: {
+      userId,
+      matchId,
+      type: "GAUFRE_GRATUITE",
+    },
+  });
+
+  if (existingReward) {
+    console.log(`⚠️ Reward already exists for user ${userId} on match ${matchId}`);
+    return;
+  }
+
+  const code = `GAUFRE-${generateRewardCode()}`;
+
+  // Expire dans 7 jours
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 7);
+
+  await prisma.reward.create({
+    data: {
+      userId,
+      type: "GAUFRE_GRATUITE",
+      description: "Gaufre offerte pour score exact",
+      code,
+      matchId,
+      reason: `Score exact du match ${homeScore}-${awayScore}`,
+      expiresAt,
+      isRedeemed: false,
+    },
+  });
+
+  console.log(`🧇 Reward generated for user ${userId}: ${code}`);
 }
