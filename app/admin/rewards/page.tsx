@@ -280,9 +280,10 @@ export default function AdminRewardsPage() {
                           className="flex items-center justify-between p-4 bg-white rounded-lg border shadow-sm"
                         >
                           <div className="flex items-center gap-4">
-                            <div className="text-2xl">
-                              {prono.match.homeTeam.flag} {prono.homeScore} - {prono.awayScore}{" "}
-                              {prono.match.awayTeam.flag}
+                            <div className="flex items-center gap-2 text-xl font-bold">
+                              <img src={prono.match.homeTeam.flag} alt={prono.match.homeTeam.code} className="w-8 h-6 object-cover rounded" />
+                              <span>{prono.homeScore} - {prono.awayScore}</span>
+                              <img src={prono.match.awayTeam.flag} alt={prono.match.awayTeam.code} className="w-8 h-6 object-cover rounded" />
                             </div>
                             <div>
                               <div className="font-semibold">
@@ -347,9 +348,7 @@ export default function AdminRewardsPage() {
                         className="flex items-center justify-between p-4 bg-white rounded-lg border shadow-sm"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="text-2xl">
-                            {ticket.player.team.flag}
-                          </div>
+                          <img src={ticket.player.team.flag} alt={ticket.player.team.code} className="w-10 h-7 object-cover rounded" />
                           <div>
                             <div className="font-semibold">
                               {ticket.player.nameFr}
