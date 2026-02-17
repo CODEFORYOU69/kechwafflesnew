@@ -13,7 +13,15 @@ import {
 // Enregistrer les polices (variable font)
 Font.register({
   family: "Montserrat",
-  src: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/fonts/Montserrat-VariableFont_wght.ttf`,
+  fonts: [
+    {
+      src: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/fonts/Montserrat-VariableFont_wght.ttf`,
+    },
+    {
+      src: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kechwaffles.com'}/fonts/Montserrat-Italic-VariableFont_wght.ttf`,
+      fontStyle: "italic",
+    },
+  ],
 });
 
 Font.register({
