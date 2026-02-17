@@ -952,22 +952,22 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
           ))}
         </View>
 
+        {/* Recettes signatures sucrées */}
+        <Text style={styles.sectionTitle}>2. Nos Créations Signatures</Text>
+        <View style={styles.productList}>
+          {recettesSignaturesSucrees.map((product, idx) => (
+            <ProductRow key={idx} product={product} alt={idx % 2 === 1} />
+          ))}
+        </View>
+
         {/* Suppléments sucrés */}
-        <Text style={styles.sectionTitle}>2. Toppings & Sauces</Text>
+        <Text style={styles.sectionTitle}>3. Toppings & Sauces</Text>
         <View style={styles.productList}>
           {[...supplementsSucres]
             .sort((a, b) => (a.price || 0) - (b.price || 0))
             .map((product, idx) => (
               <ProductRow key={idx} product={product} alt={idx % 2 === 1} wrap={false} />
             ))}
-        </View>
-
-        {/* Recettes signatures sucrées */}
-        <Text style={styles.sectionTitle}>3. Nos Créations Signatures</Text>
-        <View style={styles.productList}>
-          {recettesSignaturesSucrees.map((product, idx) => (
-            <ProductRow key={idx} product={product} alt={idx % 2 === 1} />
-          ))}
         </View>
 
         <PageFooter pageNum={++pageNum} />
@@ -978,7 +978,7 @@ export const MenuPDF = ({ products }: MenuPDFProps) => {
         <PageHeader title="Nos Cans" />
         <ImageBanner images={["IMG_1778-small.jpg", "IMG_1779-small.jpg", "IMG_1780-small.jpg"]} />
 
-        <Text style={styles.sectionTitle}>Desserts en pot à emporter</Text>
+        <Text style={styles.sectionTitle}>Dessert en Cans à emporter ou sur place</Text>
         <View style={styles.productList}>
           {dessertsCans.map((product, idx) => {
             // Si le produit a des variantes, les afficher
