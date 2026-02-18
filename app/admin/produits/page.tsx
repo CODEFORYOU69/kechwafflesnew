@@ -34,6 +34,7 @@ import {
   Eye,
   EyeOff,
   Upload,
+  ImageIcon,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -80,6 +81,7 @@ export default function ProduitsAdminPage() {
   const [pushing, setPushing] = useState(false);
   const [generatingPDF, setGeneratingPDF] = useState(false);
   const [generatingPDFGlovo, setGeneratingPDFGlovo] = useState(false);
+  const [generatingPoster, setGeneratingPoster] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -217,6 +219,19 @@ export default function ProduitsAdminPage() {
     } catch {
       alert("Erreur lors de la génération du PDF Glovo");
       setGeneratingPDFGlovo(false);
+    }
+  };
+
+  const handleGeneratePoster = (type: string, label: string) => {
+    try {
+      setGeneratingPoster(type);
+      window.open(`/api/admin/posters/generate?type=${type}`, "_blank");
+      setTimeout(() => {
+        setGeneratingPoster(null);
+      }, 3000);
+    } catch {
+      alert(`Erreur lors de la génération du poster ${label}`);
+      setGeneratingPoster(null);
     }
   };
 
@@ -507,6 +522,47 @@ export default function ProduitsAdminPage() {
               {products.length} produits
             </Badge>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Posters A1 */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Affiches A1 - Stop Trottoir</CardTitle>
+          <CardDescription>
+            Générez les affiches A1 (594x841mm) pour le stop trottoir
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-3">
+          {[
+            { type: "pizza-waffle", label: "Pizza Waffles", emoji: "🍕" },
+            { type: "menu-classic", label: "Menu Classique", emoji: "📋" },
+            { type: "coffee", label: "Cafés", emoji: "☕" },
+            { type: "cans", label: "Cans", emoji: "🥫" },
+            { type: "shots-juice", label: "Shots & Jus", emoji: "🥤" },
+            { type: "sweet-waffles", label: "Gaufres Sucrées", emoji: "🧇" },
+            { type: "ramadan-juice", label: "Ramadan Jus Frais", emoji: "🌙" },
+          ].map((poster) => (
+            <Button
+              key={poster.type}
+              onClick={() => handleGeneratePoster(poster.type, poster.label)}
+              disabled={generatingPoster === poster.type}
+              variant="outline"
+              className="border-green-500 text-green-700 hover:bg-green-50"
+            >
+              {generatingPoster === poster.type ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Génération...
+                </>
+              ) : (
+                <>
+                  <ImageIcon className="mr-2 h-4 w-4" />
+                  {poster.emoji} {poster.label}
+                </>
+              )}
+            </Button>
+          ))}
         </CardContent>
       </Card>
 
