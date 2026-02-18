@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 
 interface DashboardStats {
   matches: {
@@ -33,10 +34,44 @@ interface DashboardStats {
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [concoursActive, setConcoursActive] = useState(false);
+  const [togglingConcours, setTogglingConcours] = useState(false);
 
   useEffect(() => {
     fetchStats();
+    fetchConcoursStatus();
   }, []);
+
+  const fetchConcoursStatus = async () => {
+    try {
+      const response = await fetch("/api/admin/competition");
+      if (response.ok) {
+        const data = await response.json();
+        setConcoursActive(data.isActive);
+      }
+    } catch (error) {
+      console.error("Error fetching concours status:", error);
+    }
+  };
+
+  const toggleConcours = async (checked: boolean) => {
+    setTogglingConcours(true);
+    try {
+      const response = await fetch("/api/admin/competition", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isActive: checked }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setConcoursActive(data.isActive);
+      }
+    } catch (error) {
+      console.error("Error toggling concours:", error);
+    } finally {
+      setTogglingConcours(false);
+    }
+  };
 
   const fetchStats = async () => {
     try {
@@ -67,11 +102,28 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-red-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* En-tête */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 via-amber-500 to-red-600 bg-clip-text text-transparent mb-2">
-            Dashboard Admin
-          </h1>
-          <p className="text-gray-600">Tableau de bord des concours CAN 2025 - Kech Waffles</p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 via-amber-500 to-red-600 bg-clip-text text-transparent mb-2">
+              Dashboard Admin
+            </h1>
+            <p className="text-gray-600">Tableau de bord des concours CAN 2025 - Kech Waffles</p>
+          </div>
+          <Card className="border-amber-200">
+            <CardContent className="pt-4 pb-4 px-5">
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-medium text-gray-700">Concours CAN</span>
+                <Switch
+                  checked={concoursActive}
+                  onCheckedChange={toggleConcours}
+                  disabled={togglingConcours}
+                />
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${concoursActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                  {concoursActive ? "Actif" : "Inactif"}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Actions rapides */}

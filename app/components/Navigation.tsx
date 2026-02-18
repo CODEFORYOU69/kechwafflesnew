@@ -38,6 +38,7 @@ const MenuLink = ({ text, href }: { text: string; href: string }) => {
 export function Navigation() {
   const [hidden, setHidden] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [concoursActive, setConcoursActive] = useState(false);
   const { scrollY } = useScroll();
   const { data: session } = useSession();
 
@@ -57,6 +58,19 @@ export function Navigation() {
     };
     checkAdmin();
   }, [session]);
+
+  useEffect(() => {
+    const fetchConcoursStatus = async () => {
+      try {
+        const response = await fetch("/api/competition/status");
+        const data = await response.json();
+        setConcoursActive(data.isActive);
+      } catch (error) {
+        console.error("Error fetching concours status:", error);
+      }
+    };
+    fetchConcoursStatus();
+  }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
@@ -133,13 +147,15 @@ export function Navigation() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link href="/concours" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Concours CAN
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
+              {concoursActive && (
+                <NavigationMenuItem>
+                  <Link href="/concours" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Concours CAN
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              )}
               <NavigationMenuItem>
                 <Link href="/loyalty/card" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -198,7 +214,7 @@ export function Navigation() {
                 <MenuLink text="NOS PRODUITS" href="/product" />
                 <MenuLink text="NOTRE CARTE" href="/menu" />
                 <MenuLink text="NOUS TROUVER" href="/location" />
-                <MenuLink text="CONCOURS CAN" href="/concours" />
+                {concoursActive && <MenuLink text="CONCOURS CAN" href="/concours" />}
                 <MenuLink text="FIDÉLITÉ" href="/loyalty/card" />
 
                 {/* User section mobile */}

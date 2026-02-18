@@ -89,6 +89,7 @@ export default function ProduitsAdminPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [editedVariants, setEditedVariants] = useState<ProductVariant[]>([]);
+  const [editedPrice, setEditedPrice] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -262,6 +263,7 @@ export default function ProduitsAdminPage() {
   const handleEditProduct = (product: Product) => {
     setSelectedProduct(product);
     setEditedVariants([...product.variants]);
+    setEditedPrice(product.price);
     setEditDialogOpen(true);
   };
 
@@ -286,6 +288,7 @@ export default function ProduitsAdminPage() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          price: editedPrice,
           variants: editedVariants.map((v) => ({
             option1Name: v.option1Name,
             option1Value: v.option1Value,
@@ -700,7 +703,26 @@ export default function ProduitsAdminPage() {
                 </div>
               </div>
 
+              {/* Product Price */}
+              <div className="space-y-3">
+                <h4 className="font-medium">Prix du produit</h4>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={editedPrice ?? ""}
+                    onChange={(e) =>
+                      setEditedPrice(e.target.value ? parseFloat(e.target.value) : null)
+                    }
+                    className="w-32"
+                    placeholder="Prix"
+                  />
+                  <span className="text-sm font-medium">Dh</span>
+                </div>
+              </div>
+
               {/* Variants Pricing */}
+              {editedVariants.length > 0 && (
               <div className="space-y-3">
                 <h4 className="font-medium">Prix des variants</h4>
                 {editedVariants.map((variant) => (
@@ -740,6 +762,7 @@ export default function ProduitsAdminPage() {
                   </div>
                 ))}
               </div>
+              )}
             </div>
           )}
 
