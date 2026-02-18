@@ -117,8 +117,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: colors.gold,
     paddingVertical: 30,
-    paddingHorizontal: 60,
-    width: "85%",
+    paddingHorizontal: 40,
   },
   priceRow: {
     flexDirection: "row",
