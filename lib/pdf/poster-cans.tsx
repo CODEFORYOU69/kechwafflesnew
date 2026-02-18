@@ -19,6 +19,21 @@ import {
   GoldDivider,
 } from "@/lib/pdf/poster-shared";
 
+type Product = {
+  name: string;
+  description: string | null;
+  price: number | null;
+  category: string;
+  image: string | null;
+  variants: {
+    option1Name: string | null;
+    option1Value: string | null;
+    option2Name: string | null;
+    option2Value: string | null;
+    price: number;
+  }[];
+};
+
 const styles = StyleSheet.create({
   page: {
     backgroundColor: colors.canPurple,
@@ -55,23 +70,27 @@ const styles = StyleSheet.create({
     objectFit: "cover",
   },
   priceSection: {
-    alignItems: "center",
+    width: "90%",
     marginBottom: 10,
   },
-  priceLine: {
+  priceRow: {
     flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
-    marginBottom: 12,
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(212,175,55,0.3)",
   },
-  priceLabel: {
+  priceName: {
     fontFamily: "Montserrat",
-    fontSize: 32,
+    fontSize: 30,
     color: colors.white,
+    flex: 1,
   },
   priceValue: {
     fontFamily: "Montserrat",
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: 700,
     color: colors.gold,
   },
@@ -80,92 +99,69 @@ const styles = StyleSheet.create({
   },
 });
 
-export function PosterCans() {
+export function PosterCans({ products }: { products: Product[] }) {
+  const cansProducts = products.filter((p) => p.category === "Desserts - Cans");
+
   return (
     <Document>
       <Page size={A1_SIZE} style={styles.page}>
-        {/* Logo */}
         <View style={styles.logoContainer}>
           <PosterLogo color="white" size={220} />
         </View>
 
-        {/* Title */}
         <View style={styles.titleContainer}>
           <BilingualText fr="NOS CANS" ar="الكان ديالنا" />
         </View>
 
-        {/* Gold Divider */}
         <GoldDivider />
 
         {/* Photo Grid */}
         <View style={styles.photoGrid}>
-          {/* Row 1 */}
           <View style={styles.photoRow}>
-            <Image
-              src={`${BASE_URL}/images/menu-items/ticanoreo.png`}
-              style={styles.canImage}
-              cache
-            />
-            <Image
-              src={`${BASE_URL}/images/menu-items/ticanfraise.png`}
-              style={styles.canImage}
-              cache
-            />
-            <Image
-              src={`${BASE_URL}/images/menu-items/ticancaramel.png`}
-              style={styles.canImage}
-              cache
-            />
+            <Image src={`${BASE_URL}/images/menu-items/ticanoreo.png`} style={styles.canImage} cache />
+            <Image src={`${BASE_URL}/images/menu-items/ticanfraise.png`} style={styles.canImage} cache />
+            <Image src={`${BASE_URL}/images/menu-items/ticancaramel.png`} style={styles.canImage} cache />
           </View>
-
-          {/* Row 2 */}
           <View style={styles.photoRow}>
-            <Image
-              src={`${BASE_URL}/images/menu-items/ticanbueno.png`}
-              style={styles.canImage}
-              cache
-            />
-            <Image
-              src={`${BASE_URL}/images/menu-items/dubaichocolatecan.png`}
-              style={styles.canImage}
-              cache
-            />
-            <Image
-              src={`${BASE_URL}/images/menu-items/canstrawchocpist.png`}
-              style={styles.canImage}
-              cache
-            />
+            <Image src={`${BASE_URL}/images/menu-items/ticanbueno.png`} style={styles.canImage} cache />
+            <Image src={`${BASE_URL}/images/menu-items/dubaichocolatecan.png`} style={styles.canImage} cache />
+            <Image src={`${BASE_URL}/images/menu-items/canstrawchocpist.png`} style={styles.canImage} cache />
           </View>
         </View>
 
-        {/* Gold Divider */}
         <GoldDivider />
 
-        {/* Price Section */}
+        {/* Prix depuis la DB */}
         <View style={styles.priceSection}>
-          <View style={styles.priceLine}>
-            <Text style={styles.priceLabel}>Ticanmisu : à partir de</Text>
-            <Text style={styles.priceValue}>50 Dh</Text>
-          </View>
-          <View style={styles.priceLine}>
-            <Text style={styles.priceLabel}>Can Dubai Chocolate :</Text>
-            <Text style={styles.priceValue}>60 Dh</Text>
-          </View>
-          <View style={styles.priceLine}>
-            <Text style={styles.priceLabel}>Can Fraise Choco Pistache :</Text>
-            <Text style={styles.priceValue}>65 Dh</Text>
-          </View>
+          {cansProducts.map((product) => {
+            if (product.variants && product.variants.length > 1) {
+              const prices = product.variants.map((v) => v.price);
+              const min = Math.min(...prices);
+              const max = Math.max(...prices);
+              const priceText = min === max ? `${min} Dh` : `${min} - ${max} Dh`;
+              return (
+                <View key={product.name} style={styles.priceRow}>
+                  <Text style={styles.priceName}>{product.name}</Text>
+                  <Text style={styles.priceValue}>{priceText}</Text>
+                </View>
+              );
+            }
+            const price = product.price ?? (product.variants.length > 0 ? product.variants[0].price : null);
+            return (
+              <View key={product.name} style={styles.priceRow}>
+                <Text style={styles.priceName}>{product.name}</Text>
+                <Text style={styles.priceValue}>{price != null ? `${price} Dh` : ""}</Text>
+              </View>
+            );
+          })}
         </View>
 
-        {/* Gold Divider */}
         <GoldDivider />
 
-        {/* Darija Slogan */}
         <View style={styles.sloganContainer}>
           <SloganDarija text="ديسير فالكان، هاني وبنين!" />
         </View>
 
-        {/* Footer */}
         <PosterFooter />
       </Page>
     </Document>

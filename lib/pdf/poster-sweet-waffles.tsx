@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   signatureName: {
     fontFamily: "Montserrat",
     fontSize: 26,
-    fontWeight: 600,
+    fontWeight: 500,
     color: colors.black,
   },
   signaturePrice: {

@@ -24,74 +24,76 @@ const styles = StyleSheet.create({
     backgroundColor: colors.shotGreen,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 60,
-    paddingBottom: 120,
-    paddingHorizontal: 60,
+    paddingTop: 40,
+    paddingBottom: 100,
+    paddingHorizontal: 50,
   },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 15,
   },
   titleContainer: {
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 15,
   },
   sectionTitle: {
     fontFamily: "Montserrat",
-    fontSize: 40,
+    fontSize: 36,
     fontWeight: 700,
     color: colors.white,
     textAlign: "center",
-    marginBottom: 25,
+    marginBottom: 15,
   },
   imageRow: {
     flexDirection: "row",
-    gap: 25,
+    gap: 20,
     justifyContent: "center",
-    marginBottom: 25,
+    marginBottom: 15,
   },
   shotImage: {
-    width: 400,
-    height: 400,
-    borderRadius: 15,
-    borderWidth: 4,
+    width: 330,
+    height: 330,
+    borderRadius: 12,
+    borderWidth: 3,
     borderColor: colors.gold,
     objectFit: "cover",
+  },
+  juiceSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 30,
+    marginBottom: 15,
   },
   juiceImage: {
-    width: 500,
-    height: 500,
-    borderRadius: 15,
-    borderWidth: 4,
+    width: 350,
+    height: 350,
+    borderRadius: 12,
+    borderWidth: 3,
     borderColor: colors.gold,
     objectFit: "cover",
-  },
-  juiceImageContainer: {
-    alignItems: "center",
-    marginBottom: 30,
   },
   priceSection: {
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 15,
   },
   priceLine: {
     flexDirection: "row",
-    marginBottom: 10,
+    marginBottom: 8,
     justifyContent: "center",
   },
   priceLabel: {
     fontFamily: "Montserrat",
-    fontSize: 30,
+    fontSize: 28,
     color: colors.white,
   },
   priceValue: {
     fontFamily: "Montserrat",
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 700,
     color: colors.gold,
   },
   sloganContainer: {
-    marginBottom: 30,
+    marginBottom: 15,
   },
   dividerContainer: {
     width: "100%",
@@ -102,101 +104,66 @@ export function PosterShotsJuice() {
   return (
     <Document>
       <Page size={A1_SIZE} style={styles.page}>
-        {/* Logo */}
         <View style={styles.logoContainer}>
-          <PosterLogo color="white" size={220} />
+          <PosterLogo color="white" size={180} />
         </View>
 
-        {/* Title */}
         <View style={styles.titleContainer}>
-          <BilingualText fr="SHOTS & JUS FRAIS" ar="شوطات و عصير فريش" />
+          <BilingualText
+            fr="SHOTS & JUS FRAIS"
+            ar="شوطات و عصير فريش"
+            frStyle={{ fontSize: 60 }}
+            arStyle={{ fontSize: 42 }}
+          />
         </View>
 
-        {/* Gold Divider */}
         <View style={styles.dividerContainer}>
           <GoldDivider />
         </View>
 
         {/* Shots Section */}
-        <Text style={styles.sectionTitle}>SHOTS VITAMIN&#xC9;S</Text>
+        <Text style={styles.sectionTitle}>SHOTS VITAMINES</Text>
 
-        {/* Row 1 */}
         <View style={styles.imageRow}>
-          <Image
-            src={`${BASE_URL}/images/menu-items/shotbetterave.png`}
-            style={styles.shotImage}
-            cache
-          />
-          <Image
-            src={`${BASE_URL}/images/menu-items/shotlaidor.png`}
-            style={styles.shotImage}
-            cache
-          />
-          <Image
-            src={`${BASE_URL}/images/menu-items/shotvertdetox.png`}
-            style={styles.shotImage}
-            cache
-          />
+          <Image src={`${BASE_URL}/images/menu-items/shotbetterave.png`} style={styles.shotImage} cache />
+          <Image src={`${BASE_URL}/images/menu-items/shotlaidor.png`} style={styles.shotImage} cache />
+          <Image src={`${BASE_URL}/images/menu-items/shotvertdetox.png`} style={styles.shotImage} cache />
+        </View>
+        <View style={styles.imageRow}>
+          <Image src={`${BASE_URL}/images/menu-items/shotcurcumamangue.png`} style={styles.shotImage} cache />
+          <Image src={`${BASE_URL}/images/menu-items/shotananascoco.png`} style={styles.shotImage} cache />
+          <Image src={`${BASE_URL}/images/menu-items/SHOTWHEATGRASS.png`} style={styles.shotImage} cache />
         </View>
 
-        {/* Row 2 */}
-        <View style={styles.imageRow}>
-          <Image
-            src={`${BASE_URL}/images/menu-items/shotcurcumamangue.png`}
-            style={styles.shotImage}
-            cache
-          />
-          <Image
-            src={`${BASE_URL}/images/menu-items/shotananascoco.png`}
-            style={styles.shotImage}
-            cache
-          />
-          <Image
-            src={`${BASE_URL}/images/menu-items/SHOTWHEATGRASS.png`}
-            style={styles.shotImage}
-            cache
-          />
-        </View>
-
-        {/* Gold Divider */}
         <View style={styles.dividerContainer}>
           <GoldDivider />
         </View>
 
-        {/* Jus d'Orange Section */}
+        {/* Jus d'Orange - image + prix cote a cote */}
         <Text style={styles.sectionTitle}>JUS D&#x27;ORANGE FRAIS</Text>
 
-        <View style={styles.juiceImageContainer}>
-          <Image
-            src={`${BASE_URL}/images/menu-items/jusdorange.png`}
-            style={styles.juiceImage}
-            cache
-          />
+        <View style={styles.juiceSection}>
+          <Image src={`${BASE_URL}/images/menu-items/jusdorange.png`} style={styles.juiceImage} cache />
+          <View>
+            <View style={styles.priceLine}>
+              <Text style={styles.priceLabel}>Shots : </Text>
+              <Text style={styles.priceValue}>24 - 35 Dh</Text>
+            </View>
+            <View style={styles.priceLine}>
+              <Text style={styles.priceLabel}>Jus d&#x27;Orange : </Text>
+              <Text style={styles.priceValue}>25 - 45 Dh</Text>
+            </View>
+          </View>
         </View>
 
-        {/* Gold Divider */}
         <View style={styles.dividerContainer}>
           <GoldDivider />
         </View>
 
-        {/* Price Section */}
-        <View style={styles.priceSection}>
-          <View style={styles.priceLine}>
-            <Text style={styles.priceLabel}>Shots : </Text>
-            <Text style={styles.priceValue}>24 - 35 Dh</Text>
-          </View>
-          <View style={styles.priceLine}>
-            <Text style={styles.priceLabel}>Jus d&#x27;Orange : </Text>
-            <Text style={styles.priceValue}>25 - 45 Dh</Text>
-          </View>
-        </View>
-
-        {/* Slogan */}
         <View style={styles.sloganContainer}>
           <SloganDarija text="صحتك فكاس!" />
         </View>
 
-        {/* Footer */}
         <PosterFooter />
       </Page>
     </Document>

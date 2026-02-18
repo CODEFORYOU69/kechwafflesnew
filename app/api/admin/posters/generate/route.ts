@@ -24,7 +24,7 @@ const POSTER_TYPES = [
 type PosterType = (typeof POSTER_TYPES)[number];
 
 // Types that need products from DB
-const TYPES_NEEDING_PRODUCTS: PosterType[] = ["menu-classic", "coffee"];
+const TYPES_NEEDING_PRODUCTS: PosterType[] = ["menu-classic", "coffee", "cans"];
 
 async function fetchProducts() {
   const products = await prisma.product.findMany({
@@ -69,7 +69,7 @@ function buildPoster(type: PosterType, productData?: ProductData) {
     case "coffee":
       return PosterCoffee({ products: productData! });
     case "cans":
-      return PosterCans();
+      return PosterCans({ products: productData! });
     case "shots-juice":
       return PosterShotsJuice();
     case "sweet-waffles":

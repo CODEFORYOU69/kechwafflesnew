@@ -25,47 +25,47 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 60,
+    paddingTop: 50,
     paddingBottom: 120,
     paddingHorizontal: 60,
   },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 20,
   },
   titleContainer: {
     alignItems: "center",
-    marginBottom: 40,
+    marginBottom: 30,
   },
   imageContainer: {
     alignItems: "center",
-    marginBottom: 40,
+    marginBottom: 30,
   },
   pizzaImage: {
-    width: 900,
-    height: 900,
-    borderWidth: 6,
+    width: 1200,
+    height: 1200,
+    borderWidth: 8,
     borderColor: colors.gold,
-    borderRadius: 20,
+    borderRadius: 30,
     objectFit: "cover",
   },
   sloganFr: {
     fontFamily: "Great Vibes",
-    fontSize: 52,
+    fontSize: 56,
     color: colors.gold,
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 15,
   },
   sloganArContainer: {
-    marginBottom: 30,
+    marginBottom: 20,
   },
   dividerContainer: {
     width: "100%",
-    marginBottom: 30,
+    marginBottom: 20,
   },
   priceContainer: {
     alignItems: "center",
-    marginBottom: 40,
+    marginBottom: 30,
   },
 });
 
@@ -73,17 +73,14 @@ export function PosterPizzaWaffle() {
   return (
     <Document>
       <Page size={A1_SIZE} style={styles.page}>
-        {/* Logo */}
         <View style={styles.logoContainer}>
-          <PosterLogo color="white" size={280} />
+          <PosterLogo color="white" size={250} />
         </View>
 
-        {/* Title */}
         <View style={styles.titleContainer}>
           <BilingualText fr="PIZZA WAFFLES" ar="بيتزا وافل" />
         </View>
 
-        {/* Pizza Waffle Image */}
         <View style={styles.imageContainer}>
           <Image
             src={`${BASE_URL}/images/menu-items/wafflepizza.png`}
@@ -92,27 +89,22 @@ export function PosterPizzaWaffle() {
           />
         </View>
 
-        {/* French Slogan */}
         <Text style={styles.sloganFr}>
           {"L'Italie rencontre la Belgique"}
         </Text>
 
-        {/* Arabic Darija Slogan */}
         <View style={styles.sloganArContainer}>
           <SloganDarija text="جربها دابا!" />
         </View>
 
-        {/* Gold Divider */}
         <View style={styles.dividerContainer}>
           <GoldDivider />
         </View>
 
-        {/* Price Badge */}
         <View style={styles.priceContainer}>
           <PriceBadge fr="À partir de 30 Dh" ar="من 30 درهم" />
         </View>
 
-        {/* Footer */}
         <PosterFooter />
       </Page>
     </Document>
