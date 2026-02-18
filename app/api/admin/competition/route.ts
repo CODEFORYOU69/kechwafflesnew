@@ -59,14 +59,23 @@ export async function PATCH(request: Request) {
 
     const competition = await prisma.competition.findFirst();
 
-    if (!competition) {
-      return NextResponse.json({ error: "Aucune compétition trouvée" }, { status: 404 });
+    let updated;
+    if (competition) {
+      updated = await prisma.competition.update({
+        where: { id: competition.id },
+        data: { isActive },
+      });
+    } else {
+      updated = await prisma.competition.create({
+        data: {
+          name: "CAN 2025",
+          isActive,
+          startDate: new Date(),
+          endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+          finalPronosticsDeadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+        },
+      });
     }
-
-    const updated = await prisma.competition.update({
-      where: { id: competition.id },
-      data: { isActive },
-    });
 
     return NextResponse.json({ isActive: updated.isActive });
   } catch (error) {
