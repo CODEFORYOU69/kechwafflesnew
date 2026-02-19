@@ -221,7 +221,7 @@ export function PosterRamadanJuice() {
           {/* Jus Carotte Orange */}
           <View style={styles.juiceColumn}>
             <Image
-              src={`${BASE_URL}/images/menu-items/carotorangejuice.png`}
+              src={`${BASE_URL}/images/menu-items/carotorangejuice-compressed.jpg`}
               style={styles.juiceImage}
               cache
             />
