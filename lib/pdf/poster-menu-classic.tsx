@@ -28,38 +28,38 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: colors.cream,
     fontFamily: "Montserrat",
-    paddingHorizontal: 50,
-    paddingTop: 35,
-    paddingBottom: 100,
+    paddingHorizontal: 45,
+    paddingTop: 30,
+    paddingBottom: 90,
   },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 6,
   },
   titleContainer: {
     alignItems: "center",
-    marginBottom: 5,
+    marginBottom: 3,
   },
   twoColumns: {
     flexDirection: "row",
-    gap: 30,
+    gap: 25,
   },
   column: {
     flex: 1,
   },
   categoryBanner: {
     backgroundColor: colors.primary,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 6,
-    borderLeftWidth: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    borderLeftWidth: 4,
     borderLeftColor: colors.gold,
-    marginBottom: 8,
-    marginTop: 10,
+    marginBottom: 4,
+    marginTop: 7,
   },
   categoryText: {
     fontFamily: "Montserrat",
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 700,
     color: colors.white,
   },
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 5,
-    paddingHorizontal: 8,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
     borderBottomWidth: 1,
     borderBottomColor: "#E0E0E0",
   },
@@ -77,14 +77,14 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontFamily: "Montserrat",
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: 500,
     color: colors.black,
     flex: 1,
   },
   productPrice: {
     fontFamily: "Montserrat",
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: 700,
     color: colors.red,
   },
@@ -110,6 +110,9 @@ const CATEGORIES_RIGHT = [
   { category: "Eaux & Soft Drinks", banner: "EAUX & SOFTS" },
 ];
 
+// Produits à regrouper sur une seule ligne (nom partiel → label affiché)
+const MERGE_KEYWORDS = ["oulmès fruitée", "oulmes fruitee", "oulmès bulles fruitées", "oulmes bulles fruitees"];
+
 function getProductPrice(product: Product): string {
   if (product.variants && product.variants.length > 1) {
     const prices = product.variants.map((v) => v.price);
@@ -127,18 +130,49 @@ function removeEmojis(text: string) {
   return text.replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FE0F}]|[\u{1F900}-\u{1F9FF}]|[\u{200D}]|[\u{20E3}]|[\u{E0020}-\u{E007F}]/gu, "").trim();
 }
 
+function isMergeProduct(name: string): boolean {
+  const lower = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return MERGE_KEYWORDS.some((kw) => lower.includes(kw));
+}
+
+function mergeProducts(items: Product[]): { name: string; price: string }[] {
+  const merged: { name: string; price: string }[] = [];
+  const mergeGroup: Product[] = [];
+
+  for (const product of items) {
+    if (isMergeProduct(product.name)) {
+      mergeGroup.push(product);
+    } else {
+      merged.push({ name: removeEmojis(product.name), price: getProductPrice(product) });
+    }
+  }
+
+  if (mergeGroup.length > 0) {
+    const allPrices = mergeGroup.flatMap((p) =>
+      p.variants.length > 0 ? p.variants.map((v) => v.price) : p.price != null ? [p.price] : []
+    );
+    const price = allPrices.length > 0 ? `${Math.min(...allPrices)} Dh` : "";
+    merged.push({ name: "Oulmès Bulles Fruitées", price });
+  }
+
+  return merged;
+}
+
 function CategorySection({ category, banner, products }: { category: string; banner: string; products: Product[] }) {
   const items = products.filter((p) => p.category === category);
   if (items.length === 0) return null;
+
+  const rows = mergeProducts(items);
+
   return (
     <View>
       <View style={styles.categoryBanner}>
         <Text style={styles.categoryText}>{banner}</Text>
       </View>
-      {items.map((product, idx) => (
-        <View key={product.name} style={idx % 2 === 1 ? [styles.productRow, styles.productRowAlt] : [styles.productRow]}>
-          <Text style={styles.productName}>{removeEmojis(product.name)}</Text>
-          <Text style={styles.productPrice}>{getProductPrice(product)}</Text>
+      {rows.map((row, idx) => (
+        <View key={row.name} style={idx % 2 === 1 ? [styles.productRow, styles.productRowAlt] : [styles.productRow]}>
+          <Text style={styles.productName}>{row.name}</Text>
+          <Text style={styles.productPrice}>{row.price}</Text>
         </View>
       ))}
     </View>
@@ -150,29 +184,27 @@ export function PosterMenuClassic({ products }: { products: Product[] }) {
     <Document>
       <Page size={A1_SIZE} style={styles.page}>
         <View style={styles.logoContainer}>
-          <PosterLogo color="black" size={150} />
+          <PosterLogo color="black" size={120} />
         </View>
 
         <View style={styles.titleContainer}>
           <BilingualText
             fr="NOTRE MENU"
             ar="الميني ديالنا"
-            frStyle={{ color: colors.black, fontSize: 50 }}
-            arStyle={{ color: colors.primary, fontSize: 36 }}
+            frStyle={{ color: colors.black, fontSize: 44 }}
+            arStyle={{ color: colors.primary, fontSize: 30 }}
           />
         </View>
 
         <GoldDivider />
 
         <View style={styles.twoColumns}>
-          {/* Colonne gauche */}
           <View style={styles.column}>
             {CATEGORIES_LEFT.map(({ category, banner }) => (
               <CategorySection key={category} category={category} banner={banner} products={products} />
             ))}
           </View>
 
-          {/* Colonne droite */}
           <View style={styles.column}>
             {CATEGORIES_RIGHT.map(({ category, banner }) => (
               <CategorySection key={category} category={category} banner={banner} products={products} />
