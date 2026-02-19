@@ -83,9 +83,14 @@ function buildPoster(type: PosterType, productData?: ProductData) {
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
+    let session;
+    try {
+      session = await auth.api.getSession({
+        headers: request.headers,
+      });
+    } catch {
+      return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+    }
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
