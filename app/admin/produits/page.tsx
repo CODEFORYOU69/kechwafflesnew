@@ -542,6 +542,7 @@ export default function ProduitsAdminPage() {
             { type: "shots-juice", label: "Shots & Jus", emoji: "🥤" },
             { type: "sweet-waffles", label: "Gaufres Sucrées", emoji: "🧇" },
             { type: "ramadan-juice", label: "Ramadan Jus Frais", emoji: "🌙" },
+            { type: "ramadan-special", label: "Ramadan Spécial", emoji: "🕌" },
           ].map((poster) => (
             <Button
               key={poster.type}

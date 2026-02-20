@@ -10,6 +10,7 @@ import { PosterCans } from "@/lib/pdf/poster-cans";
 import { PosterShotsJuice } from "@/lib/pdf/poster-shots-juice";
 import { PosterSweetWaffles } from "@/lib/pdf/poster-sweet-waffles";
 import { PosterRamadanJuice } from "@/lib/pdf/poster-ramadan-juice";
+import { PosterRamadanSpecial } from "@/lib/pdf/poster-ramadan-special";
 
 const POSTER_TYPES = [
   "pizza-waffle",
@@ -19,6 +20,7 @@ const POSTER_TYPES = [
   "shots-juice",
   "sweet-waffles",
   "ramadan-juice",
+  "ramadan-special",
 ] as const;
 
 type PosterType = (typeof POSTER_TYPES)[number];
@@ -76,6 +78,8 @@ function buildPoster(type: PosterType, productData?: ProductData) {
       return PosterSweetWaffles();
     case "ramadan-juice":
       return PosterRamadanJuice();
+    case "ramadan-special":
+      return PosterRamadanSpecial();
     default:
       throw new Error(`Type de poster inconnu: ${type}`);
   }
