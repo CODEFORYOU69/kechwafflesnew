@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth-helpers";
 
 const LOYVERSE_API_URL = "https://api.loyverse.com/v1.0";
 
@@ -10,6 +11,9 @@ const LOYVERSE_API_URL = "https://api.loyverse.com/v1.0";
  */
 export async function GET(request: NextRequest) {
   try {
+    const { error } = await requireAdmin();
+    if (error) return error;
+
     const { searchParams } = new URL(request.url);
     const receiptNumber = searchParams.get("receipt_number");
 

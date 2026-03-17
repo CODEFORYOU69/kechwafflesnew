@@ -1,25 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserStats } from "@/lib/concours/pronostic";
+import { requireSession } from "@/lib/api-helpers";
 
 /**
- * GET: Récupère les statistiques d'un utilisateur
+ * GET: Récupère les statistiques de l'utilisateur connecté
  */
 export async function GET(request: NextRequest) {
+  const authResult = await requireSession(request);
+  if (authResult instanceof NextResponse) return authResult;
+  const { session } = authResult;
+
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "userId requis",
-        },
-        { status: 400 }
-      );
-    }
-
-    const stats = await getUserStats(userId);
+    const stats = await getUserStats(session.user.id);
 
     return NextResponse.json({
       success: true,

@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { getTodayQRCode } from "@/lib/concours/daily-qr";
+import { requireAdmin } from "@/lib/auth-helpers";
 
 export async function GET() {
   try {
+    const { error } = await requireAdmin();
+    if (error) return error;
+
     const qrCode = await getTodayQRCode();
 
     return NextResponse.json({

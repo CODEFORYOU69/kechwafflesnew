@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/api-helpers";
 
 /**
  * POST /api/admin/matches/create
  * Crée un nouveau match (pour les phases finales)
  */
 export async function POST(request: NextRequest) {
+  const authResult = await requireAdmin(request);
+  if (authResult instanceof NextResponse) return authResult;
+
   try {
     const body = await request.json();
     const {
@@ -92,7 +96,10 @@ export async function POST(request: NextRequest) {
  * GET /api/admin/matches/create
  * Récupère la liste des équipes et le prochain numéro de match disponible
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authResult = await requireAdmin(request);
+  if (authResult instanceof NextResponse) return authResult;
+
   try {
     // Récupérer toutes les équipes
     const teams = await prisma.team.findMany({

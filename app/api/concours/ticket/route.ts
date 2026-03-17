@@ -5,14 +5,19 @@ import {
   redeemTicket,
   getUserTickets,
 } from "@/lib/concours/buteur-ticket";
+import { requireSession, requireAdmin } from "@/lib/api-helpers";
 
 /**
  * POST: Crée un ticket buteur (pour achat menu)
  */
 export async function POST(request: NextRequest) {
+  const authResult = await requireSession(request);
+  if (authResult instanceof NextResponse) return authResult;
+  const { session } = authResult;
+
   try {
     const body = await request.json();
-    const { matchId, userId } = body;
+    const { matchId } = body;
 
     if (!matchId) {
       return NextResponse.json(
@@ -26,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     const result = await createButeurTicket({
       matchId,
-      userId,
+      userId: session.user.id,
     });
 
     if (!result.success) {
@@ -47,36 +52,31 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * GET: Récupère les tickets d'un utilisateur OU vérifie un ticket
+ * GET: Récupère les tickets de l'utilisateur connecté OU vérifie un ticket par code
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
     const ticketCode = searchParams.get("ticketCode");
 
-    // Vérification d'un ticket spécifique
+    // Vérification d'un ticket spécifique (staff/admin - utilisé pour scan PDV)
     if (ticketCode) {
+      const adminResult = await requireAdmin(request);
+      if (adminResult instanceof NextResponse) return adminResult;
       const result = await verifyTicket(ticketCode);
       return NextResponse.json(result);
     }
 
-    // Récupération des tickets d'un utilisateur
-    if (userId) {
-      const tickets = await getUserTickets(userId);
-      return NextResponse.json({
-        success: true,
-        tickets,
-      });
-    }
+    // Récupération des tickets de l'utilisateur connecté
+    const authResult = await requireSession(request);
+    if (authResult instanceof NextResponse) return authResult;
+    const { session } = authResult;
 
-    return NextResponse.json(
-      {
-        success: false,
-        message: "userId ou ticketCode requis",
-      },
-      { status: 400 }
-    );
+    const tickets = await getUserTickets(session.user.id);
+    return NextResponse.json({
+      success: true,
+      tickets,
+    });
   } catch (error) {
     console.error("Erreur API ticket GET:", error);
     return NextResponse.json(
@@ -90,9 +90,12 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * PATCH: Marque un ticket comme réclamé
+ * PATCH: Marque un ticket comme réclamé (action staff/admin uniquement)
  */
 export async function PATCH(request: NextRequest) {
+  const authResult = await requireAdmin(request);
+  if (authResult instanceof NextResponse) return authResult;
+
   try {
     const body = await request.json();
     const { ticketCode } = body;

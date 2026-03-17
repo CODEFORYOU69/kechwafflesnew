@@ -1,26 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireSession } from "@/lib/api-helpers";
 
 /**
- * GET: Récupère les rewards d'un utilisateur
+ * GET: Récupère les rewards de l'utilisateur connecté
  */
 export async function GET(request: NextRequest) {
+  const authResult = await requireSession(request);
+  if (authResult instanceof NextResponse) return authResult;
+  const { session } = authResult;
+
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "userId requis",
-        },
-        { status: 400 }
-      );
-    }
-
     const rewards = await prisma.reward.findMany({
-      where: { userId },
+      where: { userId: session.user.id },
       orderBy: {
         createdAt: "desc",
       },
