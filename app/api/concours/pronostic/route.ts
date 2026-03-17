@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createOrUpdatePronostic, getUserPronostics } from "@/lib/concours/pronostic";
-import { requireSession } from "@/lib/api-helpers";
+import { requireSession } from "@/lib/auth-helpers";
 
 /**
  * POST: Crée ou met à jour un pronostic
  */
 export async function POST(request: NextRequest) {
-  const authResult = await requireSession(request);
-  if (authResult instanceof NextResponse) return authResult;
-  const { session } = authResult;
+  const { session, error } = await requireSession();
+  if (error) return error;
 
   try {
     const body = await request.json();
@@ -47,8 +46,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(result);
-  } catch (error) {
-    console.error("Erreur API pronostic POST:", error);
+  } catch (err) {
+    console.error("Erreur API pronostic POST:", err);
     return NextResponse.json(
       {
         success: false,
@@ -60,12 +59,11 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * GET: Récupère les pronostics d'un utilisateur
+ * GET: Récupère les pronostics de l'utilisateur connecté
  */
-export async function GET(request: NextRequest) {
-  const authResult = await requireSession(request);
-  if (authResult instanceof NextResponse) return authResult;
-  const { session } = authResult;
+export async function GET() {
+  const { session, error } = await requireSession();
+  if (error) return error;
 
   try {
     const pronostics = await getUserPronostics(session.user.id);
@@ -74,8 +72,8 @@ export async function GET(request: NextRequest) {
       success: true,
       pronostics,
     });
-  } catch (error) {
-    console.error("Erreur API pronostic GET:", error);
+  } catch (err) {
+    console.error("Erreur API pronostic GET:", err);
     return NextResponse.json(
       {
         success: false,

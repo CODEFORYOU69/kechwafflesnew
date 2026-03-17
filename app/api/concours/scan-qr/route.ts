@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateQRCode, recordQRScan } from "@/lib/concours/daily-qr";
-import { requireSession } from "@/lib/api-helpers";
+import { requireSession } from "@/lib/auth-helpers";
 
 export async function POST(request: NextRequest) {
-  const authResult = await requireSession(request);
-  if (authResult instanceof NextResponse) return authResult;
-  const { session } = authResult;
+  const { session, error } = await requireSession();
+  if (error) return error;
 
   try {
     const body = await request.json();
@@ -42,8 +41,8 @@ export async function POST(request: NextRequest) {
       message: result.message,
       isFirstScan: result.isFirstScan,
     });
-  } catch (error) {
-    console.error("Erreur API scan-qr:", error);
+  } catch (err) {
+    console.error("Erreur API scan-qr:", err);
     return NextResponse.json(
       {
         success: false,
