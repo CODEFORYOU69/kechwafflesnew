@@ -1,262 +1,235 @@
 "use client";
 
-import FloatingBackground from "@/app/components/FloatingBackground";
-import { motion, useMotionValue, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { Parallax, Reveal } from "../components/Parallax";
 
-interface ProductImage {
-  front: string;
-  back: string;
-  backDescription: string;
-}
-
-interface Product {
-  id: number;
+type Product = {
+  id: string;
   name: string;
+  tagline: string;
   description: string;
-  imageUrl: ProductImage;
-  backDescription: string;
-}
+  story: string;
+  details: string[];
+  image: string;
+};
 
 const products: Product[] = [
   {
-    id: 1,
+    id: "ticanmisu",
     name: "TiCanMisu",
-    description: "Notre tiramisu signature en bocal",
-    imageUrl: {
-      front: "/images/menu-items/ticandaim.png",
-      back: "/images/menu-items/ticandaim.png",
-      backDescription:
-        "Préparé avec amour, chaque couche est soigneusement assemblée...",
-    },
-    backDescription:
-      "Un dessert traditionnel revisité, servi dans des bocaux hermétiques élégants. Parfait pour emporter ou offrir, nos TiCanMisu sont disponibles en plusieurs saveurs exquises : Dubai Chocolate, Amlou, Speculoos, et bien plus encore !",
+    tagline: "Le tiramisu, en canette.",
+    description:
+      "Notre tiramisu signature, conditionné frais en canette hermétique. Mascarpone, café, biscuits imbibés — et plusieurs déclinaisons exclusives.",
+    story:
+      "Préparé à la main, chaque couche est assemblée avec précision. Dubai Chocolate, Amlou, Spéculoos — chaque canette raconte une version différente de l'original.",
+    details: [
+      "Préparation quotidienne",
+      "Mascarpone premium",
+      "Plusieurs saveurs",
+      "Format nomade",
+    ],
+    image: "/images/menu-items/ticandaim.png",
   },
   {
-    id: 2,
-    name: "Waffle Pizza",
-    description: "L'audace sucrée-salée réinventée",
-    imageUrl: {
-      front: "/images/menu-items/wafflepizza.png",
-      back: "/images/menu-items/wafflepizza.png",
-      backDescription:
-        "Une création audacieuse qui marie la texture croustillante de la gaufre avec la générosité d'une pizza. Garnie de fromage fondant, tomates fraîches, et basilic, cette fusion culinaire unique saura surprendre vos papilles !",
-    },
-    backDescription:
-      "Une création audacieuse qui marie la texture croustillante de la gaufre avec la générosité d'une pizza. Garnie de fromage fondant, tomates fraîches, et basilic, cette fusion culinaire unique saura surprendre vos papilles !",
+    id: "pizza-waffle",
+    name: "Pizza Waffle",
+    tagline: "L'Italie rencontre la Belgique.",
+    description:
+      "Une gaufre salée maison — fromages fondus, herbes, lardons — garnie comme une pizza et gratinée au four. Base tomate ou crème, garnitures au choix.",
+    story:
+      "L'audace sucrée-salée réinventée. Une texture croustillante, un cœur filant, une générosité qui ne ressemble à rien d'autre.",
+    details: [
+      "Base tomate ou crème",
+      "Garnitures au choix",
+      "Gratinée minute",
+      "Concept signature",
+    ],
+    image: "/images/menu-items/wafflepizza.png",
   },
 ];
 
-// Composant pour la flèche animée
-function AnimatedArrow() {
-  return (
-    <motion.div
-      className="w-24 h-24 mx-auto mt-4"
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.svg
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full text-amber-900"
-      >
-        <motion.path
-          d="M4 12 L20 12 M13 5 L20 12 L13 19"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{
-            pathLength: 1,
-            opacity: 1,
-            transition: {
-              pathLength: { duration: 1, repeat: Infinity },
-              opacity: { duration: 0.2 },
-            },
-          }}
-        />
-      </motion.svg>
-    </motion.div>
-  );
-}
-
 export default function ProductPage() {
   return (
-    <FloatingBackground>
-      {/* Hero Section */}
-      <section className="py-20 px-4 text-center">
-        <div className="bg-white/80 backdrop-blur-sm p-6 rounded-lg inline-block">
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl font-bold text-amber-900 mb-6"
-          >
-            Nos Produits Exclusifs
-          </motion.h1>
-        </div>
-      </section>
-
-      {/* Products Section */}
-      <section className="max-w-5xl mx-auto px-4 py-12 mb-20">
-        <div className="flex flex-col gap-24">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-    </FloatingBackground>
+    <>
+      <ProductHero />
+      <div className="bg-[hsl(var(--bg))]">
+        {products.map((p, i) => (
+          <ProductShowcase key={p.id} product={p} index={i} />
+        ))}
+      </div>
+      <ProductCTA />
+    </>
   );
 }
 
-function ProductCard({ product }: { product: Product }) {
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-100, 100], [30, -30]);
-  const rotateY = useTransform(x, [-100, 100], [-30, 30]);
+function ProductHero() {
+  return (
+    <section className="relative flex min-h-[70vh] items-end bg-[hsl(var(--ink-950))] px-6 pb-20 pt-40 md:px-10">
+      <div className="mx-auto w-full max-w-[1440px]">
+        <Reveal>
+          <p className="text-eyebrow mb-8 text-[hsl(var(--accent))]">
+            — Collection signature
+          </p>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h1 className="text-hero text-balance text-[hsl(var(--text))]">
+            Produits d&apos;atelier,
+            <br />
+            <span className="serif-italic text-[hsl(var(--accent))]">
+              éditions limitées.
+            </span>
+          </h1>
+        </Reveal>
+        <Reveal delay={0.25}>
+          <p className="mt-10 max-w-2xl text-subhead text-[hsl(var(--text-muted))]">
+            Deux créations exclusives. Fabriquées sur place, servies fraîches,
+            pensées pour rester en tête.
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
 
-  // Réinitialiser l'état de la frappe lors du retournement
-  const handleFlip = () => {
-    if (isFlipped) {
-      setIsTyping(false); // Arrête l'effet de frappe
-      setTimeout(() => {
-        setIsFlipped(false);
-      }, 100); // Petit délai pour laisser le texte s'effacer
-    } else {
-      setIsFlipped(true);
-      setIsTyping(true);
-    }
-  };
+function ProductShowcase({ product, index }: { product: Product; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const imgScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 1.05]);
+
+  const reverse = index % 2 === 1;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="relative group"
+    <section
+      ref={ref}
+      className="relative border-t border-white/5 py-32 md:py-48"
     >
-      <motion.div
-        style={{
-          x,
-          y,
-          rotateX,
-          rotateY,
-          z: 100,
-        }}
-        drag
-        dragElastic={0.1}
-        dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-        whileTap={{ cursor: "grabbing" }}
-        className="relative w-full bg-white/90 backdrop-blur-md rounded-xl p-8 cursor-grab"
-      >
-        {/* Ombre décorative */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-300" />
-
-        {/* Contenu de la carte */}
-        <div className="relative bg-white/95 backdrop-blur-md rounded-lg p-6 flex flex-col items-center gap-8">
-          <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg">
-            <h2 className="text-4xl font-bold text-amber-900">
-              {product.name}
-            </h2>
-          </div>
-
-          {/* Container pour l'effet de flip */}
-          <div className="w-full cursor-pointer" onClick={handleFlip}>
+      <div className="mx-auto grid w-full max-w-[1440px] items-center gap-12 px-6 md:grid-cols-12 md:gap-16 md:px-10">
+        {/* Image */}
+        <div className={reverse ? "md:order-2 md:col-span-7" : "md:col-span-7"}>
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[var(--radius-lg)] bg-[hsl(var(--ink-900))] md:aspect-[5/4]">
             <motion.div
-              animate={{
-                rotateY: isFlipped ? 180 : 0,
-                scale: isFlipped ? 0.7 : 1,
-              }}
-              transition={{
-                duration: 0.6,
-                scale: { delay: isFlipped ? 0 : 0.3 },
-              }}
-              className="relative w-full preserve-3d"
+              style={{ y: imgY, scale: imgScale }}
+              className="absolute inset-0 flex items-center justify-center"
             >
-              {/* Face avant */}
-              <div className="w-full backface-hidden">
-                <div className="relative aspect-[16/9]">
-                  <Image
-                    src={product.imageUrl.front}
-                    alt={product.name}
-                    fill
-                    className="object-contain rounded-lg"
-                    priority
-                  />
-                </div>
-              </div>
-
-              {/* Face arrière */}
-              <div
-                className="absolute top-0 left-0 w-full h-full backface-hidden bg-amber-50/95 backdrop-blur-md rounded-lg p-6 flex flex-col items-center justify-between"
-                style={{ transform: "rotateY(180deg)" }}
-              >
-                <div className="relative w-full aspect-[16/9]">
-                  <Image
-                    src={product.imageUrl.back}
-                    alt={`${product.name} détail`}
-                    fill
-                    className="object-contain rounded-lg"
-                  />
-                </div>
-                <motion.div
-                  className="w-full text-center mt-4 font-mono bg-white/80 backdrop-blur-sm p-4 rounded-lg"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: isTyping ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {isTyping && (
-                    <TypewriterEffect
-                      text={product.imageUrl.backDescription}
-                      delay={50}
-                    />
-                  )}
-                </motion.div>
-              </div>
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                sizes="(max-width: 768px) 100vw, 60vw"
+                className="object-contain p-8 md:p-16"
+              />
             </motion.div>
-
-            {/* Flèche animée */}
-            {!isFlipped && <AnimatedArrow />}
+            {/* ambient glow */}
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(var(--accent)/0.12),transparent_70%)]" />
           </div>
         </div>
-      </motion.div>
 
-      {/* Ombre portée */}
-      <div className="absolute -inset-4 -z-10 bg-amber-200/20 rounded-xl blur-xl transform-gpu opacity-50 group-hover:opacity-75 transition duration-300" />
-    </motion.div>
+        {/* Copy */}
+        <div className={reverse ? "md:order-1 md:col-span-5" : "md:col-span-5 md:col-start-8"}>
+          <Reveal>
+            <p className="text-eyebrow text-[hsl(var(--text-subtle))]">
+              {String(index + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="text-section mt-6 text-[hsl(var(--text))]">
+              {product.name}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <p className="serif-italic mt-4 text-2xl text-[hsl(var(--accent))]">
+              {product.tagline}
+            </p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="mt-8 text-subhead text-[hsl(var(--text-muted))]">
+              {product.description}
+            </p>
+          </Reveal>
+          <Reveal delay={0.28}>
+            <p className="mt-4 text-[15px] font-light leading-relaxed text-[hsl(var(--text-subtle))]">
+              {product.story}
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.35}>
+            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-white/5 pt-8">
+              {product.details.map((d, i) => (
+                <div key={d} className="flex items-baseline gap-2">
+                  <span className="text-eyebrow text-[hsl(var(--text-subtle))]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm font-light text-[hsl(var(--text-muted))]">
+                    {d}
+                  </span>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+
+          <Reveal delay={0.42}>
+            <Link
+              href="/menu"
+              className="group mt-10 inline-flex items-center gap-3 rounded-[var(--radius-full)] border border-white/15 px-6 py-3 text-sm text-[hsl(var(--text))] transition hover:border-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.08)] hover:text-[hsl(var(--accent))]"
+            >
+              Voir sur la carte
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </Link>
+          </Reveal>
+        </div>
+      </div>
+    </section>
   );
 }
 
-// Composant pour l'effet de machine à écrire
-function TypewriterEffect({
-  text,
-  delay = 50,
-}: {
-  text: string;
-  delay?: number;
-}) {
-  const [displayedText, setDisplayedText] = useState("");
+function ProductCTA() {
+  return (
+    <section className="relative overflow-hidden border-t border-white/5 bg-[hsl(var(--ink-900))] py-32 md:py-40">
+      <Parallax speed={0.7} className="pointer-events-none absolute inset-0 -z-10">
+        <div className="relative h-full w-full opacity-40">
+          <Image
+            src="/images/story/gallery-5.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
+      </Parallax>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[hsl(var(--ink-900))]/60 via-[hsl(var(--ink-900))]/80 to-[hsl(var(--ink-900))]" />
 
-  useEffect(() => {
-    let index = 0;
-    setDisplayedText("");
-
-    const timer = setInterval(() => {
-      if (index < text.length) {
-        setDisplayedText((prev) => prev + text.charAt(index));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, delay);
-
-    return () => clearInterval(timer);
-  }, [text, delay]);
-
-  return <span>{displayedText}</span>;
+      <div className="mx-auto w-full max-w-[1440px] px-6 text-center md:px-10">
+        <Reveal>
+          <p className="text-eyebrow mb-6 text-[hsl(var(--accent))]">
+            — L&apos;essentiel
+          </p>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="text-hero text-balance text-[hsl(var(--text))]">
+            À tester,
+            <br />
+            <span className="serif-italic text-[hsl(var(--accent))]">
+              à partager.
+            </span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.2}>
+          <Link
+            href="/menu"
+            className="group mt-12 inline-flex items-center gap-3 rounded-[var(--radius-full)] bg-[hsl(var(--accent))] px-8 py-4 text-sm font-medium text-[hsl(var(--ink-950))] transition hover:bg-[hsl(var(--accent-soft))]"
+          >
+            Explorer la carte complète
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </Link>
+        </Reveal>
+      </div>
+    </section>
+  );
 }

@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import FloatingBackground from "@/app/components/FloatingBackground";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
+import { Reveal } from "../components/Parallax";
 
 type ProductVariant = {
   option1Name: string | null;
@@ -31,84 +29,23 @@ type Product = {
   isActive?: boolean;
 };
 
-interface ProductCardProps {
-  product: Product;
-}
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 20 },
+type Tab = {
+  id: string;
+  label: string;
+  sublabel: string;
 };
 
-const cardHover = {
-  scale: 1.03,
-  transition: { duration: 0.2 },
-};
-
-// Product Card Component
-const ProductCard = ({ product }: ProductCardProps) => (
-  <motion.div
-    variants={fadeInUp}
-    whileHover={cardHover}
-    className={`p-4 border rounded-lg bg-white/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 ${
-      product.outOfStock ? "opacity-70" : ""
-    }`}
-  >
-    {product.image && (
-      <div className="relative w-full h-32 mb-3 overflow-hidden rounded-md">
-        <motion.div whileHover={{ scale: 1.1 }} className="h-full">
-          <Image
-            src={`/images/menu-items/${product.image}`}
-            alt={product.name}
-            fill
-            className={`object-cover ${product.outOfStock ? "grayscale" : ""}`}
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-
-        {/* Badge "Victime de son succès" */}
-        {product.outOfStock && (
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28">
-            <Image
-              src="/images/victime.png"
-              alt="Victime de son succès"
-              fill
-              className="object-contain drop-shadow-lg"
-            />
-          </div>
-        )}
-      </div>
-    )}
-    <motion.div whileHover={{ scale: 1.02 }}>
-      <h3 className={`font-semibold text-lg mb-1 ${product.outOfStock ? "text-gray-500" : ""}`}>
-        {product.name}
-      </h3>
-      {product.description && (
-        <p className={`text-sm mb-2 ${product.outOfStock ? "text-gray-400" : "text-gray-600"}`}>
-          {product.description}
-        </p>
-      )}
-
-      {product.variants && product.variants.length > 0 && (
-        <div className="space-y-1">
-          {product.variants.map((variant, index) => (
-            <div key={index} className="text-sm">
-              <span className={product.outOfStock ? "text-gray-400" : "text-gray-700"}>
-                {variant.option1Value}
-                {variant.option2Value && ` - ${variant.option2Value}`}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </motion.div>
-  </motion.div>
-);
+const tabs: Tab[] = [
+  { id: "salees", label: "Salées", sublabel: "Pizza · Potato" },
+  { id: "sucrees", label: "Sucrées", sublabel: "Gaufres · Bubble · Crêpes" },
+  { id: "cans", label: "Cans", sublabel: "À emporter" },
+  { id: "boissons", label: "Boissons", sublabel: "Cafés · Shakes · Jus" },
+];
 
 export default function MenuPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState("salees");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -124,543 +61,295 @@ export default function MenuPage() {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-amber-500" />
+      <div className="flex min-h-screen items-center justify-center bg-[hsl(var(--bg))]">
+        <Loader2 className="h-10 w-10 animate-spin text-[hsl(var(--accent))]" />
       </div>
     );
   }
 
-  // ===== SALÉES =====
-  const basesSalees = products.filter(
-    (p) => p.category === "Bases Salées" && p.isActive !== false
-  );
-  const saucesSalees = products.filter(
-    (p) => p.category === "Sauces Salées" && p.isActive !== false
-  );
-  const recettesSignaturesSalees = products.filter(
-    (p) => p.category === "Recettes Salées - Signatures" && p.isActive !== false
-  );
-  const recettesClassiquesSalees = products.filter(
-    (p) => p.category === "Recettes Salées - Classiques" && p.isActive !== false
-  );
+  const by = (cat: string) =>
+    products.filter((p) => p.category === cat && p.isActive !== false);
 
-  // ===== SUCRÉES =====
-  const basesSucrees = products.filter(
-    (p) => p.category === "Bases Sucrées" && p.isActive !== false
-  );
-  const recettesSignaturesSucrees = products.filter(
-    (p) => p.category === "Recettes Sucrées - Signatures" && p.isActive !== false
-  );
-  const dessertsCans = products.filter(
-    (p) => p.category === "Desserts - Cans" && p.isActive !== false
-  );
+  // Salées
+  const basesSalees = by("Bases Salées");
+  const saucesSalees = by("Sauces Salées");
+  const recettesSignaturesSalees = by("Recettes Salées - Signatures");
+  const recettesClassiquesSalees = by("Recettes Salées - Classiques");
 
-  // ===== BOISSONS =====
-  const cafes = products.filter((p) => p.category === "Boissons - Cafés" && p.isActive !== false);
-  const boissonsLactees = products.filter(
-    (p) => p.category === "Boissons - Boissons Lactées" && p.isActive !== false
-  );
-  const milkshakes = products.filter(
-    (p) => p.category === "Boissons - Milkshakes" && p.isActive !== false
-  );
-  const boissonsSpeciales = products.filter(
-    (p) => p.category === "Boissons - Spécialisées" && p.isActive !== false
-  );
-  const boissonsIceLactees = products.filter(
-    (p) => p.category === "Boissons Ice Lactées" && p.isActive !== false
-  );
-  const eauxSoftDrinks = products.filter(
-    (p) => p.category === "Eaux & Soft Drinks" && p.isActive !== false
-  );
-  const jusFrais = products.filter(
-    (p) => p.category === "Jus Frais Pressés" && p.isActive !== false
-  );
-  const shotsVitamines = products.filter(
-    (p) => p.category === "Shots Vitaminés" && p.isActive !== false
-  );
+  // Sucrées
+  const basesSucrees = by("Bases Sucrées");
+  const recettesSignaturesSucrees = by("Recettes Sucrées - Signatures");
+  const dessertsCans = by("Desserts - Cans");
 
-  // ===== SUPPLÉMENTS =====
-  const allSupplements = products.filter(
-    (p) => p.category === "Modificateurs" && p.isActive !== false
-  );
+  // Boissons
+  const cafes = by("Boissons - Cafés");
+  const boissonsLactees = by("Boissons - Boissons Lactées");
+  const milkshakes = by("Boissons - Milkshakes");
+  const boissonsSpeciales = by("Boissons - Spécialisées");
+  const boissonsIceLactees = by("Boissons Ice Lactées");
+  const eauxSoftDrinks = by("Eaux & Soft Drinks");
+  const jusFrais = by("Jus Frais Pressés");
+  const shotsVitamines = by("Shots Vitaminés");
 
-  // Mots-clés pour identifier les suppléments salés
+  // Supplements
   const saltyKeywords = [
     "jambon", "mozzarella", "olives", "pepperoni", "poulet", "thon",
     "viande", "cheddar", "oignons", "gruyère", "gruyere", "harissa",
-    "mayo", "pesto", "saucisse", "fromage", "oeuf", "œuf"
+    "mayo", "pesto", "saucisse", "fromage", "oeuf", "œuf",
   ];
-
+  const normalize = (s: string) =>
+    s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const allSupplements = by("Modificateurs");
   const supplementsSales = allSupplements.filter((p) => {
-    const nameLower = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    return saltyKeywords.some((kw) => nameLower.includes(kw.normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+    const n = normalize(p.name);
+    return saltyKeywords.some((kw) => n.includes(normalize(kw)));
   });
-
   const supplementsSucres = allSupplements.filter((p) => {
-    const nameLower = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    return !saltyKeywords.some((kw) => nameLower.includes(kw.normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+    const n = normalize(p.name);
+    return !saltyKeywords.some((kw) => n.includes(normalize(kw)));
   });
 
   return (
-    <FloatingBackground>
-      <div className="relative min-h-screen">
-        <motion.main
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="relative z-10 min-h-screen p-6"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="relative z-10 max-w-4xl mx-auto"
-          >
-            <Tabs defaultValue="salees" className="w-full">
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <TabsList className="w-full mb-6 grid grid-cols-2 md:grid-cols-4">
-                  <TabsTrigger value="salees" className="flex-1">
-                    <motion.span whileHover={{ scale: 1.05 }}>
-                      Waffles Salées
-                    </motion.span>
-                  </TabsTrigger>
-                  <TabsTrigger value="sucrees" className="flex-1">
-                    <motion.span whileHover={{ scale: 1.05 }}>
-                      Waffles Sucrées
-                    </motion.span>
-                  </TabsTrigger>
-                  <TabsTrigger value="cans" className="flex-1">
-                    <motion.span whileHover={{ scale: 1.05 }}>
-                      Cans
-                    </motion.span>
-                  </TabsTrigger>
-                  <TabsTrigger value="boissons" className="flex-1">
-                    <motion.span whileHover={{ scale: 1.05 }}>
-                      Boissons
-                    </motion.span>
-                  </TabsTrigger>
-                </TabsList>
-              </motion.div>
+    <>
+      <MenuHero />
 
-              <AnimatePresence mode="wait">
-                {/* SALÉES SECTION */}
-                <TabsContent
-                  value="salees"
-                  className="bg-white/90 rounded-lg p-6"
-                >
-                  <motion.h2
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="text-2xl font-bold mb-6"
+      <section className="bg-[hsl(var(--bg))] pb-32">
+        <div className="mx-auto w-full max-w-[1440px] px-6 md:px-10">
+          {/* Tab rail */}
+          <div className="sticky top-[72px] z-30 -mx-6 mb-12 border-b border-white/5 bg-[hsl(var(--bg))]/85 px-6 backdrop-blur-xl md:top-[80px] md:-mx-10 md:px-10">
+            <div className="flex gap-1 overflow-x-auto py-4 md:gap-2">
+              {tabs.map((t) => {
+                const isActive = active === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => setActive(t.id)}
+                    className={[
+                      "group relative flex flex-shrink-0 flex-col items-start rounded-[var(--radius-md)] px-5 py-3 text-left transition",
+                      isActive
+                        ? "bg-[hsl(var(--ink-900))]"
+                        : "hover:bg-[hsl(var(--ink-900))]/50",
+                    ].join(" ")}
                   >
-                    Nos Waffles Salées 🧇
-                  </motion.h2>
+                    <span
+                      className={[
+                        "font-display text-lg transition-colors",
+                        isActive
+                          ? "text-[hsl(var(--accent))]"
+                          : "text-[hsl(var(--text))]",
+                      ].join(" ")}
+                    >
+                      {t.label}
+                    </span>
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-[hsl(var(--text-subtle))]">
+                      {t.sublabel}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-                  <motion.div
-                    variants={staggerContainer}
-                    initial="hidden"
-                    animate="show"
-                    className="space-y-6"
-                  >
-                    {/* Comment ça marche */}
-                    <motion.div key="comment-ca-marche" variants={fadeInUp}>
-                      <Card className="bg-amber-50 border-amber-200">
-                        <CardHeader>
-                          <CardTitle className="text-amber-800">Comment ça marche ?</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-amber-700">
-                          <ol className="list-decimal list-inside space-y-2">
-                            <li>Choisissez votre <strong>base</strong> (Pizza Waffle ou Potato Waffle)</li>
-                            <li>Choisissez votre <strong>sauce</strong> (Tomate ou Crème)</li>
-                            <li>Choisissez votre <strong>recette</strong> (Signature ou Classique)</li>
-                            <li>Ajoutez des <strong>suppléments</strong> si vous le souhaitez !</li>
-                          </ol>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="space-y-20"
+            >
+              {active === "salees" && (
+                <>
+                  <Intro title="Composer sa gaufre salée" description="1. Base · 2. Sauce · 3. Recette · 4. Suppléments." />
+                  <Group n="01" title="Les bases" items={basesSalees} />
+                  <Group n="02" title="Les sauces" items={saucesSalees} />
+                  <Group n="03" title="Recettes signatures" items={recettesSignaturesSalees} accent />
+                  <Group n="04" title="Recettes classiques" items={recettesClassiquesSalees} />
+                  <Group n="+" title="Suppléments salés" items={supplementsSales} compact />
+                </>
+              )}
 
-                    {/* Bases */}
-                    <motion.div key="bases-salees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>1. Choisissez votre base</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {basesSalees.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
+              {active === "sucrees" && (
+                <>
+                  <Intro title="Composer son dessert" description="1. Base · 2. Recette ou libre · 3. Toppings." />
+                  <Group n="01" title="Les bases" items={basesSucrees} />
+                  <Group n="02" title="Créations signatures" items={recettesSignaturesSucrees} accent />
+                  <Group n="+" title="Toppings" items={supplementsSucres} compact />
+                </>
+              )}
 
-                    {/* Sauces */}
-                    <motion.div key="sauces-salees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>2. Choisissez votre sauce</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {saucesSalees.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
+              {active === "cans" && (
+                <>
+                  <Intro title="Desserts à emporter" description="Nos créations en format nomade. Frais, hermétique, prêt à partir." />
+                  <Group n="01" title="Nos cans" items={dessertsCans} />
+                </>
+              )}
 
-                    {/* Recettes Signatures */}
-                    <motion.div key="signatures-salees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow border-2 border-amber-400">
-                        <CardHeader className="bg-amber-50">
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>3. Nos Recettes Signatures ⭐</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-                          {recettesSignaturesSalees.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
+              {active === "boissons" && (
+                <>
+                  <Intro title="Boissons signatures" description="Cafés, shakes, jus frais et shots vitaminés." />
+                  <Group n="01" title="Cafés" items={cafes} />
+                  <Group n="02" title="Lactées" items={boissonsLactees} />
+                  <Group n="03" title="Ice lactées" items={boissonsIceLactees} />
+                  <Group n="04" title="Milkshakes" items={milkshakes} />
+                  <Group n="05" title="Spécialités" items={boissonsSpeciales} />
+                  <Group n="06" title="Jus frais pressés" items={jusFrais} />
+                  <Group n="07" title="Shots vitaminés" items={shotsVitamines} />
+                  <Group n="08" title="Eaux & soft drinks" items={eauxSoftDrinks} />
+                </>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+    </>
+  );
+}
 
-                    {/* Recettes Classiques */}
-                    <motion.div key="classiques-salees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>3. Ou nos Recettes Classiques</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {recettesClassiquesSalees.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    {/* Suppléments Salés */}
-                    <motion.div key="supplements-salees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>4. Ajoutez des suppléments</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                          {supplementsSales.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  </motion.div>
-                </TabsContent>
-
-                {/* SUCRÉES SECTION */}
-                <TabsContent
-                  value="sucrees"
-                  className="bg-white/90 rounded-lg p-6"
-                >
-                  <motion.h2
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="text-2xl font-bold mb-6"
-                  >
-                    Nos Waffles Sucrées 🍫
-                  </motion.h2>
-
-                  <motion.div
-                    variants={staggerContainer}
-                    initial="hidden"
-                    animate="show"
-                    className="space-y-6"
-                  >
-                    {/* Comment ça marche */}
-                    <motion.div key="comment-sucrees" variants={fadeInUp}>
-                      <Card className="bg-pink-50 border-pink-200">
-                        <CardHeader>
-                          <CardTitle className="text-pink-800">Composez votre dessert !</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-pink-700">
-                          <ol className="list-decimal list-inside space-y-2">
-                            <li>Choisissez votre <strong>base</strong> (Gaufre, Craffle, Pancakes...)</li>
-                            <li>Optez pour une de nos <strong>recettes signatures</strong> ou composez la vôtre</li>
-                            <li>Ajoutez vos <strong>toppings</strong> (fruits, sauces, glaces...)</li>
-                          </ol>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    {/* Bases Sucrées */}
-                    <motion.div key="bases-sucrees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>1. Choisissez votre base</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {basesSucrees.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    {/* Recettes Signatures Sucrées */}
-                    <motion.div key="signatures-sucrees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow border-2 border-pink-400">
-                        <CardHeader className="bg-pink-50">
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>2. Nos Créations Signatures ⭐</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-                          {recettesSignaturesSucrees.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    {/* Toppings Sucrés */}
-                    <motion.div key="toppings-sucres" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>3. Ajoutez vos toppings</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                          {supplementsSucres.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                  </motion.div>
-                </TabsContent>
-
-                {/* CANS SECTION */}
-                <TabsContent
-                  value="cans"
-                  className="bg-white/90 rounded-lg p-6"
-                >
-                  <motion.h2
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="text-2xl font-bold mb-6"
-                  >
-                    Nos Cans 🥫
-                  </motion.h2>
-
-                  <motion.div
-                    variants={staggerContainer}
-                    initial="hidden"
-                    animate="show"
-                    className="space-y-6"
-                  >
-                    {/* Description */}
-                    <motion.div key="cans-desc" variants={fadeInUp}>
-                      <Card className="bg-purple-50 border-purple-200">
-                        <CardHeader>
-                          <CardTitle className="text-purple-800">Desserts en pot à emporter !</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-purple-700">
-                          <p>Nos créations gourmandes en format pratique. Parfait pour une pause sucrée où vous voulez !</p>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    {/* Cans */}
-                    <motion.div key="cans-list" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Nos Cans</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {dessertsCans.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  </motion.div>
-                </TabsContent>
-
-                {/* BOISSONS SECTION */}
-                <TabsContent
-                  value="boissons"
-                  className="bg-white/90 rounded-lg p-6"
-                >
-                  <motion.h2
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="text-2xl font-bold mb-6"
-                  >
-                    Nos Boissons
-                  </motion.h2>
-
-                  <motion.div
-                    variants={staggerContainer}
-                    initial="hidden"
-                    animate="show"
-                    className="space-y-6"
-                  >
-                    <motion.div key="cafes" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Cafés</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {cafes.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div key="boissons-lactees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Boissons Lactées</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {boissonsLactees.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div key="milkshakes" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Milkshakes</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {milkshakes.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div key="boissons-speciales" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Boissons Spécialisées</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {boissonsSpeciales.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div key="boissons-ice-lactees" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Boissons Ice Lactées</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {boissonsIceLactees.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div key="eaux-soft-drinks" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Eaux & Soft Drinks</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {eauxSoftDrinks.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div key="jus-frais" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Jus Frais Pressés</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {jusFrais.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-
-                    <motion.div key="shots-vitamines" variants={fadeInUp}>
-                      <Card className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                          <motion.div whileHover={{ scale: 1.01 }}>
-                            <CardTitle>Shots Vitaminés</CardTitle>
-                          </motion.div>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {shotsVitamines.map((product, idx) => (
-                            <ProductCard key={`${product.handle}-${product.sku}-${idx}`} product={product} />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  </motion.div>
-                </TabsContent>
-
-              </AnimatePresence>
-            </Tabs>
-          </motion.div>
-        </motion.main>
+function MenuHero() {
+  return (
+    <section className="relative flex min-h-[60vh] items-end bg-[hsl(var(--ink-950))] px-6 pb-16 pt-40 md:min-h-[70vh] md:px-10">
+      <div className="mx-auto w-full max-w-[1440px]">
+        <Reveal>
+          <p className="text-eyebrow mb-6 text-[hsl(var(--accent))]">
+            — La carte
+          </p>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h1 className="text-hero text-balance text-[hsl(var(--text))]">
+            Tout ce qui
+            <br />
+            <span className="serif-italic text-[hsl(var(--accent))]">
+              sort de l&apos;atelier.
+            </span>
+          </h1>
+        </Reveal>
       </div>
-    </FloatingBackground>
+    </section>
+  );
+}
+
+function Intro({ title, description }: { title: string; description: string }) {
+  return (
+    <Reveal>
+      <div className="flex flex-col gap-3 border-b border-white/5 pb-10 md:flex-row md:items-end md:justify-between">
+        <h2 className="text-section text-[hsl(var(--text))]">{title}</h2>
+        <p className="text-sm font-light text-[hsl(var(--text-muted))] md:max-w-sm md:text-right">
+          {description}
+        </p>
+      </div>
+    </Reveal>
+  );
+}
+
+function Group({
+  n,
+  title,
+  items,
+  accent = false,
+  compact = false,
+}: {
+  n: string;
+  title: string;
+  items: Product[];
+  accent?: boolean;
+  compact?: boolean;
+}) {
+  if (!items.length) return null;
+  return (
+    <div>
+      <Reveal>
+        <div className="mb-8 flex items-baseline gap-4">
+          <span
+            className={[
+              "font-display text-2xl",
+              accent ? "text-[hsl(var(--accent))]" : "text-[hsl(var(--text-subtle))]",
+            ].join(" ")}
+          >
+            {n}
+          </span>
+          <h3 className="text-headline text-[hsl(var(--text))]">{title}</h3>
+          <span className="h-px flex-1 bg-white/5" />
+          <span className="text-xs uppercase tracking-[0.2em] text-[hsl(var(--text-subtle))]">
+            {items.length} {items.length > 1 ? "articles" : "article"}
+          </span>
+        </div>
+      </Reveal>
+
+      <div
+        className={[
+          "grid gap-4",
+          compact
+            ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+        ].join(" ")}
+      >
+        {items.map((p, i) => (
+          <MenuCard key={`${p.handle}-${p.sku}-${i}`} product={p} compact={compact} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MenuCard({ product, compact = false }: { product: Product; compact?: boolean }) {
+  const isOut = product.outOfStock;
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-5% 0px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className={[
+        "group relative flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/5 bg-[hsl(var(--ink-900))] transition hover:border-white/15",
+        isOut ? "opacity-60" : "",
+      ].join(" ")}
+    >
+      {product.image && (
+        <div className={`relative ${compact ? "aspect-square" : "aspect-[5/4]"} overflow-hidden bg-[hsl(var(--ink-800))]`}>
+          <Image
+            src={`/images/menu-items/${product.image}`}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 50vw, 33vw"
+            className={`object-cover transition-transform duration-700 group-hover:scale-105 ${isOut ? "grayscale" : ""}`}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--ink-900))]/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+          {isOut && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="rounded-[var(--radius-full)] bg-[hsl(var(--ink-950))]/80 px-4 py-2 text-xs uppercase tracking-[0.2em] text-[hsl(var(--accent))] backdrop-blur">
+                Victime de son succès
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+      <div className={compact ? "p-4" : "p-6"}>
+        <h4 className={`font-display ${compact ? "text-base" : "text-xl"} text-[hsl(var(--text))]`}>
+          {product.name}
+        </h4>
+        {product.description && !compact && (
+          <p className="mt-2 text-sm font-light leading-relaxed text-[hsl(var(--text-muted))]">
+            {product.description}
+          </p>
+        )}
+        {product.variants && product.variants.length > 0 && (
+          <ul className="mt-3 space-y-1 text-xs font-light text-[hsl(var(--text-subtle))]">
+            {product.variants.map((v, idx) => (
+              <li key={idx}>
+                {v.option1Value}
+                {v.option2Value ? ` · ${v.option2Value}` : ""}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </motion.article>
   );
 }
