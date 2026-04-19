@@ -3,7 +3,6 @@ import { Inter, Instrument_Serif } from "next/font/google";
 import { Navigation } from "./components/Navigation";
 import { WhatsAppButton } from "./components/WhatsappButton";
 import { StructuredData } from "./components/StructuredData";
-import { Toaster } from "sonner";
 import Footer from "./Footer";
 import "./globals.css";
 
@@ -105,12 +104,6 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
         <WhatsAppButton />
-        <Toaster
-          position="top-right"
-          richColors
-          theme="dark"
-          toastOptions={{ className: "font-sans" }}
-        />
       </body>
     </html>
   );
