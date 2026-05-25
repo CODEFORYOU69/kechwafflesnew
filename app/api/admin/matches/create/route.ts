@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth-helpers";
 
 /**
  * POST /api/admin/matches/create
  * Crée un nouveau match (pour les phases finales)
  */
 export async function POST(request: NextRequest) {
+  const { error } = await requireAdmin();
+  if (error) return error;
+
   try {
     const body = await request.json();
     const {
@@ -79,8 +83,8 @@ export async function POST(request: NextRequest) {
         scheduledAt: match.scheduledAt,
       },
     });
-  } catch (error) {
-    console.error("Error creating match:", error);
+  } catch (err) {
+    console.error("Error creating match:", err);
     return NextResponse.json(
       { success: false, error: "Erreur lors de la création du match" },
       { status: 500 }
@@ -93,6 +97,9 @@ export async function POST(request: NextRequest) {
  * Récupère la liste des équipes et le prochain numéro de match disponible
  */
 export async function GET() {
+  const { error } = await requireAdmin();
+  if (error) return error;
+
   try {
     // Récupérer toutes les équipes
     const teams = await prisma.team.findMany({
@@ -119,8 +126,8 @@ export async function GET() {
       teams,
       nextMatchNumber,
     });
-  } catch (error) {
-    console.error("Error fetching data:", error);
+  } catch (err) {
+    console.error("Error fetching data:", err);
     return NextResponse.json(
       { success: false, error: "Erreur serveur" },
       { status: 500 }

@@ -1,32 +1,23 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getUserStats } from "@/lib/concours/pronostic";
+import { requireSession } from "@/lib/auth-helpers";
 
 /**
- * GET: Récupère les statistiques d'un utilisateur
+ * GET: Récupère les statistiques de l'utilisateur connecté
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
+  const { session, error } = await requireSession();
+  if (error) return error;
+
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "userId requis",
-        },
-        { status: 400 }
-      );
-    }
-
-    const stats = await getUserStats(userId);
+    const stats = await getUserStats(session.user.id);
 
     return NextResponse.json({
       success: true,
       stats,
     });
-  } catch (error) {
-    console.error("Erreur API stats GET:", error);
+  } catch (err) {
+    console.error("Erreur API stats GET:", err);
     return NextResponse.json(
       {
         success: false,

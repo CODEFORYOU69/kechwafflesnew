@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAvailableMatches } from "@/lib/concours/pronostic";
+import { auth } from "@/lib/auth";
 
 /**
  * GET: Récupère les matchs disponibles pour pronostiquer
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    // userId optionnel - dérivé de la session si l'utilisateur est connecté
+    const session = await auth.api.getSession({ headers: request.headers }).catch(() => null);
+    const userId = session?.user?.id || undefined;
 
-    const matches = await getAvailableMatches(userId || undefined);
+    const matches = await getAvailableMatches(userId);
 
     return NextResponse.json({
       success: true,

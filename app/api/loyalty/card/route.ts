@@ -1,41 +1,38 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createMemberCard } from "@/lib/loyalty/member-card";
+import { requireSession } from "@/lib/auth-helpers";
 
 /**
- * GET: Récupère la carte membre d'un utilisateur (ou la crée si elle n'existe pas)
+ * GET: Récupère la carte membre de l'utilisateur connecté (ou la crée si elle n'existe pas)
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
+  const { session, error } = await requireSession();
+  if (error) return error;
+
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "userId requis",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Cherche la carte membre existante
+    // Cherche la carte membre existante, ou la crée (avec protection contre les races)
     let card = await prisma.memberCard.findUnique({
-      where: { userId },
+      where: { userId: session.user.id },
     });
 
-    // Si pas de carte, la créer
     if (!card) {
-      card = await createMemberCard(userId);
+      try {
+        card = await createMemberCard(session.user.id);
+      } catch {
+        // Concurrent creation: retry the lookup
+        card = await prisma.memberCard.findUnique({
+          where: { userId: session.user.id },
+        });
+      }
     }
 
     return NextResponse.json({
       success: true,
       card,
     });
-  } catch (error) {
-    console.error("Erreur API loyalty/card GET:", error);
+  } catch (err) {
+    console.error("Erreur API loyalty/card GET:", err);
     return NextResponse.json(
       {
         success: false,

@@ -1,26 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireSession } from "@/lib/auth-helpers";
 
 /**
- * GET: Récupère les rewards d'un utilisateur
+ * GET: Récupère les rewards de l'utilisateur connecté
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
+  const { session, error } = await requireSession();
+  if (error) return error;
+
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "userId requis",
-        },
-        { status: 400 }
-      );
-    }
-
     const rewards = await prisma.reward.findMany({
-      where: { userId },
+      where: { userId: session.user.id },
       orderBy: {
         createdAt: "desc",
       },
@@ -30,8 +21,8 @@ export async function GET(request: NextRequest) {
       success: true,
       rewards,
     });
-  } catch (error) {
-    console.error("Erreur API rewards GET:", error);
+  } catch (err) {
+    console.error("Erreur API rewards GET:", err);
     return NextResponse.json(
       {
         success: false,

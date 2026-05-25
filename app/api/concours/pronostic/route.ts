@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createOrUpdatePronostic, getUserPronostics } from "@/lib/concours/pronostic";
+import { requireSession } from "@/lib/auth-helpers";
 
 /**
  * POST: Crée ou met à jour un pronostic
  */
 export async function POST(request: NextRequest) {
+  const { session, error } = await requireSession();
+  if (error) return error;
+
   try {
     const body = await request.json();
-    const { userId, matchId, homeScore, awayScore } = body;
+    const { matchId, homeScore, awayScore } = body;
 
-    if (!userId || !matchId || homeScore === undefined || awayScore === undefined) {
+    if (!matchId || homeScore === undefined || awayScore === undefined) {
       return NextResponse.json(
         {
           success: false,
@@ -31,7 +35,7 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await createOrUpdatePronostic({
-      userId,
+      userId: session.user.id,
       matchId,
       homeScore,
       awayScore,
@@ -42,8 +46,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(result);
-  } catch (error) {
-    console.error("Erreur API pronostic POST:", error);
+  } catch (err) {
+    console.error("Erreur API pronostic POST:", err);
     return NextResponse.json(
       {
         success: false,
@@ -55,31 +59,21 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * GET: Récupère les pronostics d'un utilisateur
+ * GET: Récupère les pronostics de l'utilisateur connecté
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
+  const { session, error } = await requireSession();
+  if (error) return error;
+
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "userId requis",
-        },
-        { status: 400 }
-      );
-    }
-
-    const pronostics = await getUserPronostics(userId);
+    const pronostics = await getUserPronostics(session.user.id);
 
     return NextResponse.json({
       success: true,
       pronostics,
     });
-  } catch (error) {
-    console.error("Erreur API pronostic GET:", error);
+  } catch (err) {
+    console.error("Erreur API pronostic GET:", err);
     return NextResponse.json(
       {
         success: false,

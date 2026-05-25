@@ -18,20 +18,37 @@ export async function POST(request: NextRequest) {
     const body = JSON.parse(rawBody);
 
     // Validation de la signature (sécurité)
+    const webhookSecret = process.env.LOYVERSE_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.error("❌ LOYVERSE_WEBHOOK_SECRET non configuré");
+      return NextResponse.json(
+        { success: false, message: "Webhook not configured" },
+        { status: 500 }
+      );
+    }
     const signature = request.headers.get("X-Loyverse-Webhook-Signature");
-    if (signature && process.env.LOYVERSE_WEBHOOK_SECRET) {
-      const expectedSignature = crypto
-        .createHmac("sha256", process.env.LOYVERSE_WEBHOOK_SECRET)
-        .update(rawBody)
-        .digest("hex");
-
-      if (signature !== expectedSignature) {
-        console.error("❌ Signature webhook invalide");
-        return NextResponse.json(
-          { success: false, message: "Invalid signature" },
-          { status: 401 }
-        );
-      }
+    if (!signature) {
+      console.error("❌ Signature webhook manquante");
+      return NextResponse.json(
+        { success: false, message: "Missing webhook signature" },
+        { status: 401 }
+      );
+    }
+    const expectedSignature = crypto
+      .createHmac("sha256", webhookSecret)
+      .update(rawBody)
+      .digest("hex");
+    const sigBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expectedSignature);
+    const signatureValid =
+      sigBuffer.length === expectedBuffer.length &&
+      crypto.timingSafeEqual(sigBuffer, expectedBuffer);
+    if (!signatureValid) {
+      console.error("❌ Signature webhook invalide");
+      return NextResponse.json(
+        { success: false, message: "Invalid signature" },
+        { status: 401 }
+      );
     }
 
     console.log("📥 Loyverse webhook received:", body.event_type);
