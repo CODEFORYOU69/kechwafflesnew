@@ -17,6 +17,7 @@ const navItems: NavItem[] = [
   { label: "Notre histoire", href: "/notre-histoire" },
   { label: "Produits", href: "/product" },
   { label: "Carte", href: "/menu" },
+  { label: "Prestations", href: "/prestations" },
   { label: "Nous trouver", href: "/location" },
 ];
 
@@ -92,7 +93,7 @@ export function Navigation() {
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden items-center gap-1 md:flex">
+            <nav className="hidden items-center gap-1 lg:flex">
               {items.map((item) => {
                 const active =
                   item.href === "/"
@@ -123,7 +124,7 @@ export function Navigation() {
           </div>
 
           {/* Right cluster */}
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-3 lg:flex">
             {session ? (
               <>
                 {isAdmin && (
@@ -165,7 +166,7 @@ export function Navigation() {
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
               <button
-                className="md:hidden -mr-2 p-2 text-[hsl(var(--text))]"
+                className="lg:hidden -mr-2 p-2 text-[hsl(var(--text))]"
                 aria-label="Ouvrir le menu"
               >
                 <Menu className="h-6 w-6" />

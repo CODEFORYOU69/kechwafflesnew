@@ -53,20 +53,24 @@ export default function Footer() {
           <Column title="Horaires">
             <ul className="space-y-2 text-sm font-light text-[hsl(var(--text-muted))]">
               <li className="flex justify-between gap-4">
-                <span className="text-[hsl(var(--text-subtle))]">Lun – Jeu</span>
-                <span>10h – 22h</span>
+                <span className="text-[hsl(var(--text-subtle))]">Lun</span>
+                <span>Fermé</span>
+              </li>
+              <li className="flex justify-between gap-4">
+                <span className="text-[hsl(var(--text-subtle))]">Mar – Jeu</span>
+                <span>11h – 02h</span>
               </li>
               <li className="flex justify-between gap-4">
                 <span className="text-[hsl(var(--text-subtle))]">Ven</span>
-                <span>17h – 02h</span>
+                <span>18h30 – 02h</span>
               </li>
               <li className="flex justify-between gap-4">
                 <span className="text-[hsl(var(--text-subtle))]">Sam</span>
-                <span>10h – 02h</span>
+                <span>11h – 02h</span>
               </li>
               <li className="flex justify-between gap-4">
                 <span className="text-[hsl(var(--text-subtle))]">Dim</span>
-                <span>11h – 22h</span>
+                <span>18h – 02h</span>
               </li>
             </ul>
           </Column>
@@ -77,6 +81,7 @@ export default function Footer() {
                 ["Notre histoire", "/notre-histoire"],
                 ["Nos produits", "/product"],
                 ["La carte", "/menu"],
+                ["Prestations", "/prestations"],
                 ["Fidélité", "/loyalty/card"],
               ].map(([label, href]) => (
                 <li key={href}>

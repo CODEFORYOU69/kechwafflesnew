@@ -3,6 +3,7 @@ import { Marquee } from "./components/landing/Marquee";
 import { Signatures } from "./components/landing/Signatures";
 import { Manifesto } from "./components/landing/Manifesto";
 import { Ingredients } from "./components/landing/Ingredients";
+import { Prestations } from "./components/landing/Prestations";
 import { VisitCTA } from "./components/landing/VisitCTA";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <Manifesto />
       <Signatures />
       <Ingredients />
+      <Prestations />
       <VisitCTA />
     </>
   );
