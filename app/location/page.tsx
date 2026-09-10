@@ -122,11 +122,15 @@ function Details() {
           <Reveal delay={0.18}>
             <InfoBlock icon={<Clock className="h-4 w-4" />} title="Horaires">
               <ul className="space-y-2 text-[hsl(var(--text-muted))]">
-                <HourRow d="Lundi – Jeudi" h="10h – 22h" />
-                <HourRow d="Vendredi" h="17h – 02h" />
-                <HourRow d="Samedi" h="10h – 02h" />
-                <HourRow d="Dimanche" h="11h – 22h" />
+                <HourRow d="Lundi" h="Fermé" />
+                <HourRow d="Mardi – Jeudi" h="11h – 02h" />
+                <HourRow d="Vendredi" h="18h30 – 02h" />
+                <HourRow d="Samedi" h="11h – 02h" />
+                <HourRow d="Dimanche" h="18h – 02h" />
               </ul>
+              <p className="mt-3 text-sm text-[hsl(var(--accent))]">
+                Service jusqu&apos;à 2h du matin, tous les soirs 🌙
+              </p>
             </InfoBlock>
           </Reveal>
 

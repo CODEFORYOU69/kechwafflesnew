@@ -66,10 +66,11 @@ export function VisitCTA() {
 
           <Reveal delay={0.3} className="md:col-span-4 md:col-start-9">
             <dl className="space-y-8 border-t border-white/10 pt-8">
-              <Row term="Lun – Jeu" desc="10h – 22h" />
-              <Row term="Ven" desc="17h – 02h" />
-              <Row term="Sam" desc="10h – 02h" />
-              <Row term="Dim" desc="11h – 22h" />
+              <Row term="Lun" desc="Fermé" />
+              <Row term="Mar – Jeu" desc="11h – 02h" />
+              <Row term="Ven" desc="18h30 – 02h" />
+              <Row term="Sam" desc="11h – 02h" />
+              <Row term="Dim" desc="18h – 02h" />
             </dl>
           </Reveal>
         </div>
