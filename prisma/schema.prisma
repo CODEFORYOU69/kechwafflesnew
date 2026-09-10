@@ -504,3 +504,35 @@ enum DrawType {
   WEEKLY
   GRAND_PRIZE
 }
+
+model MonthPlan {
+  id           String       @id @default(cuid())
+  month        Int
+  year         Int
+  monthContext String?
+  status       String       @default("draft")
+  posts        SocialPost[]
+  createdAt    DateTime     @default(now())
+}
+
+model SocialPost {
+  id               String    @id @default(cuid())
+  weekNumber       Int
+  dayOfWeek        String
+  scheduledAt      DateTime
+  platform         String[]
+  postType         String
+  theme            String
+  product          String?
+  title            String
+  caption          String
+  hashtags         String[]
+  visualBrief      String
+  remotionTemplate String
+  status           String    @default("draft")
+  mediaUrl         String?
+  renderError      String?
+  monthPlan        MonthPlan @relation(fields: [monthPlanId], references: [id], onDelete: Cascade)
+  monthPlanId      String
+  createdAt        DateTime  @default(now())
+}

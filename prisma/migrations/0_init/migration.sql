@@ -1,0 +1,2 @@
+-- This is a baseline migration for an existing database
+-- The actual schema is already in place
