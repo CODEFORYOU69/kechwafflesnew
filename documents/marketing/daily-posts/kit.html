@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kech Waffles — Pack 14 jours</title>
+<style>
+  :root { --ink:#0D0A08; --ink8:#231A14; --ink7:#362B22; --cream:#F6F0E7; --cream3:#B9AD9A; --ember:#EFA63B; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--ink); color:var(--cream); font-family:'Montserrat',-apple-system,Helvetica,Arial,sans-serif; padding:48px 32px 80px; }
+  header { max-width:1200px; margin:0 auto 40px; }
+  h1 { font-size:28px; letter-spacing:.5px; }
+  h1 span { color:var(--ember); }
+  header p { color:var(--cream3); margin-top:10px; max-width:720px; line-height:1.5; font-size:14px; }
+  header code { background:var(--ink8); padding:2px 8px; border-radius:6px; font-size:13px; }
+  .grid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:20px; }
+  .card { background:var(--ink8); border:1px solid var(--ink7); border-radius:16px; overflow:hidden; }
+  .imgs { display:flex; gap:2px; background:var(--ink7); }
+  .imgs a { flex:1; display:block; }
+  .imgs img { width:100%; display:block; aspect-ratio:4/5; object-fit:cover; }
+  .imgs a.v img { aspect-ratio:9/16; }
+  .meta { padding:14px 16px 18px; }
+  .day { color:var(--ember); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; }
+  .q { font-weight:700; font-size:15px; margin:6px 0 4px; }
+  .nets { color:var(--cream3); font-size:12px; }
+  .missing { padding:30px 16px; text-align:center; color:var(--cream3); font-size:13px; aspect-ratio:8/5; display:flex; align-items:center; justify-content:center; }
+  footer { max-width:1200px; margin:48px auto 0; color:var(--cream3); font-size:13px; line-height:1.6; }
+  a { color:var(--ember); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Kech Waffles — <span>14 jours de posts</span></h1>
+  <p>Chaque jour : visuel <strong>feed 4:5</strong> (Instagram + Facebook) et <strong>vertical 9:16</strong> (TikTok + Stories).
+  La copy complète de chaque réseau est dans <code>posts.md</code>, la stratégie dans <code>README.md</code>.
+  Clique sur un visuel pour l'ouvrir en taille réelle.</p>
+</header>
+<div class="grid" id="grid"></div>
+<footer>
+  <p>Regénérer les visuels : <code>node generate-visuals.mjs</code> (ou <code>node generate-visuals.mjs 3</code> pour un seul jour).</p>
+  <p>Kit de relance (bios, carrousel, Google Business, réponses DM) : <code>../launch-kit/</code></p>
+</footer>
+<script>
+const days = [
+  [1,"Meilleures gaufres à Marrakech ?","IG · TikTok · FB · GBP"],
+  [2,"Un vrai café à Marrakech","IG · TikTok"],
+  [3,"Kunefe à Marrakech","IG · TikTok · FB · GBP"],
+  [4,"Best waffles in Marrakech (EN)","IG · TikTok · GBP"],
+  [5,"La gaufre salée existe","IG · TikTok · FB"],
+  [6,"C'est quoi, un craffle ?","IG · TikTok"],
+  [7,"Ouvert jusqu'à 2h du matin","IG · TikTok · FB · GBP"],
+  [8,"Le goûter à Marrakech","IG · TikTok · FB"],
+  [9,"Date night — craffle chocolat-fraise","IG · TikTok"],
+  [10,"La liégeoise, la vraie","IG · TikTok · FB · GBP"],
+  [11,"Dessert livré à Marrakech","IG · TikTok · FB · GBP"],
+  [12,"Craffle 3 chocolats","IG · TikTok"],
+  [13,"La rfissa… en sandwich ? (teaser)","IG · TikTok · FB"],
+  [14,"Kech Waffles — le récap","IG · TikTok · FB · GBP"],
+];
+document.getElementById("grid").innerHTML = days.map(([d,q,nets]) => {
+  const nn = String(d).padStart(2,"0");
+  return `<div class="card">
+    <div class="imgs">
+      <a href="images/feed/jour-${nn}.jpg"><img src="images/feed/jour-${nn}.jpg" alt="Jour ${nn} feed" onerror="this.parentNode.outerHTML='<div class=missing>visuel à générer<br>(photo iCloud manquante)</div>'"></a>
+      <a class="v" href="images/vertical/jour-${nn}.jpg"><img src="images/vertical/jour-${nn}.jpg" alt="Jour ${nn} vertical"></a>
+    </div>
+    <div class="meta"><div class="day">Jour ${nn}</div><div class="q">${q}</div><div class="nets">${nets}</div></div>
+  </div>`;
+}).join("");
+</script>
+</body>
+</html>
