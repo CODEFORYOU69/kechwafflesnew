@@ -1,77 +1,109 @@
-import type { Metadata } from "next";
-import { Inter, Instrument_Serif } from "next/font/google";
+import { MotionRuntime } from "@/components/motion/MotionRuntime";
+import { PageTransition } from "@/components/motion/PageTransition";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import type { Metadata, Viewport } from "next";
+import { Instrument_Sans, Instrument_Serif } from "next/font/google";
+import localFont from "next/font/local";
 import { Navigation } from "./components/Navigation";
-import { WhatsAppButton } from "./components/WhatsappButton";
 import { StructuredData } from "./components/StructuredData";
+import { WhatsAppButton } from "./components/WhatsappButton";
 import Footer from "./Footer";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
+// Instanced to keep the first paint light: see app/fonts/README.md.
+const display = localFont({
+  src: "./fonts/bricolage-grotesque-opsz40.woff2",
+  weight: "600 800",
+  declarations: [{ prop: "font-stretch", value: "75% 90%" }],
   variable: "--font-display",
   display: "swap",
 });
 
+const sans = Instrument_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const serif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["italic"],
+  variable: "--font-serif",
+  display: "swap",
+  preload: false,
+});
+
+const mono = localFont({
+  src: "./fonts/jetbrains-mono-400-500.woff2",
+  weight: "400 500",
+  variable: "--font-mono",
+  display: "swap",
+  preload: false,
+});
+
+const SITE_TITLE = "Kech Waffles — Café de spécialité & croffles · Marrakech";
+const SITE_DESCRIPTION =
+  "Café de spécialité, croffles du jour et pâtisseries maison à Marrakech, MAG 33 Al Badii. Mardis et jeudis Girls Only, Café IA et service informatique pour les étudiants.";
+const SOCIAL_IMAGE = "/brand/og-image.jpg";
+
+export const viewport: Viewport = {
+  themeColor: "#0F0B08",
+};
+
 export const metadata: Metadata = {
   title: {
-    default: "Kech Waffles — Atelier de gaufres artisanales · Marrakech",
+    default: SITE_TITLE,
     template: "%s · Kech Waffles",
   },
-  description:
-    "Atelier de gaufres artisanales à Marrakech. Chocolat Callebaut, pistache premium, tiramisu maison, pizza waffles et boissons signatures. 100% fait maison.",
+  description: SITE_DESCRIPTION,
   keywords: [
-    "gaufres Marrakech",
-    "restaurant Marrakech",
-    "bubble waffle Marrakech",
-    "tiramisu Marrakech",
-    "pancakes Marrakech",
-    "milkshake Marrakech",
-    "desserts Marrakech",
-    "café Marrakech",
-    "pizza waffle",
-    "brunch Marrakech",
+    "café de spécialité Marrakech",
+    "coffee shop Marrakech",
+    "croffles Marrakech",
+    "barista Marrakech",
+    "iced latte Marrakech",
+    "café pour travailler Marrakech",
+    "Girls Only Marrakech",
+    "Café IA Marrakech",
+    "service informatique étudiants Marrakech",
+    "pâtisserie maison Marrakech",
+    "corner gaufres événement Marrakech",
     "Kech Waffles",
-    "TiCanMisu",
-    "crêpes Marrakech",
   ],
   authors: [{ name: "Kech Waffles" }],
   creator: "Kech Waffles",
   publisher: "Kech Waffles",
   metadataBase: new URL("https://www.kechwaffles.com"),
-  alternates: { canonical: "/" },
+  icons: {
+    apple: "/brand/icons/apple-touch-icon.png",
+  },
   openGraph: {
     type: "website",
     locale: "fr_FR",
     url: "https://www.kechwaffles.com",
     siteName: "Kech Waffles",
-    title: "Kech Waffles — Atelier de gaufres artisanales · Marrakech",
+    title: SITE_TITLE,
     description:
-      "Atelier de gaufres à Marrakech. Ingrédients nobles, recettes signatures, savoir-faire artisanal.",
+      "Le café pris au sérieux, des croffles du jour, des mardis et jeudis Girls Only et un Café IA pour les étudiants. MAG 33, Al Badii, Marrakech.",
     images: [
       {
-        url: "/images/menu-items/TransparentBlack.jpg",
+        url: SOCIAL_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Kech Waffles Marrakech",
+        alt: "Logo Kech Waffles, Marrakech",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kech Waffles — Atelier de gaufres · Marrakech",
+    title: SITE_TITLE,
     description:
-      "Atelier de gaufres à Marrakech. Recettes signatures, ingrédients nobles.",
-    images: ["/images/menu-items/TransparentBlack.jpg"],
+      "Café de spécialité, croffles du jour, Girls Only mardi et jeudi, Café IA pour les étudiants. Marrakech.",
+    images: [SOCIAL_IMAGE],
   },
+  // Search Console: the value of `content` in its HTML tag, set in the Vercel project.
+  verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
   robots: {
     index: true,
     follow: true,
@@ -83,7 +115,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: { google: "votre-code-google-search-console" },
 };
 
 export default function RootLayout({
@@ -94,16 +125,25 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${inter.variable} ${instrumentSerif.variable} dark`}
+      className={`${display.variable} ${sans.variable} ${serif.variable} ${mono.variable} dark`}
     >
       <head>
         <StructuredData />
       </head>
       <body className="bg-[hsl(var(--bg))] text-[hsl(var(--text))] antialiased grain">
+        <noscript>
+          <style>{`[data-reveal]{opacity:1;transform:none}.line-mask>span{transform:none}body>header{background:hsl(var(--espresso-950))}.hero{height:auto}.hero__stage{position:relative;height:auto;display:flex;flex-direction:column}.hero__opening{position:relative}.hero__door{display:none}.hero__final{position:relative;height:auto;opacity:1!important;transform:none!important}[data-rail-scene]{height:auto!important}`}</style>
+        </noscript>
+        <a href="#contenu" className="skip-link" data-no-transition>
+          Aller au contenu
+        </a>
         <Navigation />
-        <main>{children}</main>
+        <main id="contenu" tabIndex={-1}>{children}</main>
         <Footer />
         <WhatsAppButton />
+        <SmoothScroll />
+        <MotionRuntime />
+        <PageTransition />
       </body>
     </html>
   );

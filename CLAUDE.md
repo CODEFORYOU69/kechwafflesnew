@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Read First
+
+- `documents/design-system.md`: palette, contrasts, typography, motion rules (« La Porte »). Its rules are not negotiable.
+- `lib/site-content.ts`: all the site's copy and business facts. Import from it; never invent a price, a schedule or a service.
+
 ## Development Commands
 
 ### Core Development
@@ -20,33 +25,36 @@ This project uses **pnpm** as the primary package manager (evidenced by pnpm-loc
 - **TypeScript** throughout
 - **Tailwind CSS** for styling
 - **Shadcn/ui** component library with Radix UI primitives
-- **Framer Motion** for animations
-- **Poppins** font from Google Fonts
+- **Motion**: CSS and a single runtime (`components/motion/`), Lenis for wheel smoothing, Framer Motion (`LazyMotion` + `m.*`) only in islands where CSS is not enough
+- **Fonts**: Bricolage Grotesque (display) and JetBrains Mono (labels) self-hosted and instanced in `app/fonts/`, Instrument Sans (body) and Instrument Serif (accent) from `next/font/google`
 
 ### Project Structure
 ```
 app/
-├── components/           # App-specific components (Hero, Navigation, etc.)
-├── location/            # Location page route
-├── menu/               # Menu page route
-├── notre-histoire/     # History page route
-├── product/            # Product page route
-├── layout.tsx          # Root layout with Navigation & WhatsApp button
-├── page.tsx            # Home page (client component)
-└── globals.css         # Global styles with Tailwind
+├── components/         # Navigation, StructuredData, WhatsApp button, marketing
+├── cafe-ia/ girls-only/ location/ menu/ notre-histoire/ prestations/ product/
+├── admin/ concours/ loyalty/ api/   # Application routes: no smooth scroll, no curtain
+├── Footer.tsx
+├── layout.tsx          # Root layout: fonts, Navigation, Footer, motion runtime
+├── page.tsx            # Home: assembles components/sections
+└── globals.css         # Design system classes and tokens
 
 components/
-├── ui/                 # Shadcn/ui components (button, card, etc.)
-└── magicui/           # Magic UI components
+├── sections/           # Home sections (Server Components) and their small islands
+├── motion/             # Reveal, ParallaxLayer, MagneticButton, MotionRuntime, PageTransition
+├── brand/              # Animated logo
+└── ui/                 # Shadcn/ui components
 
 lib/
-└── utils.ts           # Utility functions (likely cn function for Tailwind)
+├── site-content.ts     # Copy and facts, single source
+├── casablanca-time.ts  # Café clock: call after mount only
+└── utils.ts            # `cn`, with the design system's type scale declared to tailwind-merge
 ```
 
 ### Key Architecture Patterns
 - **App Router**: Uses Next.js 15 App Router with file-based routing
-- **RSC Strategy**: Mix of Server and Client Components (main page is client-side for Framer Motion)
-- **Component Organization**: App components in `app/components/`, reusable UI in `components/ui/`
+- **RSC Strategy**: Sections and pages are Server Components, with one small client island per interaction
+- **Component Organization**: Site sections in `components/sections/`, CSS specific to a section in a `*.module.css` beside it, reusable UI in `components/ui/`
 - **Styling System**: Shadcn/ui with CSS variables for theming, mobile-first responsive design
 - **Internationalization**: French language (lang="fr" in layout)
 
@@ -99,14 +107,15 @@ Uses **Commitizen** style:
 Uses CSS custom properties in `globals.css` for consistent theming across light/dark modes with HSL color space.
 
 ## Business Context
-**Kech Waffles** - Restaurant in Marrakech specializing in:
-- Sweet delicacies (Tiramisu-style waffles, pancakes, crauffles)
-- Savory stuffed brioches (cheddar, Indian goat cheese, traditional Savoyard)
+**Kech Waffles** - Specialty coffee shop in Marrakech (MAG 33, Al Badii):
+- Specialty coffee and croffles first, with daily house pastries
+- Girls Only on Tuesdays and Thursdays, Café IA and IT help for students
+- Traditional waffles are events only: they appear solely in Prestations
 - QR code menu system for customers
 - WhatsApp integration for orders/contact
 
 ## Performance Considerations
 - Next.js Image optimization with proper `sizes` prop
-- Priority loading for above-fold images
-- Framer Motion animations with `whileInView` for performance
+- Priority loading for above-fold images only
+- Animate `transform` and `opacity` only; scroll-driven effects in CSS, off the main thread
 - CSS variables for efficient theme switching

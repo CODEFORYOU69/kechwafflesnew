@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 export default {
     darkMode: ["class"],
@@ -9,7 +10,49 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+  			serif: ['var(--font-serif)', 'Georgia', 'serif'],
+  			mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+  		},
+  		transitionTimingFunction: {
+  			door: 'var(--ease-door)',
+  			soft: 'var(--ease-out)',
+  			spring: 'var(--ease-spring)',
+  		},
   		colors: {
+  			espresso: {
+  				'950': 'hsl(var(--espresso-950) / <alpha-value>)',
+  				'900': 'hsl(var(--espresso-900) / <alpha-value>)',
+  				'800': 'hsl(var(--espresso-800) / <alpha-value>)',
+  				'700': 'hsl(var(--espresso-700) / <alpha-value>)',
+  				'600': 'hsl(var(--espresso-600) / <alpha-value>)',
+  			},
+  			terracotta: {
+  				'700': 'hsl(var(--terracotta-700) / <alpha-value>)',
+  				'600': 'hsl(var(--terracotta-600) / <alpha-value>)',
+  				'500': 'hsl(var(--terracotta-500) / <alpha-value>)',
+  				'400': 'hsl(var(--terracotta-400) / <alpha-value>)',
+  				'300': 'hsl(var(--terracotta-300) / <alpha-value>)',
+  			},
+  			gold: {
+  				'700': 'hsl(var(--gold-700) / <alpha-value>)',
+  				'500': 'hsl(var(--gold-500) / <alpha-value>)',
+  				'400': 'hsl(var(--gold-400) / <alpha-value>)',
+  				'300': 'hsl(var(--gold-300) / <alpha-value>)',
+  				'200': 'hsl(var(--gold-200) / <alpha-value>)',
+  			},
+  			cream: {
+  				'50': 'hsl(var(--cream-50) / <alpha-value>)',
+  				'100': 'hsl(var(--cream-100) / <alpha-value>)',
+  				'200': 'hsl(var(--cream-200) / <alpha-value>)',
+  				'300': 'hsl(var(--cream-300) / <alpha-value>)',
+  				'400': 'hsl(var(--cream-400) / <alpha-value>)',
+  			},
+  			zellige: {
+  				'600': 'hsl(var(--zellige-600) / <alpha-value>)',
+  				'400': 'hsl(var(--zellige-400) / <alpha-value>)',
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -97,9 +140,16 @@ export default {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
   			shine: 'shine var(--duration) infinite linear',
-  			spin: 'spin var(--duration) infinite linear'
+  			spin: 'spin var(--duration, 1s) infinite linear'
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+  	require("tailwindcss-animate"),
+  	// Plain variants rather than `screens`: an object in `screens` disables min-*/max-*.
+  	plugin(({ addVariant }) => {
+  		addVariant("fine", "@media (hover: hover) and (pointer: fine)");
+  		addVariant("coarse", "@media (pointer: coarse)");
+  	}),
+  ],
 } satisfies Config;

@@ -1,0 +1,81 @@
+/* The built-in close button of `components/ui/sheet.tsx`, aligned on the bar's « Menu ». */
+.sheet > button {
+  top: calc((var(--nav-h) - 2.75rem) / 2);
+  right: calc(var(--gutter) - 0.625rem);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid hsl(var(--cream-50) / 0.25);
+  border-radius: var(--radius-full);
+  color: hsl(var(--cream-50));
+  opacity: 1;
+}
+
+.sheet > button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Radix focuses this button on opening: the ring is for keyboards, not for a thumb. */
+.sheet > button:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.75rem var(--gutter);
+}
+
+.link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding-block: clamp(0.25rem, 0.9vh, 0.5rem);
+  padding-block: clamp(0.25rem, 0.9svh, 0.5rem);
+}
+
+/* Two classes: this file loads before globals.css, whose `.text-section` sets the same property. */
+.link .label {
+  font-size: clamp(2.25rem, min(12.6vw, 6.6vh), 4.5rem);
+  font-size: clamp(2.25rem, min(12.6vw, 6.6svh), 4.5rem);
+  line-height: 1;
+}
+
+.door {
+  display: none;
+}
+
+/* A phone on its side: two columns rather than a long scroll. */
+@media (max-height: 480px) {
+  .list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+}
+
+/* A tablet has room for the door itself. */
+@media (min-width: 768px) and (min-height: 481px) {
+  .body {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    align-items: center;
+  }
+
+  .nav {
+    grid-column: span 7;
+  }
+
+  .door {
+    display: block;
+    grid-column: span 5;
+    aspect-ratio: 3 / 4;
+  }
+}

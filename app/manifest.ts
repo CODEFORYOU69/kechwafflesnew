@@ -5,21 +5,27 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Kech Waffles Marrakech",
     short_name: "Kech Waffles",
     description:
-      "Restaurant à Marrakech spécialisé en gaufres tiramisu, pancakes, milkshakes et desserts gourmands",
+      "Café de spécialité, croffles du jour et pâtisseries maison à Marrakech. Mardis et jeudis Girls Only, Café IA pour les étudiants.",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#f97316",
+    background_color: "#0F0B08",
+    theme_color: "#0F0B08",
     icons: [
       {
-        src: "/images/menu-items/TransparentBlack.jpg",
+        src: "/brand/icons/icon-192.png",
         sizes: "192x192",
-        type: "image/jpeg",
+        type: "image/png",
       },
       {
-        src: "/images/menu-items/TransparentBlack.jpg",
+        src: "/brand/icons/icon-512.png",
         sizes: "512x512",
-        type: "image/jpeg",
+        type: "image/png",
+      },
+      {
+        src: "/brand/icons/icon-maskable-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };
