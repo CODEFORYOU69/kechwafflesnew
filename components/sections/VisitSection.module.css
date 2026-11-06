@@ -1,0 +1,390 @@
+/* The base focus ring is gold: too faint on cream. */
+.section :focus-visible {
+  outline-color: hsl(var(--terracotta-700));
+}
+
+/* Phone first: the plate, then address and door side by side, then the week. */
+.stage {
+  /* Content width of `.page-x`, so the plate can line up with the grid below it. */
+  --page-w: calc(min(100vw, 1440px) - 2 * var(--gutter));
+  --plate-pad: 1.375rem;
+  --plate-line: 2px;
+  --house-w: 4.25rem;
+  --door-w: calc(var(--page-w) * 0.36);
+  --door-climb: 1rem;
+  --door-cut: 0.375rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--door-w);
+  column-gap: 1.25rem;
+}
+
+.eyebrow {
+  grid-column: 1 / -1;
+  margin-bottom: 1.5rem;
+}
+
+/* --- The plate: enamel keyline, screws, house number ------- */
+.plate {
+  position: relative;
+  grid-column: 1 / -1;
+  padding: 2.75rem var(--plate-pad) 1.5rem;
+  border: var(--plate-line) solid hsl(var(--espresso-950));
+  border-radius: 1rem;
+}
+
+.plate::before {
+  content: "";
+  position: absolute;
+  inset: 0.3125rem;
+  border: 1px solid hsl(var(--espresso-950));
+  border-radius: 0.6875rem;
+  pointer-events: none;
+}
+
+.screw {
+  position: absolute;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  border: 1px solid hsl(var(--espresso-950));
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    transparent calc(50% - 0.5px),
+    hsl(var(--espresso-950)) calc(50% - 0.5px),
+    hsl(var(--espresso-950)) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+}
+
+.screw[data-corner="0"] {
+  top: 0.75rem;
+  left: 0.75rem;
+}
+
+.screw[data-corner="1"] {
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.screw[data-corner="2"] {
+  bottom: 0.75rem;
+  left: 0.75rem;
+}
+
+.screw[data-corner="3"] {
+  bottom: 0.75rem;
+  right: 0.75rem;
+}
+
+/* Sized so that « Marrakech. » fills the plate exactly, down to the smallest phones. */
+.plate .plateTitle {
+  font-size: calc((var(--page-w) - 2 * var(--plate-pad) - 2 * var(--plate-line)) / 4.24);
+  white-space: nowrap;
+}
+
+/* The tight tracking pushes the last glyph out of its box: room for the mask not to cut it. */
+.plateTitle > :global(.line-mask) {
+  padding-right: 0.06em;
+  margin-right: -0.06em;
+}
+
+/* Screwed over the top edge of the plate, on the axis of the door below. */
+.houseNumber {
+  position: absolute;
+  top: -1.625rem;
+  right: calc(var(--door-w) / 2 - var(--house-w) / 2 - var(--plate-line));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: var(--house-w);
+  height: calc(var(--house-w) * 1.24);
+  padding-bottom: 0.5rem;
+  border-radius: 999px 999px 0 0;
+  background: hsl(var(--terracotta-700));
+  color: hsl(var(--cream-50));
+}
+
+.houseNumber::before {
+  content: "";
+  position: absolute;
+  inset: 0.25rem;
+  border: 1px solid hsl(var(--cream-50) / 0.55);
+  border-radius: 999px 999px 0 0;
+}
+
+.houseNumber > :first-child {
+  font-size: 0.625rem;
+}
+
+.houseDigits {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: calc(var(--house-w) * 0.47);
+  font-stretch: 78%;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.coordinates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+  margin-top: 0.875rem;
+  /* Stops short of the door when it climbs through the bottom edge. */
+  max-width: calc(100% - var(--door-w) + var(--plate-pad));
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: hsl(var(--espresso-700));
+}
+
+/* --- Address ------------------------------------------------ */
+.address {
+  grid-column: 1;
+  grid-row: 3;
+  margin-top: 2.5rem;
+}
+
+/* On a phone, next to the door: sized so that the address stays on two lines. */
+.address .addressLines {
+  margin-top: 0.875rem;
+  font-size: min(1.625rem, calc((var(--page-w) - var(--door-w) - 1.25rem) / 7.4));
+}
+
+.addressLines > span {
+  display: block;
+}
+
+.intro {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: hsl(var(--espresso-700));
+}
+
+/* --- Actions ------------------------------------------------ */
+.actions {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  margin-top: 2rem;
+}
+
+.buttons {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.buttons :global(.cta) {
+  width: 100%;
+}
+
+.buttons :global(.magnetic) {
+  display: flex;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: hsl(var(--terracotta-700));
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link {
+    transition: opacity 0.25s var(--ease-out);
+  }
+
+  .link:hover {
+    opacity: 0.65;
+  }
+}
+
+/* --- Hours -------------------------------------------------- */
+.hours {
+  grid-column: 1 / -1;
+  grid-row: 5;
+  margin-top: 3.5rem;
+}
+
+.hoursHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 0.875rem;
+}
+
+/* --- The door: climbs through the plate's bottom edge ------- */
+.photoSlot {
+  position: relative;
+  grid-column: 2;
+  grid-row: 3;
+  min-height: calc(var(--door-w) * 1.5);
+  margin-top: calc(var(--door-climb) * -1);
+}
+
+/* The section's colour, as a cut in the plate's lines. */
+.photoSlot .photoFrame {
+  position: absolute;
+  inset: 0 calc(var(--door-cut) * -1);
+  border: var(--door-cut) solid hsl(var(--cream-50));
+  border-bottom: 0;
+}
+
+/* Tablet: the name fits on one line, like a real plate, and the grid goes to twelve. */
+@media (min-width: 768px) {
+  .stage {
+    --plate-pad: clamp(1.75rem, 3.6vw, 3.25rem);
+    --house-w: clamp(5rem, 8.6vw, 7.75rem);
+    --grid-gap: 1.5rem;
+    --grid-col: calc((var(--page-w) - 11 * var(--grid-gap)) / 12);
+    --door-w: calc(4 * var(--grid-col) + 3 * var(--grid-gap));
+    --door-climb: clamp(1.75rem, 2.8vw, 2.5rem);
+    --door-cut: 0.5rem;
+    --block-gap: clamp(3rem, 5vw, 4.5rem);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    /* The last row soaks up the height of what spans it: the actions stay under the address. */
+    grid-template-rows: auto auto auto 1fr auto;
+    column-gap: var(--grid-gap);
+  }
+
+  .plate {
+    padding-block: clamp(2.25rem, 3.4vw, 3rem);
+    border-radius: clamp(1rem, 1.6vw, 1.5rem);
+  }
+
+  .plate::before {
+    inset: 0.4375rem;
+    border-radius: clamp(0.5625rem, calc(1.6vw - 0.4375rem), 1.0625rem);
+  }
+
+  .screw[data-corner="0"] {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .screw[data-corner="1"] {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .screw[data-corner="2"] {
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  .screw[data-corner="3"] {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* As large as the line allows between the plate's edge and the house number. */
+  .plate .plateTitle {
+    display: flex;
+    column-gap: 0.18em;
+    font-size: min(
+      11rem,
+      calc(
+        (
+            var(--page-w) - var(--plate-pad) - 2 * var(--plate-line) - var(--door-w) / 2 -
+              var(--house-w) / 2 - 1.5rem
+          ) /
+          7.28
+      )
+    );
+  }
+
+  .houseNumber {
+    top: calc(var(--house-w) * -0.3);
+    padding-bottom: clamp(0.625rem, 1vw, 1rem);
+  }
+
+  .houseNumber::before {
+    inset: 0.3125rem;
+  }
+
+  .houseNumber > :first-child {
+    font-size: 0.6875rem;
+  }
+
+  .address {
+    grid-column: 1 / span 8;
+    margin-top: var(--block-gap);
+  }
+
+  .address .addressLines {
+    font-size: clamp(1.625rem, 2.9vw, 2.625rem);
+  }
+
+  .actions {
+    grid-column: 1 / span 8;
+    margin-top: clamp(1.75rem, 2.6vw, 2.5rem);
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .buttons :global(.cta) {
+    width: auto;
+  }
+
+  .buttons :global(.magnetic) {
+    display: inline-flex;
+  }
+
+  .hours {
+    margin-top: var(--block-gap);
+  }
+
+  .photoSlot {
+    grid-column: 9 / -1;
+    grid-row: 3 / span 2;
+    min-height: 0;
+  }
+}
+
+/* Desktop: address, week and door on the same floor. */
+@media (min-width: 1024px) {
+  .stage {
+    --door-w: calc(3 * var(--grid-col) + 2 * var(--grid-gap));
+    grid-template-rows: auto auto auto 1fr;
+  }
+
+  .address {
+    grid-column: 1 / span 4;
+  }
+
+  /* Address on the top line of the week, links on its bottom line. */
+  .actions {
+    grid-column: 1 / span 4;
+    align-self: end;
+  }
+
+  /* Pulled up by half the pill's extra height: « Adresse » and « Horaires » share a line. */
+  .hours {
+    grid-column: 5 / span 5;
+    grid-row: 3 / span 2;
+    margin-top: calc(var(--block-gap) - 0.65rem);
+  }
+
+  .photoSlot {
+    grid-column: 10 / -1;
+  }
+}

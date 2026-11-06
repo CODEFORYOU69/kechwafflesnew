@@ -1,0 +1,669 @@
+.section {
+  --block-gap: clamp(5rem, 10vw, 10rem);
+}
+
+/* A top border on a rounded box thins out along the curve: the arch reads on the dark hero. */
+.section::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 auto;
+  height: var(--arch);
+  border-top: 1px solid hsl(var(--gold-400) / 0.5);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* --- Marquee ---------------------------------------------- */
+.marquee {
+  padding-top: calc(var(--arch) * 0.34);
+}
+
+.marqueeWindow {
+  overflow: hidden;
+  overflow: clip;
+  padding-block: 0.9375rem;
+}
+
+/* Two selectors: `.animate-marquee` sets the shorthand at the same specificity. */
+.marquee .marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation-duration: 100s;
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-right: clamp(1.5rem, 3vw, 2.5rem);
+  white-space: nowrap;
+  color: hsl(var(--cream-200));
+}
+
+.marqueeArch {
+  display: block;
+  flex: none;
+  width: 0.5rem;
+  height: 0.6875rem;
+  border-radius: 999px 999px 0 0;
+  background: hsl(var(--gold-400));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .marquee:hover .marqueeTrack {
+    animation-play-state: paused;
+  }
+}
+
+/* --- Header ----------------------------------------------- */
+.header {
+  margin-top: clamp(3.5rem, 7vw, 7rem);
+}
+
+/* --- Roast panel ------------------------------------------ */
+.roast {
+  --roast: 0;
+  --thumb-w: 2.75rem;
+  --thumb-h: 3.5rem;
+  --track-h: 1.125rem;
+  --glide: 0.7s;
+  --glide-ease: var(--ease-door);
+  position: relative;
+  isolation: isolate;
+  margin-top: var(--block-gap);
+  padding-block: clamp(1.75rem, 3.6vw, 3.25rem);
+  border-block: 1px solid hsl(var(--cream-300) / 0.2);
+  overflow: hidden;
+  overflow: clip;
+  color: hsl(var(--cream-50));
+}
+
+/* While a pointer holds the thumb, everything follows it with a little weight. */
+.roast[data-free] {
+  --glide: 0.22s;
+  --glide-ease: var(--ease-out);
+}
+
+/* Three stacked tints, each opacity computed from --roast: the variable moves, only opacity animates. */
+.tint {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  transition: opacity var(--glide) var(--glide-ease);
+}
+
+.tintDark {
+  background: hsl(var(--espresso-950));
+}
+
+.tintMedium {
+  background: linear-gradient(112deg, hsl(18 52% 23%) 30%, hsl(15 52% 17%));
+  opacity: clamp(0, calc(2 - var(--roast)), 1);
+}
+
+/* Darkens towards the far corner, never lighter: cream-200 keeps its 4.58 everywhere. */
+.tintLight {
+  background: linear-gradient(112deg, hsl(33 62% 30%) 30%, hsl(25 56% 25%));
+  opacity: clamp(0, calc(1 - var(--roast)), 1);
+}
+
+.tintGrid {
+  --module: clamp(2.25rem, 4vw, 3.5rem);
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  color: hsl(var(--cream-50));
+  opacity: 0.05;
+  -webkit-mask-image: linear-gradient(105deg, transparent 18%, #000 78%);
+  mask-image: linear-gradient(105deg, transparent 18%, #000 78%);
+}
+
+.roastHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.roastTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Wide enough for 20 mono characters, the longest line: it always breaks on two lines. */
+.roastHint {
+  max-width: 10.5rem;
+  text-align: right;
+}
+
+@media (min-width: 768px) {
+  .roastTitle {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.875rem;
+  }
+}
+
+/* The name rides the thumb: flush left on the first notch, flush right on the last. */
+.wordRail {
+  display: grid;
+  container-type: inline-size;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.roast .word {
+  grid-area: 1 / 1;
+  justify-self: start;
+  width: max-content;
+  padding-right: 0.02em;
+  font-size: clamp(5rem, 20vw + 2rem, 13rem);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(calc(var(--roast) / 2 * (100cqw - 100%)), 0, 0);
+  transition:
+    transform var(--glide) var(--glide-ease),
+    opacity 0.28s ease,
+    visibility 0s linear 0.28s;
+}
+
+.roast .word[data-active] {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    transform var(--glide) var(--glide-ease),
+    opacity 0.42s ease 0.06s,
+    visibility 0s;
+}
+
+.dial {
+  margin-top: clamp(0.75rem, 1.8vw, 1.625rem);
+}
+
+.range {
+  --track-fill: linear-gradient(
+    to right,
+    hsl(var(--gold-300)),
+    hsl(var(--terracotta-500)) 50%,
+    hsl(var(--espresso-600))
+  );
+  --thumb-fill: linear-gradient(hsl(var(--espresso-950)) 0 0) 50% 100% / 2px 58% no-repeat,
+    hsl(var(--cream-50));
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: var(--thumb-h);
+  margin: 0;
+  background: transparent;
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.range:active {
+  cursor: grabbing;
+}
+
+/* The focus ring goes on the thumb, around the door. */
+.range:focus-visible {
+  outline: none;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: var(--track-h);
+  background: var(--track-fill);
+  box-shadow: 0 0 0 1px hsl(var(--cream-50) / 0.42);
+}
+
+.range::-moz-range-track {
+  height: var(--track-h);
+  background: var(--track-fill);
+  box-shadow: 0 0 0 1px hsl(var(--cream-50) / 0.42);
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--thumb-w);
+  height: var(--thumb-h);
+  margin-top: calc((var(--track-h) - var(--thumb-h)) / 2);
+  border: 0;
+  border-radius: 999px 999px 0 0;
+  background: var(--thumb-fill);
+  box-shadow: 0 0 0 2px hsl(var(--espresso-950));
+}
+
+.range::-moz-range-thumb {
+  box-sizing: border-box;
+  width: var(--thumb-w);
+  height: var(--thumb-h);
+  border: 0;
+  border-radius: 999px 999px 0 0;
+  background: var(--thumb-fill);
+  box-shadow: 0 0 0 2px hsl(var(--espresso-950));
+}
+
+.range:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 2px hsl(var(--espresso-950)),
+    0 0 0 4px hsl(var(--cream-50));
+}
+
+.range:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 2px hsl(var(--espresso-950)),
+    0 0 0 4px hsl(var(--cream-50));
+}
+
+.ruler {
+  height: 0.5rem;
+  margin: -0.8125rem calc(var(--thumb-w) / 2) 0;
+  background: linear-gradient(to right, hsl(var(--cream-50) / 0.5) 1px, transparent 1px)
+    calc(50% + 1rem) 0 / 2rem 100%;
+  pointer-events: none;
+}
+
+/* Same width as the thumb: `space-between` then centres each label under its notch. */
+.notches {
+  display: flex;
+  justify-content: space-between;
+}
+
+.notch {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: var(--thumb-w);
+  min-height: 2.75rem;
+  padding: 0;
+  white-space: nowrap;
+  color: hsl(var(--cream-200));
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.notch::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(50% - 0.5px);
+  width: 1px;
+  height: 1.375rem;
+  background: hsl(var(--cream-50) / 0.75);
+}
+
+.notch[data-active] {
+  color: hsl(var(--cream-50));
+}
+
+.readouts {
+  display: grid;
+  margin-top: clamp(1.75rem, 3.4vw, 3rem);
+}
+
+.readout {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem 1.5rem;
+  visibility: hidden;
+  transition: visibility 0s linear 0.28s;
+}
+
+.readout[data-active] {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.readoutItem {
+  opacity: 0;
+  transform: translate3d(0, 0.5rem, 0);
+  transition:
+    opacity 0.24s ease,
+    transform 0s linear 0.28s;
+}
+
+.readout[data-active] .readoutItem {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.42s ease calc(0.06s + var(--i, 0) * 50ms),
+    transform 0.6s var(--ease-out) calc(0.06s + var(--i, 0) * 50ms);
+}
+
+.readoutItem:nth-child(2) {
+  --i: 1;
+}
+
+.readoutItem:nth-child(3) {
+  --i: 2;
+  grid-column: 1 / -1;
+}
+
+.readoutItem:nth-child(4) {
+  --i: 3;
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1024px) {
+  .readout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0 1.5rem;
+  }
+
+  .readoutItem {
+    grid-column: span 3;
+  }
+
+  .readoutItem:nth-child(3) {
+    grid-column: span 4;
+  }
+
+  .readoutItem:nth-child(4) {
+    grid-column: span 2;
+  }
+}
+
+.roastNote {
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  padding-top: 1rem;
+  border-top: 1px solid hsl(var(--cream-50) / 0.22);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: hsl(var(--cream-50));
+}
+
+/* --- Extractions ------------------------------------------ */
+.extractions {
+  margin-top: var(--block-gap);
+}
+
+.extraction {
+  padding-block: 1.75rem;
+  border-top: 1px solid hsl(var(--cream-300) / 0.3);
+}
+
+/* Each column starts lower than the last: three hairlines, a staircase, no row of cards. */
+@media (min-width: 1024px) {
+  .extraction {
+    padding: 0 1.5rem;
+    border-top: 0;
+    border-left: 1px solid hsl(var(--cream-300) / 0.3);
+  }
+
+  .extraction:nth-child(2) {
+    padding-top: 3.5rem;
+  }
+
+  .extraction:nth-child(3) {
+    padding-top: 7rem;
+  }
+}
+
+/* --- Barista station -------------------------------------- */
+.station {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 0.75rem;
+  margin-top: var(--block-gap);
+}
+
+.backPlane {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  align-self: start;
+  margin-inline: calc(var(--gutter) * -1);
+  aspect-ratio: 3 / 4;
+}
+
+.sidePlane {
+  z-index: 1;
+  grid-column: 1 / 5;
+  grid-row: 1;
+  align-self: end;
+  margin-bottom: -6rem;
+  aspect-ratio: 3 / 4;
+}
+
+.frontCard {
+  z-index: 2;
+  grid-column: 6 / -1;
+  grid-row: 1;
+  align-self: end;
+  margin-bottom: -4.5rem;
+  aspect-ratio: 4 / 3;
+}
+
+/* The section's own colour around the photo: it detaches without a soft shadow. */
+.mat {
+  box-shadow: 0 0 0 clamp(0.375rem, 0.7vw, 0.625rem) hsl(var(--espresso-900));
+}
+
+.stationHead {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin-top: 8.5rem;
+}
+
+.stationTitle {
+  margin-top: 1.25rem;
+}
+
+.stationText {
+  grid-column: 2 / -1;
+  grid-row: 3;
+  margin-top: 1.5rem;
+}
+
+/* Tablet: a full-width arch would fill the whole screen, the arcade fits sooner. */
+@media (min-width: 640px) {
+  .backPlane {
+    grid-column: 1 / 9;
+    margin-inline: 0;
+  }
+
+  .sidePlane {
+    z-index: 0;
+    grid-column: 9 / -1;
+    margin-bottom: 0;
+    aspect-ratio: 11 / 16;
+  }
+
+  .frontCard {
+    grid-column: 6 / 11;
+    margin-bottom: -3.5rem;
+  }
+
+  .stationHead {
+    margin-top: 7rem;
+  }
+
+  .stationText {
+    grid-column: 5 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .station {
+    column-gap: 1.5rem;
+  }
+
+  .backPlane {
+    grid-column: 1 / 7;
+    grid-row: 1 / 3;
+    margin-inline: 0;
+  }
+
+  .stationHead {
+    grid-column: 8 / -1;
+    grid-row: 1;
+    margin-top: 0;
+    padding-bottom: 2.5rem;
+  }
+
+  .station .stationTitle {
+    font-size: clamp(3.25rem, 5.9vw, 5.5rem);
+  }
+
+  .sidePlane {
+    z-index: 0;
+    grid-column: 7 / 10;
+    grid-row: 2;
+    margin-bottom: 0;
+    aspect-ratio: 11 / 16;
+  }
+
+  .stationText {
+    grid-column: 10 / -1;
+    grid-row: 2;
+    align-self: end;
+    margin-top: 0;
+  }
+
+  /* Off the column grid on purpose: on it, the card's edge sits tangent to the glass in the arch. */
+  .frontCard {
+    --card-shift: min(3.25vw, 2.925rem);
+    grid-column: 5 / 9;
+    grid-row: 2;
+    margin: 0 calc(var(--card-shift) * -1) -3rem var(--card-shift);
+    aspect-ratio: 5 / 3;
+  }
+}
+
+/* The planes themselves drift on the mouse only: on touch the page stays where the finger puts it. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+    .frontCard {
+      animation: card-drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+
+    .sidePlane {
+      animation: side-drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
+
+@keyframes card-drift {
+  from {
+    transform: translate3d(0, 3.5rem, 0);
+  }
+  to {
+    transform: translate3d(0, -3.5rem, 0);
+  }
+}
+
+@keyframes side-drift {
+  from {
+    transform: translate3d(0, -1.75rem, 0);
+  }
+  to {
+    transform: translate3d(0, 1.75rem, 0);
+  }
+}
+
+/* --- Signatures ------------------------------------------- */
+.signatures {
+  margin-top: var(--block-gap);
+}
+
+.signatureList {
+  container-type: inline-size;
+}
+
+.signatureName {
+  display: block;
+  position: relative;
+  line-height: 1;
+}
+
+/* The lead name runs edge to edge on one line at every width: its size follows the list's.
+   The width in em holds at every size: the optical axis is fixed in the font file. */
+.signatures .leadName {
+  font-size: clamp(3.5rem, 11.5vw, 11rem);
+  font-size: calc(100cqw / 6.09);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.signatureRow {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: baseline;
+  padding-block: 1.125rem;
+}
+
+.signatureDetail {
+  grid-column: 2;
+  margin-top: 0.375rem;
+}
+
+/* The lead name's size comes from the full list width, so it has to span all of it. */
+.signatureRowLead .signatureName {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.signatureRowLead .signatureIndex,
+.signatureRowLead .signatureDetail {
+  grid-row: 2;
+  margin-top: 0;
+  padding-top: 0.875rem;
+}
+
+@media (min-width: 1024px) {
+  .signatureRow {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    padding-block: 1.25rem;
+  }
+
+  .signatureIndex {
+    grid-column: 1 / 4;
+  }
+
+  .signatureName {
+    grid-column: 4 / 10;
+  }
+
+  .signatureDetail {
+    grid-column: 10 / -1;
+    margin-top: 0;
+    text-align: right;
+  }
+}
+
+/* High contrast themes drop the painted track and thumb: draw them with system colours. */
+@media (forced-colors: active) {
+  .range {
+    border: 1px solid CanvasText;
+  }
+
+  .range::-webkit-slider-thumb {
+    forced-color-adjust: none;
+    background: ButtonText;
+  }
+
+  .range::-moz-range-thumb {
+    forced-color-adjust: none;
+    background: ButtonText;
+  }
+
+  .range:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}

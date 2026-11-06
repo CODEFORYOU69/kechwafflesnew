@@ -1,21 +1,26 @@
-import Hero from "./components/Hero";
-import { Marquee } from "./components/landing/Marquee";
-import { Signatures } from "./components/landing/Signatures";
-import { Manifesto } from "./components/landing/Manifesto";
-import { Ingredients } from "./components/landing/Ingredients";
-import { Prestations } from "./components/landing/Prestations";
-import { VisitCTA } from "./components/landing/VisitCTA";
+import { AICafeSection } from "@/components/sections/AICafeSection";
+import { CoffeeSection } from "@/components/sections/CoffeeSection";
+import { EventsSection } from "@/components/sections/EventsSection";
+import { GirlsOnlySection } from "@/components/sections/GirlsOnlySection";
+import { HeroParallax } from "@/components/sections/HeroParallax";
+import { MenuGrid } from "@/components/sections/MenuGrid";
+import { VisitSection } from "@/components/sections/VisitSection";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (
     <>
-      <Hero />
-      <Marquee />
-      <Manifesto />
-      <Signatures />
-      <Ingredients />
-      <Prestations />
-      <VisitCTA />
+      <HeroParallax />
+      <CoffeeSection />
+      <MenuGrid />
+      <GirlsOnlySection />
+      <AICafeSection />
+      <EventsSection />
+      <VisitSection />
     </>
   );
 }

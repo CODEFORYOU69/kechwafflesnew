@@ -1,0 +1,708 @@
+/* The global focus ring is gold: invisible on cream. */
+.section :focus-visible {
+  outline-color: hsl(var(--terracotta-700));
+}
+
+/* ---------------------------------------------------------------
+   Header
+   --------------------------------------------------------------- */
+.header {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 1.7vw, 1.5rem);
+  row-gap: 1.5rem;
+}
+
+.headerEyebrow,
+.headerTitle,
+.headerIntro {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1024px) {
+  .headerEyebrow {
+    grid-column: 1 / span 2;
+    padding-top: 0.75rem;
+  }
+
+  .headerTitle {
+    grid-column: 3 / -1;
+  }
+
+  .headerIntro {
+    grid-column: 8 / -1;
+    margin-top: 1.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------
+   The rail. Native first: the markup works before and without JS.
+   --------------------------------------------------------------- */
+.scene {
+  --caption: 4.25rem;
+  --foot: 1.25rem;
+  /* Sized on the width, capped so that the tall arches still fit a phone held sideways. */
+  --u: min(1vw, 0.62vh);
+  --gap: calc(var(--u) * 4.5);
+  --title-size: min(29vw, 34vh);
+  position: relative;
+  margin-top: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.stage {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  /* The rail runs edge to edge: an outer ring would fall outside the screen. */
+  outline-offset: -4px;
+}
+
+.track {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap);
+  width: max-content;
+  padding: 0 var(--gutter) var(--foot);
+}
+
+/* The floor everything stands on, and its ruler: one tick per module of the kufic grid. */
+.track::before,
+.track::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  pointer-events: none;
+}
+
+.track::before {
+  bottom: calc(var(--foot) + var(--caption) - 1px);
+  height: 1px;
+  background: hsl(var(--espresso-950) / 0.32);
+}
+
+.track::after {
+  bottom: calc(var(--foot) + var(--caption) - 7px);
+  height: 6px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    hsl(var(--espresso-950) / 0.32) 0 1px,
+    transparent 1px 44px
+  );
+}
+
+/* --- Title panel ------------------------------------------------ */
+.intro {
+  position: relative;
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.introTitle {
+  position: relative;
+  /* Puts the baseline of the word on the floor line. */
+  top: 0.07em;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: var(--title-size);
+  font-stretch: 78%;
+  font-weight: 750;
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  /* The ff ligature turns into a black mass at this size. */
+  font-variant-ligatures: none;
+  white-space: nowrap;
+}
+
+/* Wide enough for the overhang of the italic L, and the article nests above the word. */
+.introTitle :global(.line-mask) {
+  padding-inline: 0.25em;
+  margin-inline: -0.25em;
+}
+
+.introTitle :global(.line-mask):first-child {
+  margin-bottom: -0.17em;
+}
+
+.introArticle {
+  display: block;
+  line-height: 0.9;
+  color: hsl(var(--terracotta-700));
+}
+
+/* Takes no part in the panel's width, which the word alone decides. */
+.introNote {
+  width: 0;
+  min-width: 100%;
+  height: var(--caption);
+  padding-top: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: hsl(var(--espresso-700));
+}
+
+.introHint {
+  position: absolute;
+  top: calc(var(--title-size) * 0.36);
+  left: calc(var(--title-size) * 1.2);
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  white-space: nowrap;
+  color: hsl(var(--terracotta-700));
+}
+
+.hintPinned {
+  display: none;
+}
+
+.hintArrow {
+  position: relative;
+  display: block;
+  width: 1.75rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.hintArrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.scene[data-mode="pinned"] .hintNative {
+  display: none;
+}
+
+.scene[data-mode="pinned"] .hintPinned {
+  display: inline;
+}
+
+/* --- Cards ------------------------------------------------------- */
+.cards {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  flex: none;
+  width: calc(var(--native-w) * var(--u));
+  scroll-snap-align: start;
+}
+
+/* Always clear of the floor: the caption of a lifted arch never crosses the line. */
+.cardLifted {
+  --lifted-by: calc(var(--native-lift) * var(--u) + var(--caption));
+  margin-bottom: var(--lifted-by);
+}
+
+.rise {
+  position: relative;
+}
+
+/* A plumb line from a lifted arch down to the floor, as on an elevation drawing. */
+.cardLifted .rise::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(var(--native-h) * var(--u));
+  width: 1px;
+  height: var(--lifted-by);
+  background: hsl(var(--espresso-950) / 0.32);
+}
+
+.cardLifted .caption {
+  padding-left: 0.625rem;
+}
+
+.figure {
+  margin: 0;
+}
+
+.photo {
+  position: relative;
+  height: calc(var(--native-h) * var(--u));
+  background: hsl(var(--cream-200));
+}
+
+.photoSquare {
+  overflow: hidden;
+  overflow: clip;
+}
+
+.photoInner {
+  position: absolute;
+  inset: 0;
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  height: var(--caption);
+  padding-top: 0.75rem;
+}
+
+.captionIndex {
+  color: hsl(var(--terracotta-700));
+}
+
+.captionName {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+  font-stretch: 86%;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+/* While the rail is native, nothing waits for a reveal: a swipe must land on a photo. */
+.scene[data-mode="native"] [data-reveal],
+.scene[data-mode="native"] :global(.line-mask) > span {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (min-width: 1024px) {
+  .scene {
+    --caption: 4.75rem;
+    --foot: 1.5rem;
+    /* All sized on the stage's height: a scene always fits one screen, whatever its shape. */
+    --u: min(calc((100vh - var(--nav-h) - var(--caption) - var(--foot) - 1rem) / 100), 1vw);
+    --gap: calc(var(--u) * 6);
+    --title-size: min(23.5vw, 46vh);
+    /* The stage opens on its own empty sky. */
+    margin-top: 0;
+  }
+
+  .stage {
+    display: flex;
+    align-items: flex-end;
+    height: 100vh;
+    padding-top: var(--nav-h);
+  }
+
+  .track {
+    flex: none;
+  }
+
+  .intro {
+    z-index: 0;
+  }
+
+  /* On desktop the note takes the pocket beside the article, the hint takes the floor. */
+  .introNote {
+    position: absolute;
+    top: calc(var(--title-size) * 0.16);
+    left: calc(var(--title-size) * 1.42);
+    width: auto;
+    min-width: 0;
+    max-width: 22rem;
+    height: auto;
+    padding-top: 0;
+    font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+  }
+
+  .introHint {
+    position: static;
+    height: var(--caption);
+    align-items: flex-start;
+    padding-top: 0.875rem;
+  }
+
+  .card {
+    width: calc(var(--w) * var(--u));
+  }
+
+  .cardLifted {
+    --lifted-by: calc(var(--lift) * var(--u) + var(--caption));
+  }
+
+  .photo {
+    height: calc(var(--h) * var(--u));
+  }
+
+  /* Overscan for the drift, in both modes so that the crop stays the same (the cable of
+     `croffle-fraise` stays out of the frame). `--shift` recentres an off-centre croffle. */
+  .photoInner {
+    left: calc(-8% + var(--shift));
+    right: calc(-8% - var(--shift));
+  }
+
+  .cardLifted .rise::after {
+    top: calc(var(--h) * var(--u));
+  }
+}
+
+/* --- Pinned scene (set by CroffleRail, never before hydration) --- */
+.scene[data-mode="pinned"] .stage {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  overflow: clip;
+  scroll-snap-type: none;
+}
+
+.scene[data-mode="pinned"] .track {
+  will-change: transform;
+}
+
+.scene[data-mode="pinned"] .intro {
+  will-change: transform;
+}
+
+.progress {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background: hsl(var(--terracotta-700));
+  transform-origin: 0 50%;
+}
+
+/* Same query as PIN_QUERY: the scene has its height from the first paint, so an anchor below
+   it lands in the right place. The script then refines it to the pixel. */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .scene {
+    height: calc(392 * var(--u) + 2.82 * var(--title-size) + 2 * var(--gutter) - 100vw + 100vh);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .photoInner img {
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  .card:hover .photoInner img {
+    transform: scale(1.035);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Frais du jour
+   --------------------------------------------------------------- */
+.fresh {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(0.75rem, 1.7vw, 1.5rem);
+  row-gap: clamp(0.75rem, 1.7vw, 1.5rem);
+  margin-top: clamp(4rem, 8vw, 8rem);
+}
+
+.freshHead {
+  grid-column: 1 / -1;
+  margin-bottom: 1rem;
+}
+
+.freshTitle {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(2.25rem, 4.6vw, 4.5rem);
+  font-stretch: 80%;
+  font-weight: 750;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+}
+
+.freshNote {
+  margin-top: 0.875rem;
+  color: hsl(var(--espresso-700));
+}
+
+.tile {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5rem;
+  overflow: hidden;
+  overflow: clip;
+}
+
+.tileIndex {
+  position: relative;
+}
+
+.tileBody {
+  position: relative;
+}
+
+.tilePhoto {
+  position: relative;
+  overflow: hidden;
+  overflow: clip;
+}
+
+.tileName {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-stretch: 78%;
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.tileDetail {
+  margin-top: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+/* The slab: the only dark surface of the section. */
+.tileCookies {
+  grid-column: 1 / -1;
+  min-height: 24rem;
+  padding: 1.25rem;
+  background: hsl(var(--espresso-950));
+  color: hsl(var(--cream-50));
+}
+
+.tileCookies .tileIndex {
+  color: hsl(var(--gold-400));
+}
+
+/* The whole slab is the photo; a shade under the words keeps them readable. */
+.tileCookies .tilePhoto {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+}
+
+.tileCookies .tilePhoto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    hsl(var(--espresso-950) / 0.92) 12%,
+    hsl(var(--espresso-950) / 0.55) 46%,
+    hsl(var(--espresso-950) / 0.15) 78%
+  );
+}
+
+.tileCookies .tileName {
+  font-size: clamp(4.25rem, 19.5vw, 10rem);
+  line-height: 0.84;
+}
+
+.tileCookies .tileDetail {
+  color: hsl(var(--cream-200));
+}
+
+.tileGrid {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  color: hsl(var(--gold-400));
+  opacity: 0.1;
+  -webkit-mask-image: linear-gradient(to bottom left, #000, transparent 62%);
+  mask-image: linear-gradient(to bottom left, #000, transparent 62%);
+}
+
+/* The door: a terracotta arch, the concentric arches of the logo, the text inside them. */
+.tileBrownies {
+  --arch-step: 0.5rem;
+  grid-column: 1 / -1;
+  min-height: 34rem;
+  padding: 0 calc(var(--arch-step) * 3 + 1rem) 1.25rem;
+  border-radius: 999px 999px 0 0;
+  background: hsl(var(--terracotta-700));
+  color: hsl(var(--cream-50));
+  justify-content: flex-end;
+}
+
+.tileBrownies .tileIndex {
+  color: hsl(var(--gold-200));
+}
+
+/* The photo stands in the innermost arch, the words stay on the terracotta below it. */
+.tileBrownies .tilePhoto {
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--arch-step) * 3);
+  right: calc(var(--arch-step) * 3);
+  left: calc(var(--arch-step) * 3);
+  height: 58%;
+}
+
+.tileBrownies .tileName {
+  font-size: clamp(3rem, 16vw, 7rem);
+}
+
+.tileBrownies .tileDetail {
+  color: hsl(var(--cream-50));
+}
+
+.doorArches {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+}
+
+.doorArches > span {
+  position: absolute;
+  bottom: 0;
+  border: 1px solid hsl(var(--gold-200) / 0.34);
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+}
+
+.doorArches > span:nth-child(1) {
+  inset: var(--arch-step) var(--arch-step) 0;
+}
+
+.doorArches > span:nth-child(2) {
+  inset: calc(var(--arch-step) * 2) calc(var(--arch-step) * 2) 0;
+}
+
+.doorArches > span:nth-child(3) {
+  inset: calc(var(--arch-step) * 3) calc(var(--arch-step) * 3) 0;
+}
+
+/* Printed tiles: nothing but hairlines. */
+.tileBrioches,
+.tileGateaux {
+  grid-column: span 6;
+  gap: 1.25rem;
+  padding: 1rem 0 1.25rem;
+  border-top: 1px solid hsl(var(--espresso-950) / 0.32);
+  border-bottom: 1px solid hsl(var(--espresso-950) / 0.32);
+}
+
+.tileGateaux {
+  padding-left: 0.875rem;
+  border-left: 1px solid hsl(var(--espresso-950) / 0.32);
+}
+
+.tileBrioches .tileIndex,
+.tileGateaux .tileIndex {
+  order: -1;
+  color: hsl(var(--terracotta-700));
+}
+
+.tileBrioches .tilePhoto,
+.tileGateaux .tilePhoto {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  max-width: 17rem;
+}
+
+.tileBrioches .tileName,
+.tileGateaux .tileName {
+  font-size: clamp(2.25rem, 10.5vw, 5.25rem);
+  line-height: 0.92;
+}
+
+.tileBrioches .tileDetail,
+.tileGateaux .tileDetail {
+  color: hsl(var(--espresso-700));
+}
+
+@media (min-width: 768px) {
+  .tileCookies {
+    padding: 2rem;
+    min-height: 30rem;
+  }
+
+  .tileBrownies {
+    --arch-step: 1rem;
+    padding-bottom: 2rem;
+    min-height: 40rem;
+  }
+
+  .tileDetail {
+    font-size: 1.0625rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .freshHead {
+    grid-column: 1 / span 7;
+    grid-row: 1;
+    margin-bottom: 2rem;
+  }
+
+  .tileCookies {
+    grid-column: 1 / span 7;
+    grid-row: 2;
+    min-height: clamp(26rem, 36vw, 34rem);
+  }
+
+  .tileCookies .tileName {
+    font-size: clamp(5rem, 9.8vw, 10.5rem);
+  }
+
+  /* Rises beside the title and runs down the whole board. */
+  .tileBrownies {
+    grid-column: 8 / -1;
+    grid-row: 1 / span 3;
+  }
+
+  .tileBrownies .tileName {
+    font-size: clamp(3.5rem, 6.4vw, 7rem);
+  }
+
+  .tileBrioches .tileName,
+  .tileGateaux .tileName {
+    font-size: clamp(3rem, 5.8vw, 5.25rem);
+  }
+
+  .tileBrioches {
+    grid-column: 1 / span 4;
+    grid-row: 3;
+  }
+
+  .tileGateaux {
+    grid-column: 5 / span 3;
+    grid-row: 3;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Foot
+   --------------------------------------------------------------- */
+.foot {
+  margin-top: clamp(3.5rem, 6vw, 6rem);
+}
+
+.footInner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid hsl(var(--espresso-950) / 0.32);
+}
+
+.footNote {
+  max-width: 34rem;
+}
+
+.footActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .footInner {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+}
