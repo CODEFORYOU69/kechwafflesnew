@@ -23,7 +23,7 @@ import {
 const bases = [
   { name: "Bruxelles", price: "25 Dh" },
   { name: "Liégeoise", price: "30 Dh" },
-  { name: "Craffle", price: "35 Dh" },
+  { name: "Croffle", price: "35 Dh" },
   { name: "Pancakes", price: "35 Dh" },
   { name: "Bubble", price: "40 Dh" },
 ];

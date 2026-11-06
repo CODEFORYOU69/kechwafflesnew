@@ -1,0 +1,628 @@
+/* ---------------------------------------------------------------
+   Page hero: the giant title walks across a real arch.
+   --------------------------------------------------------------- */
+.hero {
+  /* « carte » measures 1.91em: it fills the column on a phone, without touching its edge. */
+  --title-size: min(calc((100vw - 2 * var(--gutter)) / 1.93), 34vh);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 88vh;
+  min-height: 88svh;
+  padding-top: var(--nav-h);
+  padding-bottom: calc(var(--arch) + 1.25rem);
+  overflow: hidden;
+  overflow: clip;
+}
+
+.heroGrid {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  color: hsl(var(--gold-400));
+  opacity: 0.05;
+  -webkit-mask-image: radial-gradient(70% 70% at 70% 30%, #000, transparent);
+  mask-image: radial-gradient(70% 70% at 70% 30%, #000, transparent);
+}
+
+.heroInner {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.heroStage {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.heroFrame {
+  position: absolute;
+  z-index: -1;
+  top: 0.5rem;
+  right: 0;
+  bottom: 0;
+  width: 56vw;
+  background: hsl(var(--espresso-800));
+}
+
+/* The title runs over the photo: its foot stays dark enough for it. */
+.heroFrame::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(to top, hsl(var(--espresso-950) / 0.55), transparent 58%);
+}
+
+.heroEyebrow {
+  max-width: calc(100% - 56vw - 0.75rem);
+  padding-top: 1.25rem;
+  color: hsl(var(--gold-400));
+}
+
+.heroTitle {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  font-size: var(--title-size);
+  /* Looser than `.text-mega`: at this size its tight letters merge into one mass. */
+  font-stretch: 78%;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: hsl(var(--cream-50));
+}
+
+.heroLead {
+  margin-top: 1.25rem;
+  color: hsl(var(--cream-200));
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    --title-size: min(27vw, 48vh, 29rem);
+    /* Never less than the title, the note above it and the bar: on a short window too. */
+    min-height: max(min(92vh, 62vw), calc(var(--title-size) * 0.8 + 26rem));
+    padding-bottom: calc(var(--arch) + 1.5rem);
+  }
+
+  .heroFrame {
+    /* Runs on behind the section that rises over the foot of the hero. */
+    bottom: calc((var(--arch) + 1.5rem) * -1);
+    width: clamp(20rem, 32vw, 30rem);
+  }
+
+  .heroEyebrow {
+    max-width: none;
+    padding-top: 2.5rem;
+  }
+
+  .heroTitle {
+    flex-direction: row;
+    gap: 0.2em;
+    margin-top: 2rem;
+    white-space: nowrap;
+  }
+
+  /* Out of the flow, just above the title, which the text must never cross. */
+  .heroLead {
+    position: absolute;
+    bottom: calc(var(--title-size) * 0.8 + 3rem);
+    left: var(--gutter);
+    max-width: 24rem;
+    margin-top: 0;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Catalogue
+   --------------------------------------------------------------- */
+.catalog :focus-visible {
+  outline-color: hsl(var(--terracotta-700));
+}
+
+/* On the top edge of the section, which would clip it if it stood inside: it leaves the
+   screen when the rail can dock against the top without being cut by that edge. */
+.sentinel {
+  position: relative;
+  top: calc(var(--arch) * -1);
+  height: 1px;
+  margin-bottom: -1px;
+  pointer-events: none;
+}
+
+.catalog {
+  padding-top: clamp(1rem, 2.4vw, 2.25rem);
+}
+
+.rail {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 30;
+  background: hsl(var(--cream-100));
+  border-bottom: 1px solid hsl(var(--espresso-950) / 0.2);
+  transition: transform 0.5s var(--ease-out);
+}
+
+/* Filled band under the navigation bar: nothing scrolls by above the rail. */
+.rail::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 100%;
+  height: var(--nav-h);
+  background: hsl(var(--cream-100));
+}
+
+/* The bar leaves when heading down: the rail follows it up instead of leaving a gap. */
+:global(body):has(:global(header[data-hidden="true"])) .rail[data-docked="true"] {
+  transform: translate3d(0, calc(var(--nav-h) * -1), 0);
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.25rem;
+  margin-inline: -0.375rem;
+  overflow-x: auto;
+}
+
+.tab {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0.5rem 0.375rem;
+  color: hsl(var(--espresso-600));
+  text-align: left;
+}
+
+.tab::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background: hsl(var(--terracotta-700));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.55s var(--ease-out);
+}
+
+.tab[aria-selected="true"] {
+  color: hsl(var(--espresso-950));
+}
+
+.tab[aria-selected="true"]::after {
+  transform: scaleX(1);
+}
+
+/* The rail scrolls under its own tabs: the ring has to stay inside. */
+.tab:focus-visible {
+  outline-offset: -3px;
+}
+
+.tabIndex,
+.tabSublabel {
+  display: none;
+}
+
+.tabLabel {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-stretch: 84%;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tab:hover {
+    color: hsl(var(--terracotta-700));
+  }
+}
+
+@media (min-width: 768px) {
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 1.7vw, 1.5rem);
+    margin-inline: 0;
+    overflow: visible;
+  }
+
+  .tab {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 0.75rem;
+    align-content: center;
+    align-items: baseline;
+    min-height: 3.75rem;
+    padding: 0.5rem 0;
+  }
+
+  .tab:focus-visible {
+    outline-offset: 2px;
+  }
+
+  .tabIndex {
+    display: block;
+    color: hsl(var(--terracotta-700));
+  }
+
+  .tabLabel {
+    font-size: clamp(1.375rem, 2.3vw, 2rem);
+  }
+
+  .tabSublabel {
+    grid-column: 2;
+    margin-top: 0.25rem;
+    color: hsl(var(--espresso-600));
+    white-space: nowrap;
+  }
+}
+
+/* Below this width the longest sublabel no longer fits its column. */
+@media (min-width: 1200px) {
+  .tab {
+    min-height: 4.75rem;
+  }
+
+  .tabSublabel {
+    display: block;
+  }
+}
+
+/* --- Panel -------------------------------------------------------- */
+.panel {
+  animation: panel-in 0.7s var(--ease-out) both;
+}
+
+/* Keyboard users land on the panel: the ring would run around the whole catalogue. */
+.panel:focus-visible {
+  outline-offset: -2px;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.panelHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-block: clamp(2.5rem, 6vw, 5.5rem) clamp(1rem, 2vw, 2rem);
+}
+
+.panelSteps {
+  color: hsl(var(--terracotta-700));
+}
+
+@media (min-width: 1024px) {
+  .panelHeader {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+
+  .panelSteps {
+    max-width: 22rem;
+    padding-bottom: 0.75rem;
+    text-align: right;
+  }
+}
+
+/* --- Groups ------------------------------------------------------- */
+.group {
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.groupHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.groupMarker,
+.groupCount {
+  color: hsl(var(--terracotta-700));
+}
+
+.groupCount {
+  color: hsl(var(--espresso-600));
+}
+
+.groupLine {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .groupHeader {
+    grid-template-columns: 2.25rem auto minmax(0, 1fr) auto;
+    column-gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .groupLine {
+    display: block;
+    align-self: center;
+    height: 1px;
+    background: hsl(var(--espresso-950) / 0.2);
+  }
+}
+
+.items {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: clamp(1rem, 1.7vw, 1.5rem);
+}
+
+.items_compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .items_regular {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .items_compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .items_regular {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .items_signature {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* An odd count must not leave half a row empty before the next group. */
+  .items_signature > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .items_compact {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* --- Items: a printed menu, not a wall of cards ------------------- */
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid hsl(var(--espresso-950) / 0.2);
+}
+
+.itemText {
+  min-width: 0;
+}
+
+.itemName {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.25rem, 1.75vw, 1.5rem);
+  font-stretch: 86%;
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+.itemDescription {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: hsl(var(--espresso-700));
+}
+
+.itemOptions {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: hsl(var(--espresso-600));
+}
+
+.itemOut {
+  margin-top: 0.625rem;
+  color: hsl(var(--terracotta-700));
+}
+
+.visual {
+  position: relative;
+  flex: none;
+  width: 5.25rem;
+  height: 7rem;
+  background: hsl(var(--cream-50));
+}
+
+.item[data-out] .visual img {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+@media (min-width: 1024px) {
+  .item_regular .visual {
+    width: 6.5rem;
+    height: 8.75rem;
+  }
+}
+
+/* No photo worth calling a photo: a typographic door instead of the logo. */
+.visualTile {
+  display: grid;
+  place-items: end center;
+  padding-bottom: 0.25em;
+  font-size: 3.25rem;
+  background: hsl(var(--terracotta-700));
+  color: hsl(var(--cream-50));
+}
+
+.visualInitial {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-stretch: 78%;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Signatures: the large plates of the page. */
+.item_signature {
+  gap: 1.25rem;
+  padding-block: 1.25rem 1.75rem;
+}
+
+.item_signature .itemName {
+  font-size: clamp(1.625rem, 2.9vw, 2.625rem);
+  font-stretch: 80%;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.item_signature .itemDescription {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+}
+
+.item_signature .visual {
+  width: 38vw;
+  height: 50vw;
+  max-width: 14rem;
+  max-height: 18.5rem;
+}
+
+.item_signature .visualTile {
+  font-size: clamp(5rem, 22vw, 9rem);
+}
+
+@media (min-width: 1024px) {
+  .item_signature .visual {
+    width: clamp(10rem, 15vw, 14rem);
+    height: clamp(13.25rem, 20vw, 18.5rem);
+  }
+}
+
+/* Toppings and extras: a dense index. */
+.item_compact {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.625rem;
+  padding-block: 0.5rem;
+}
+
+.item_compact .visual {
+  order: -1;
+  width: 2.5rem;
+  height: 3.25rem;
+}
+
+.item_compact .visualTile {
+  font-size: 1.5rem;
+}
+
+.item_compact .itemName {
+  font-size: 1rem;
+  line-height: 1.15;
+}
+
+.item_compact .itemOptions {
+  margin-top: 0.125rem;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+}
+
+/* --- Waiting and failing ------------------------------------------ */
+.skeleton {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: clamp(1rem, 1.7vw, 1.5rem);
+  min-height: 60vh;
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  align-content: start;
+}
+
+@media (min-width: 768px) {
+  .skeleton {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .skeleton {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.skeletonItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 5.25rem;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid hsl(var(--espresso-950) / 0.2);
+}
+
+.skeletonItem > span {
+  background: hsl(var(--cream-200));
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+.skeletonItem > span:first-child {
+  height: 1.5rem;
+  max-width: 70%;
+}
+
+.skeletonItem > span:last-child {
+  height: 7rem;
+  border-radius: 999px 999px 0 0;
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.error {
+  max-width: 40rem;
+  min-height: 40vh;
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+/* On a phone the contact button would sit on the last tab until the rail has docked. */
+@media (max-width: 767px) {
+  :global(body):has(.rail:not([data-docked="true"])) :global(.floating-contact) {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (forced-colors: active) {
+  .tab[aria-selected="true"] {
+    outline: 3px solid Highlight;
+    outline-offset: -3px;
+  }
+}

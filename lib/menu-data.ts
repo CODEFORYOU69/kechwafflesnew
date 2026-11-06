@@ -523,7 +523,7 @@ export const menuProducts: Product[] = [
   {
     handle: "base-craffle",
     sku: "BASE-CRA",
-    name: "Craffle",
+    name: "Croffle",
     category: "Bases Sucrées",
     description: "Croissant gaufré croustillant",
     image: "croffle.jpg",

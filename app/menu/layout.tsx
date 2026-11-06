@@ -1,32 +1,49 @@
-import { Metadata } from "next";
+import { SITE_URL } from "@/lib/site-content";
+import type { Metadata } from "next";
 
+const TITLE = "La carte : café, croffles et pâtisseries maison";
+const DESCRIPTION =
+  "La carte de Kech Waffles à Marrakech : café de spécialité, croffles du jour, pâtisseries maison, boissons glacées et jus pressés. MAG 33, Al Badii.";
+const SOCIAL_IMAGE = "/brand/og-image.jpg";
+
+// Next.js replaces nested metadata objects instead of merging them: `openGraph` and
+// `twitter` have to repeat what the root layout sets, the image included.
 export const metadata: Metadata = {
-  title: "Menu - Gaufres, Pancakes, Milkshakes & Desserts",
-  description:
-    "Découvrez notre menu complet : bubble waffles tiramisu, pancakes américains, milkshakes gourmands, pizza waffles, crêpes, cafés glacés et bien plus. Restaurant Kech Waffles Marrakech.",
+  title: TITLE,
+  description: DESCRIPTION,
   keywords: [
-    "menu Kech Waffles",
-    "carte restaurant Marrakech",
-    "bubble waffle tiramisu",
-    "pancakes Marrakech",
-    "milkshake prix",
-    "desserts menu",
-    "pizza waffle carte",
-    "prix gaufres Marrakech",
-    "menu complet Marrakech",
+    "carte Kech Waffles",
+    "menu café Marrakech",
+    "café de spécialité Marrakech",
+    "croffles Marrakech",
+    "iced latte Marrakech",
+    "cold brew Marrakech",
   ],
+  alternates: { canonical: "/menu" },
   openGraph: {
-    title: "Menu Kech Waffles - Gaufres, Pancakes & Desserts Marrakech",
-    description:
-      "Découvrez notre menu complet : bubble waffles, pancakes, milkshakes, pizza waffles, crêpes et cafés gourmands.",
-    url: "https://www.kechwaffles.com/menu",
+    type: "website",
+    locale: "fr_FR",
+    siteName: "Kech Waffles",
+    url: `${SITE_URL}/menu`,
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [
+      {
+        url: SOCIAL_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Logo Kech Waffles, Marrakech",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [SOCIAL_IMAGE],
   },
 };
 
-export default function MenuLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function MenuLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
