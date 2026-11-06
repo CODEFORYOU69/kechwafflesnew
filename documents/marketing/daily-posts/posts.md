@@ -69,7 +69,7 @@ La liégeoise : perles de sucre caramélisées dans le fer, dorée à la command
 ### Google Business
 
 ```
-Nos gaufres sont dorées à la commande 🧇 liégeoise aux perles de sucre, bruxelloise légère, craffles croissant-gaufre. | Waffles baked to order — Liège, Brussels & craffles. 📍 MAG 33 Al Badii · jusqu'à 2h tous les soirs
+Nos gaufres sont dorées à la commande 🧇 liégeoise aux perles de sucre, bruxelloise légère, croffles croissant-gaufre. | Waffles baked to order — Liège, Brussels & croffles. 📍 MAG 33 Al Badii · jusqu'à 2h tous les soirs
 ```
 **Bouton :** `Commander` → https://glovoapp.com/en/ma/marrakech/stores/kech-waffles-mar
 
@@ -205,7 +205,7 @@ Best waffles in Marrakech? Here's our case.
 
 The Brussels waffle: light, crispy, golden — topped with fresh strawberries, and packed to go if you're on your way to the medina.
 
-We're a small waffle atelier in Al Badii — where locals actually go for dessert. Liège waffles, craffles, kunefe, real specialty coffee.
+We're a small waffle atelier in Al Badii — where locals actually go for dessert. Liège waffles, croffles, kunefe, real specialty coffee.
 
 📍 MAG 33 Al Badii, Marrakech (Google Maps: Kech Waffles)
 🕙 Open till 2am every night (closed Mondays)
@@ -312,15 +312,15 @@ Aussi à la carte : La Fesiya (poulet aux citrons confits), La Khli3 (viande sé
 
 ---
 
-## Jour 6 — C'est quoi, un craffle ?
+## Jour 6 — C'est quoi, un croffle ?
 
-**Requête ciblée :** « craffle » *(la requête curiosité — les gens tapent le mot qu'ils découvrent)*
+**Requête ciblée :** « croffle » *(la requête curiosité — les gens tapent le mot qu'ils découvrent)*
 **Visuels :** `images/feed/jour-06.jpg` · `images/vertical/jour-06.jpg`
 
 ### Instagram
 
 ```
-C'est quoi un craffle ? La question qu'on entend dix fois par jour au comptoir.
+C'est quoi un croffle ? La question qu'on entend dix fois par jour au comptoir.
 
 Réponse : une pâte de croissant, feuilletée et beurrée, cuite dans le fer à gaufre. Dehors ça croustille comme un croissant du matin, dedans c'est moelleux comme une gaufre.
 
@@ -333,31 +333,31 @@ Ensuite tu choisis son destin :
 📍 MAG 33 Al Badii, Marrakech — le croissant et la gaufre ont eu un enfant, il habite ici.
 
 ⸻
-A craffle = croissant dough baked in a waffle iron. Crispy outside, buttery inside. Pick your topping.
+A croffle = croissant dough baked in a waffle iron. Crispy outside, buttery inside. Pick your topping.
 
 Enregistre pour ton prochain craving 🔖
 ```
 
-**Alt text :** `Craffle Oreo de Kech Waffles : croissant-gaufre croustillant, chantilly, Oreo entier et sauce chocolat.`
+**Alt text :** `Croffle Oreo de Kech Waffles : croissant-gaufre croustillant, chantilly, Oreo entier et sauce chocolat.`
 
-**Hashtags :** `#craffle #croffle #marrakechfood #marrakech #dessertmarrakech`
+**Hashtags :** `#croffle #croffle #marrakechfood #marrakech #dessertmarrakech`
 
 ### TikTok
 
-**Texte à l'écran (0-3 s) :** `C'est quoi un CRAFFLE ? 🥐🧇`
-**À dire à voix haute (darija) :** « واش عمرك جربتي كرافل؟ كرواصون + ݣوفرة. شوف كيفاش كيتصاوب. » — *« Wach 3emrek jerrebti craffle ? Croissant + gaufre. Chouf kifach kaytsawb. »*
-**Variante FR :** « T'as déjà goûté un craffle ? Croissant + gaufre. Regarde comment ça se fabrique. »
+**Texte à l'écran (0-3 s) :** `C'est quoi un CROFFLE ? 🥐🧇`
+**À dire à voix haute (darija) :** « واش عمرك جربتي كرافل؟ كرواصون + ݣوفرة. شوف كيفاش كيتصاوب. » — *« Wach 3emrek jerrebti croffle ? Croissant + gaufre. Chouf kifach kaytsawb. »*
+**Variante FR :** « T'as déjà goûté un croffle ? Croissant + gaufre. Regarde comment ça se fabrique. »
 
 | Temps | Ce qu'on voit | Ce qu'on dit |
 |---|---|---|
 | 0-3 s | La pâte de croissant crue posée sur le fer | Le hook ci-dessus |
 | 3-10 s | Le fer qui se referme, la vapeur | « Une pâte de croissant, feuilletée au beurre, écrasée dans le fer à gaufre. » |
-| 10-18 s | Le craffle qui s'ouvre, feuilletage visible | « Dehors : croissant. Dedans : gaufre. » |
+| 10-18 s | Le croffle qui s'ouvre, feuilletage visible | « Dehors : croissant. Dedans : gaufre. » |
 | 18-25 s | Défilé des versions : Oreo, spéculoos, caramel, 3 chocolats | « Oreo, spéculoos, caramel, 3 chocolats, coco… » |
 | 25-30 s | Première bouchée + pin Maps | « Kech Waffles, Al Badii, Marrakech. Tu sais ce qu'il te reste à faire. » |
 
-**Légende :** `Le craffle : croissant + gaufre, et ton topping 🥐🧇 📍 Al Badii, Marrakech`
-**Hashtags :** `#craffle #croffle #marrakech #foodtiktokmaroc #dessert`
+**Légende :** `Le croffle : croissant + gaufre, et ton topping 🥐🧇 📍 Al Badii, Marrakech`
+**Hashtags :** `#croffle #croffle #marrakech #foodtiktokmaroc #dessert`
 
 ### Facebook
 *Pas de post FB.*
@@ -436,7 +436,7 @@ Le soir aussi 🌙 Jusqu'à 2h du matin, tous les soirs (fermé le lundi). Gaufr
 
 ---
 
-## Jour 8 — Le goûter en famille (craffle caramel-spéculoos)
+## Jour 8 — Le goûter en famille (croffle caramel-spéculoos)
 
 **Requête ciblée :** « goûter à Marrakech »
 **Visuels :** `images/feed/jour-08.jpg` · `images/vertical/jour-08.jpg`
@@ -444,7 +444,7 @@ Le soir aussi 🌙 Jusqu'à 2h du matin, tous les soirs (fermé le lundi). Gaufr
 ### Instagram
 
 ```
-Le goûter à Marrakech qui met tout le monde d'accord : le craffle caramel-spéculoos.
+Le goûter à Marrakech qui met tout le monde d'accord : le croffle caramel-spéculoos.
 
 Croustillant dehors, moelleux dedans, chantilly, éclats de spéculoos — et chacun choisit sa version : Oreo, coco, 3 chocolats, chocolat-fraise…
 
@@ -453,14 +453,14 @@ Les enfants choisissent leur topping, les parents récupèrent un vrai café à 
 📍 MAG 33 Al Badii, Marrakech — mercredi & week-end après l'école, c'est le créneau
 
 ⸻
-Craffles + build-your-own toppings: the family snack stop in Marrakech.
+Croffles + build-your-own toppings: the family snack stop in Marrakech.
 
 Tague la famille qui doit voir ça 👨‍👩‍👧‍👦
 ```
 
-**Alt text :** `Craffle caramel-spéculoos de Kech Waffles avec chantilly et éclats de biscuits. Titre : goûter à Marrakech.`
+**Alt text :** `Croffle caramel-spéculoos de Kech Waffles avec chantilly et éclats de biscuits. Titre : goûter à Marrakech.`
 
-**Hashtags :** `#gouter #marrakechenfamille #craffle #marrakechfood #marrakech`
+**Hashtags :** `#gouter #marrakechenfamille #croffle #marrakechfood #marrakech`
 
 ### TikTok
 
@@ -470,20 +470,20 @@ Tague la famille qui doit voir ça 👨‍👩‍👧‍👦
 
 | Temps | Ce qu'on voit | Ce qu'on dit |
 |---|---|---|
-| 0-3 s | Le craffle qui sort du fer | Le hook ci-dessus |
+| 0-3 s | Le croffle qui sort du fer | Le hook ci-dessus |
 | 3-12 s | Défilé des toppings (caramel, spéculoos, Oreo, coco) | « Caramel, spéculoos, Oreo, coco, 3 chocolats… chacun compose le sien. » |
 | 12-20 s | Une main d'enfant qui pointe un topping | « Croustillant dehors, moelleux dedans. » |
-| 20-28 s | La table familiale, cafés + craffles | « Kech Waffles, Al Badii. Le goûter est réglé. » |
+| 20-28 s | La table familiale, cafés + croffles | « Kech Waffles, Al Badii. Le goûter est réglé. » |
 
-**Légende :** `Craffles + toppings au choix : le goûter familial à Marrakech 🥐 📍 Al Badii`
-**Hashtags :** `#craffle #gouter #marrakech #familytime #foodtiktokmaroc`
+**Légende :** `Croffles + toppings au choix : le goûter familial à Marrakech 🥐 📍 Al Badii`
+**Hashtags :** `#croffle #gouter #marrakech #familytime #foodtiktokmaroc`
 
 ### Facebook
 
 ```
 Le goûter qui met tout le monde d'accord 🥐🧇
 
-Craffle croustillant + toppings au choix (caramel-spéculoos, Oreo, coco, 3 chocolats…) pour les petits — et un vrai café pour les grands.
+Croffle croustillant + toppings au choix (caramel-spéculoos, Oreo, coco, 3 chocolats…) pour les petits — et un vrai café pour les grands.
 
 📍 Kech Waffles, MAG 33 Al Badii, Marrakech
 Mercredi après-midi & week-end : pensez à venir un peu tôt 😉
@@ -494,7 +494,7 @@ Mercredi après-midi & week-end : pensez à venir un peu tôt 😉
 
 ---
 
-## Jour 9 — L'idée date night (craffle chocolat-fraise)
+## Jour 9 — L'idée date night (croffle chocolat-fraise)
 
 **Requête ciblée :** « où sortir en amoureux à Marrakech »
 **Visuels :** `images/feed/jour-09.jpg` · `images/vertical/jour-09.jpg`
@@ -502,7 +502,7 @@ Mercredi après-midi & week-end : pensez à venir un peu tôt 😉
 ### Instagram
 
 ```
-Idée date night à Marrakech qui ne ruine personne : un craffle chocolat-fraise, deux cuillères.
+Idée date night à Marrakech qui ne ruine personne : un croffle chocolat-fraise, deux cuillères.
 
 Chocolat chaud qui coule, fraises fraîches, chantilly — et une table tranquille à Al Badii, loin du bruit de la place.
 
@@ -511,12 +511,12 @@ On sert jusqu'à 2h tous les soirs : le dessert d'après-dîner est officielleme
 📍 MAG 33 Al Badii, Marrakech
 
 ⸻
-Date night idea in Marrakech: one chocolate-strawberry craffle, two spoons. Open till 2am every night.
+Date night idea in Marrakech: one chocolate-strawberry croffle, two spoons. Open till 2am every night.
 
 Identifie la personne concernée 👀
 ```
 
-**Alt text :** `Craffle chocolat-fraise de Kech Waffles : chocolat fondu, fraises fraîches et chantilly. Titre : l'idée date night à Marrakech.`
+**Alt text :** `Croffle chocolat-fraise de Kech Waffles : chocolat fondu, fraises fraîches et chantilly. Titre : l'idée date night à Marrakech.`
 
 **Hashtags :** `#marrakech #datenight #dessertmarrakech #chocolat #marrakechfood`
 
@@ -528,12 +528,12 @@ Identifie la personne concernée 👀
 
 | Temps | Ce qu'on voit | Ce qu'on dit |
 |---|---|---|
-| 0-3 s | Le chocolat chaud versé sur le craffle | Le hook ci-dessus |
+| 0-3 s | Le chocolat chaud versé sur le croffle | Le hook ci-dessus |
 | 3-12 s | Fraises + chantilly posées | « Chocolat qui coule, fraises fraîches, chantilly. » |
-| 12-20 s | Deux cuillères plantées, deux mains | « Un craffle, deux cuillères. C'est le move. » |
+| 12-20 s | Deux cuillères plantées, deux mains | « Un croffle, deux cuillères. C'est le move. » |
 | 20-28 s | La table le soir, lumière chaude + pin Maps | « Et on sert jusqu'à 2h, tous les soirs. Kech Waffles, Al Badii. » |
 
-**Légende :** `Un craffle chocolat-fraise, deux cuillères : le date night à Marrakech 🍓 📍 Al Badii`
+**Légende :** `Un croffle chocolat-fraise, deux cuillères : le date night à Marrakech 🍓 📍 Al Badii`
 **Hashtags :** `#datenight #marrakech #chocolat #foodtiktokmaroc #dessert`
 
 ### Facebook
@@ -675,7 +675,7 @@ Envie d'un dessert sans sortir ? Nos desserts en canette (tiramisu Oreo, façon 
 
 ---
 
-## Jour 12 — Le dessert des chocolat-addicts (craffle 3 chocolats)
+## Jour 12 — Le dessert des chocolat-addicts (croffle 3 chocolats)
 
 **Requête ciblée :** « dessert chocolat Marrakech »
 **Visuels :** `images/feed/jour-12.jpg` · `images/vertical/jour-12.jpg`
@@ -685,21 +685,21 @@ Envie d'un dessert sans sortir ? Nos desserts en canette (tiramisu Oreo, façon 
 ```
 Aux chocolat-addicts de Marrakech : ce post est un avertissement.
 
-Le craffle 3 chocolats : noir, lait, blanc — sur pâte de croissant croustillante. Il ne joue pas, il ne s'excuse pas.
+Le croffle 3 chocolats : noir, lait, blanc — sur pâte de croissant croustillante. Il ne joue pas, il ne s'excuse pas.
 
 À partager. Ou pas. On ne juge personne ici.
 
 📍 MAG 33 Al Badii, Marrakech
 
 ⸻
-Triple chocolate craffle: dark, milk & white chocolate on crispy croissant-waffle dough. You've been warned.
+Triple chocolate croffle: dark, milk & white chocolate on crispy croissant-waffle dough. You've been warned.
 
 Envoie ça à ton/ta chocolat-addict de service 🍫
 ```
 
-**Alt text :** `Craffle 3 chocolats de Kech Waffles : pépites de chocolat noir, au lait et blanc sur croissant-gaufre. Titre : le dessert des chocolat-addicts.`
+**Alt text :** `Croffle 3 chocolats de Kech Waffles : pépites de chocolat noir, au lait et blanc sur croissant-gaufre. Titre : le dessert des chocolat-addicts.`
 
-**Hashtags :** `#chocolat #dessertmarrakech #craffle #marrakech #chocolatelover`
+**Hashtags :** `#chocolat #dessertmarrakech #croffle #marrakech #chocolatelover`
 
 ### TikTok
 
@@ -710,12 +710,12 @@ Envoie ça à ton/ta chocolat-addict de service 🍫
 | Temps | Ce qu'on voit | Ce qu'on dit |
 |---|---|---|
 | 0-3 s | Les trois chocolats fondus côte à côte | Le hook ci-dessus |
-| 3-12 s | Le craffle nappé des trois, l'un après l'autre | « Noir. Lait. Blanc. Dans cet ordre, sur pâte de croissant. » |
+| 3-12 s | Le croffle nappé des trois, l'un après l'autre | « Noir. Lait. Blanc. Dans cet ordre, sur pâte de croissant. » |
 | 12-20 s | Gros plan sur le feuilletage + chocolat qui coule | *(silence — laisse le chocolat parler)* |
-| 20-28 s | Première bouchée + pin Maps | « Le craffle 3 chocolats. Kech Waffles, Al Badii. À partager, en théorie. » |
+| 20-28 s | Première bouchée + pin Maps | « Le croffle 3 chocolats. Kech Waffles, Al Badii. À partager, en théorie. » |
 
-**Légende :** `Le craffle 3 chocolats : noir, lait, blanc 🍫 📍 Kech Waffles, Al Badii`
-**Hashtags :** `#chocolate #craffle #marrakech #foodtiktokmaroc #chocolatelover`
+**Légende :** `Le croffle 3 chocolats : noir, lait, blanc 🍫 📍 Kech Waffles, Al Badii`
+**Hashtags :** `#chocolate #croffle #marrakech #foodtiktokmaroc #chocolatelover`
 
 ### Facebook
 *Pas de post FB.*
@@ -798,7 +798,7 @@ Pas encore à la carte. Suivez la page : le lancement sera annoncé ici en premi
 ```
 Kech Waffles, c'est quoi au juste ? Le récap en un post (à épingler).
 
-🧇 Liégeoises aux perles de sucre, bruxelloises, craffles (Oreo, spéculoos, 3 chocolats, coco…)
+🧇 Liégeoises aux perles de sucre, bruxelloises, croffles (Oreo, spéculoos, 3 chocolats, coco…)
 ✨ Signatures marocaines : amlou, fleur d'oranger-rose, dattes, tiramisu
 👑 Gaufres salées : La Boisée, pizza waffles, La Fesiya, La Khli3 + brioches fourrées
 🧀 Kunefe préparé à la commande
@@ -842,7 +842,7 @@ Enregistre ce post : c'est ta carte de visite pour nous trouver 🔖
 ```
 Kech Waffles, c'est quoi ? Le récap 🧇
 
-• Liégeoises, bruxelloises, craffles (Oreo, spéculoos, 3 chocolats…)
+• Liégeoises, bruxelloises, croffles (Oreo, spéculoos, 3 chocolats…)
 • Signatures marocaines : amlou, fleur d'oranger, dattes, tiramisu
 • Gaufres salées : La Boisée, pizza waffles + brioches fourrées
 • Kunefe à la commande

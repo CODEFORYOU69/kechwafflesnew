@@ -28,7 +28,7 @@ Regénérer : `node generate-visuals.mjs` (photos depuis `public/images/menu-ite
 
 ## 🎯 Message central (fil rouge de tout le kit)
 
-> Des gaufres artisanales prises au sérieux — liégeoises aux perles de sucre, craffles, pizza waffles, kunefe — et des signatures qui parlent marocain (amlou, fleur d'oranger, rfissa bientôt). À Al Badii, jusqu'à 2h du matin tous les soirs, sur place ou sur Glovo.
+> Des gaufres artisanales prises au sérieux — liégeoises aux perles de sucre, croffles, pizza waffles, kunefe — et des signatures qui parlent marocain (amlou, fleur d'oranger, rfissa bientôt). À Al Badii, jusqu'à 2h du matin tous les soirs, sur place ou sur Glovo.
 
 ## 📌 Les faits (à copier tels quels, ne pas improviser)
 
@@ -38,7 +38,7 @@ Regénérer : `node generate-visuals.mjs` (photos depuis `public/images/menu-ite
 - **Comptes :** Instagram `@kech_waffles` · TikTok `@kechwaffles` · Facebook `facebook.com/kechwaffles`
 - **Livraison :** Glovo → https://glovoapp.com/en/ma/marrakech/stores/kech-waffles-mar
 - **WhatsApp :** +212 7 09 38 84 31 → https://wa.me/212709388431
-- **Prix signatures :** La Tiramisu 45 dh · La Dubai 55 dh · La Souss-Massa / La Marrakchia / L'Oasis 50 dh *(pas encore de photos de ces recettes → la copy des posts s'appuie sur liégeoises, craffles, bruxelloise, Boisée, kunefe)*
+- **Prix signatures :** La Tiramisu 45 dh · La Dubai 55 dh · La Souss-Massa / La Marrakchia / L'Oasis 50 dh *(pas encore de photos de ces recettes → la copy des posts s'appuie sur liégeoises, croffles, bruxelloise, Boisée, kunefe)*
 
 ## ⚠️ Statut & honnêteté (à lire avant de poster)
 

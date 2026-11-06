@@ -204,7 +204,7 @@ const TOTAL = 6;
 const CAROUSELS = {
   "carousel": {
     s1: { title: "La gaufre,\nprise au sérieux.", sub: "Kech Waffles · Al Badii, Marrakech" },
-    s2: { title: "Craffles. Liégeoises.\nPizza waffles.", sub: "Et les signatures marocaines : amlou, fleur d'oranger…" },
+    s2: { title: "Croffles. Liégeoises.\nPizza waffles.", sub: "Et les signatures marocaines : amlou, fleur d'oranger…" },
     s3: { title: "Sucré d'un côté.\nSalé de l'autre.", sub: "Personne ne se dispute.", labels: ["SUCRÉ", "SALÉ"] },
     s4: { title: "Le kunefe\nest arrivé.", sub: "Préparé à la commande, servi brûlant." },
     s5: { big: "2h", title: "On sert jusqu'à 2h du matin.\nTous les soirs.", sub: "Sauf le lundi — on recharge les fers" },
@@ -212,7 +212,7 @@ const CAROUSELS = {
   },
   "carousel-en": {
     s1: { title: "Waffles,\ntaken seriously.", sub: "Kech Waffles · Al Badii, Marrakech" },
-    s2: { title: "Craffles. Liège waffles.\nPizza waffles.", sub: "Plus Moroccan signatures: amlou, orange blossom…" },
+    s2: { title: "Croffles. Liège waffles.\nPizza waffles.", sub: "Plus Moroccan signatures: amlou, orange blossom…" },
     s3: { title: "Sweet on one side.\nSavory on the other.", sub: "Everybody wins.", labels: ["SWEET", "SAVORY"] },
     s4: { title: "The kunefe\nhas landed.", sub: "Made to order, served hot." },
     s5: { big: "2am", title: "Open till 2am.\nEvery night.", sub: "Closed on Mondays" },
@@ -231,4 +231,4 @@ for (const [dir, S] of Object.entries(CAROUSELS)) {
 
 await tiktokCover({ photo: join(IMG, "craflechocolatfraise.jpg"), title: "La gaufre,\nprise au sérieux.", sub: "Kech Waffles · Al Badii, Marrakech", out: OUT("tiktok/cover.jpg") });
 await storyCard({ title: "On vous doit\ndes nouvelles 👀", sub: "Nouvelles signatures marocaines,\nkunefe, et une surprise en cuisine…", footer: "MAG 33 AL BADII · MARRAKECH", out: OUT("stories/relance.jpg") });
-await gbpFeature({ photo: join(IMG, "gauffresliegeoise.jpg"), title: "Gaufres · craffles · kunefe · café — Al Badii, Marrakech", out: OUT("google-business/feature.jpg") });
+await gbpFeature({ photo: join(IMG, "gauffresliegeoise.jpg"), title: "Gaufres · croffles · kunefe · café — Al Badii, Marrakech", out: OUT("google-business/feature.jpg") });

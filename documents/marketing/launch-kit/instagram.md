@@ -12,8 +12,8 @@ Le principe : on ne s'excuse pas de l'absence, on réinstalle l'identité. Chaqu
 
 | Slide | Texte incrusté (FR) | Visuel |
 |---|---|---|
-| 1 | **La gaufre, prise au sérieux.** | Craffle chocolat-fraise plein cadre (la photo la plus spectaculaire) |
-| 2 | **Craffles. Liégeoises. Pizza waffles.** Et les signatures marocaines. | Triptyque : craffle Oreo / liégeoise chocolat / pizza waffle |
+| 1 | **La gaufre, prise au sérieux.** | Croffle chocolat-fraise plein cadre (la photo la plus spectaculaire) |
+| 2 | **Croffles. Liégeoises. Pizza waffles.** Et les signatures marocaines. | Triptyque : croffle Oreo / liégeoise chocolat / pizza waffle |
 | 3 | **Sucré d'un côté. Salé de l'autre.** Personne ne se dispute. | Split : liégeoise Nutella vs La Boisée |
 | 4 | **Le kunefe est arrivé.** Préparé à la commande, servi brûlant. | Cheese pull figé en photo |
 | 5 | **Jusqu'à 2h du matin,** tous les soirs (sauf lundi). | Slide typographique « 2h » |
@@ -24,7 +24,7 @@ Le principe : on ne s'excuse pas de l'absence, on réinstalle l'identité. Chaqu
 | Slide | Texte incrusté (EN) |
 |---|---|
 | 1 | **Waffles, taken seriously.** |
-| 2 | **Craffles. Liège waffles. Pizza waffles.** Plus Moroccan signatures. |
+| 2 | **Croffles. Liège waffles. Pizza waffles.** Plus Moroccan signatures. |
 | 3 | **Sweet on one side. Savory on the other.** |
 | 4 | **The kunefe has landed.** Made to order, served hot. |
 | 5 | **Open till 2am,** every night (closed Mondays). |
@@ -35,7 +35,7 @@ Le principe : on ne s'excuse pas de l'absence, on réinstalle l'identité. Chaqu
 ```
 On reprend la parole ici — et on la reprend avec ce qu'on sait faire.
 
-Kech Waffles, c'est la gaufre prise au sérieux : liégeoises aux perles de sucre dorées à la commande, craffles croissant-gaufre, pizza waffles… et depuis peu, un kunefe préparé à la commande. Sans oublier les signatures marocaines (amlou, fleur d'oranger, citrons confits).
+Kech Waffles, c'est la gaufre prise au sérieux : liégeoises aux perles de sucre dorées à la commande, croffles croissant-gaufre, pizza waffles… et depuis peu, un kunefe préparé à la commande. Sans oublier les signatures marocaines (amlou, fleur d'oranger, citrons confits).
 
 Sucré, salé, un vrai comptoir café — et on sert jusqu'à 2h du matin, tous les soirs.
 
@@ -43,7 +43,7 @@ Sucré, salé, un vrai comptoir café — et on sert jusqu'à 2h du matin, tous 
 🛵 Glovo : https://glovoapp.com/en/ma/marrakech/stores/kech-waffles-mar
 
 ⸻
-We're back on the feed. Liège waffles with caramelized pearl sugar, craffles, pizza waffles — plus kunefe made to order and Moroccan signatures. Open till 2am every night.
+We're back on the feed. Liège waffles with caramelized pearl sugar, croffles, pizza waffles — plus kunefe made to order and Moroccan signatures. Open till 2am every night.
 
 Swipe jusqu'au bout, et dis-nous en commentaire : tu commences par la sucrée ou la salée ? 👇
 ```

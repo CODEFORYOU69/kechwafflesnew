@@ -20,7 +20,7 @@ www.kechwaffles.com
 - **Lien :** www.kechwaffles.com
 
 ### Facebook
-- **Description courte :** `Atelier de gaufres artisanales sucrées & salées, craffles, kunefe et spécialités café à Marrakech (Al Badii). Jusqu'à 2h du matin tous les soirs. Livraison Glovo.`
+- **Description courte :** `Atelier de gaufres artisanales sucrées & salées, croffles, kunefe et spécialités café à Marrakech (Al Badii). Jusqu'à 2h du matin tous les soirs. Livraison Glovo.`
 - **Bouton d'action :** `Commander` → https://glovoapp.com/en/ma/marrakech/stores/kech-waffles-mar *(ou bouton `WhatsApp` → +212 7 09 38 84 31 si tu préfères centraliser les demandes)*
 
 ### Link-in-bio (si tu utilises un agrégateur de liens)

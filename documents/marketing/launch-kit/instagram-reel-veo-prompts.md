@@ -12,7 +12,7 @@ Le Reel prévoit **La Tiramisu** (3-8 s) et **La Dubai** (8-14 s). Or ton README
 **Deux sorties possibles :**
 
 - **A. Tu photographies La Tiramisu et La Dubai** (10 min, lumière de jour, fond sombre), tu les charges en référence, et tu gardes le scénario tel quel. C'est la bonne option.
-- **B. Tu remplaces ces deux beats** par des produits dont tu as déjà les photos — liégeoise, craffle, La Boisée. Les prompts 2bis et 3bis en bas du fichier sont écrits pour ça.
+- **B. Tu remplaces ces deux beats** par des produits dont tu as déjà les photos — liégeoise, croffle, La Boisée. Les prompts 2bis et 3bis en bas du fichier sont écrits pour ça.
 
 Les prompts 2 et 3 ci-dessous supposent l'option A (avec tes photos en référence).
 

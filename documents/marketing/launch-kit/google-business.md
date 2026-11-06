@@ -20,7 +20,7 @@
 ### La description (750 caractères, les 250 premiers comptent le plus)
 
 ```
-Kech Waffles est un atelier de gaufres artisanales à Marrakech (Al Badii) : gaufres liégeoises aux perles de sucre, craffles (croissant-gaufre), gaufres salées (La Boisée, pizza waffles), signatures marocaines (amlou, fleur d'oranger), kunefe préparé à la commande, desserts en canette et carte café complète (espresso, matcha, ice lattes, milkshakes). Sur place ou en livraison Glovo. Ouvert jusqu'à 2h du matin tous les soirs (fermé le lundi). — Artisan waffle shop in Marrakech: Liège waffles, craffles, sweet & savory waffles, kunefe made to order, specialty coffee. Open till 2am every night (closed Mondays). Dine in or Glovo delivery.
+Kech Waffles est un atelier de gaufres artisanales à Marrakech (Al Badii) : gaufres liégeoises aux perles de sucre, croffles (croissant-gaufre), gaufres salées (La Boisée, pizza waffles), signatures marocaines (amlou, fleur d'oranger), kunefe préparé à la commande, desserts en canette et carte café complète (espresso, matcha, ice lattes, milkshakes). Sur place ou en livraison Glovo. Ouvert jusqu'à 2h du matin tous les soirs (fermé le lundi). — Artisan waffle shop in Marrakech: Liège waffles, croffles, sweet & savory waffles, kunefe made to order, specialty coffee. Open till 2am every night (closed Mondays). Dine in or Glovo delivery.
 ```
 
 ### Photos (signal de classement local direct)
@@ -48,7 +48,7 @@ Le pack `../daily-posts/posts.md` fournit un post GBP prêt les jours 1, 3, 4, 7
 ### Post de relance (à publier le jour 1 du kit)
 
 ```
-La carte s'est agrandie chez Kech Waffles 🧇 Craffles croissant-gaufre, liégeoises aux perles de sucre, gaufres salées (La Boisée, pizza waffles) et kunefe préparé à la commande. Sur place à Al Badii ou en livraison Glovo — jusqu'à 2h tous les soirs. | New waffles & made-to-order kunefe. Open till 2am every night.
+La carte s'est agrandie chez Kech Waffles 🧇 Croffles croissant-gaufre, liégeoises aux perles de sucre, gaufres salées (La Boisée, pizza waffles) et kunefe préparé à la commande. Sur place à Al Badii ou en livraison Glovo — jusqu'à 2h tous les soirs. | New waffles & made-to-order kunefe. Open till 2am every night.
 ```
 **Bouton :** `Itinéraire`
 

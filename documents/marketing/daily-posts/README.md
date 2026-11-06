@@ -105,13 +105,13 @@ Voir `../launch-kit/google-business.md` pour l'optimisation complète de la fich
 | 3 | Kunefe à Marrakech | ✅ | ✅ | ✅ | ✅ |
 | 4 | Best waffles in Marrakech (EN) — la bruxelloise | ✅ | ✅ | — | ✅ |
 | 5 | Gaufres salées — La Boisée + pizza waffle | ✅ | ✅ | ✅ | — |
-| 6 | C'est quoi un craffle ? | ✅ | ✅ | — | — |
+| 6 | C'est quoi un croffle ? | ✅ | ✅ | — | — |
 | 7 | Ouvert jusqu'à 2h — le dessert d'après-dîner | ✅ | ✅ | ✅ | ✅ |
-| 8 | Goûter en famille — craffle caramel-spéculoos | ✅ | ✅ | ✅ | — |
-| 9 | Date night — craffle chocolat-fraise | ✅ | ✅ | — | — |
+| 8 | Goûter en famille — croffle caramel-spéculoos | ✅ | ✅ | ✅ | — |
+| 9 | Date night — croffle chocolat-fraise | ✅ | ✅ | — | — |
 | 10 | La gaufre liégeoise, la vraie | ✅ | ✅ | ✅ | ✅ |
 | 11 | Dessert en livraison — cans + Glovo | ✅ | ✅ | ✅ | ✅ |
-| 12 | Craffle 3 chocolats — les chocolat-addicts | ✅ | ✅ | — | — |
+| 12 | Croffle 3 chocolats — les chocolat-addicts | ✅ | ✅ | — | — |
 | 13 | TEASER — sandwichs rfissa roulés (bientôt) | ✅ | ✅ | ✅ | — |
 | 14 | Kech Waffles, le récap — adresse, horaires, Glovo | ✅ | ✅ | ✅ | ✅ |
 

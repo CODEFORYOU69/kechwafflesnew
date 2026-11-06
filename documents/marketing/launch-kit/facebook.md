@@ -17,7 +17,7 @@ Visuel : le carrousel Instagram (les 6 slides passent en album FB) ou la meilleu
 Ça faisait longtemps qu'on n'avait rien posté ici. On corrige ça — et on a des choses à raconter 🧇
 
 Chez Kech Waffles, la carte a grandi :
-• Les craffles : croissant + gaufre (Oreo, spéculoos, caramel, 3 chocolats, coco…)
+• Les croffles : croissant + gaufre (Oreo, spéculoos, caramel, 3 chocolats, coco…)
 • Les liégeoises aux perles de sucre & la bruxelloise, dorées à la commande
 • Le côté salé : La Boisée (poulet, mozza, sauce gruyère), pizza waffles, brioches fourrées
 • Le petit nouveau : le kunefe, préparé à la commande, servi brûlant
@@ -52,7 +52,7 @@ Pour ceux qui cherchent un kunefe correct à Marrakech : on le prépare à la co
 Crée un **événement Facebook récurrent** « Nocturnes Kech Waffles — jusqu'à 2h du matin » :
 - Les événements ont leur propre onglet de découverte locale sur FB.
 - Les participants reçoivent un rappel automatique le jour J.
-- Texte court : `Gaufres, craffles, kunefe et cafés servis jusqu'à 2h du matin, tous les soirs (sauf lundi). MAG 33 Al Badii, Marrakech.`
+- Texte court : `Gaufres, croffles, kunefe et cafés servis jusqu'à 2h du matin, tous les soirs (sauf lundi). MAG 33 Al Badii, Marrakech.`
 
 ---
 
