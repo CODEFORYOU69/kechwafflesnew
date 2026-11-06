@@ -1,32 +1,44 @@
-import { Metadata } from "next";
+import { SITE_URL } from "@/lib/site-content";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Nos Produits Signature - TiCanMisu & Pizza Waffles",
+  title: "TiCanMisu et Pizza Waffle",
   description:
-    "Découvrez nos créations uniques : TiCanMisu en bocal (tiramisu revisité aux saveurs Dubai Chocolate, Amlou, Speculoos) et nos Pizza Waffles audacieuses. Produits exclusifs Kech Waffles Marrakech.",
+    "À côté du café de spécialité et des croffles, deux créations d’atelier de Kech Waffles à Marrakech : le TiCanMisu, tiramisu en canette, et la Pizza Waffle, gaufre salée gratinée.",
   keywords: [
     "TiCanMisu",
-    "tiramisu bocal Marrakech",
-    "pizza waffle",
-    "tiramisu Dubai chocolate",
-    "dessert en bocal",
-    "tiramisu Amlou",
-    "tiramisu Speculoos",
+    "tiramisu en canette Marrakech",
+    "Pizza Waffle Marrakech",
     "dessert à emporter Marrakech",
-    "cadeau gourmand Marrakech",
+    "Kech Waffles",
   ],
+  alternates: { canonical: "/product" },
   openGraph: {
-    title: "Produits Exclusifs Kech Waffles - TiCanMisu & Pizza Waffles",
+    type: "website",
+    locale: "fr_FR",
+    siteName: "Kech Waffles",
+    url: `${SITE_URL}/product`,
+    title: "TiCanMisu et Pizza Waffle · Kech Waffles",
     description:
-      "TiCanMisu en bocal et Pizza Waffles : nos créations signature disponibles chez Kech Waffles Marrakech.",
-    url: "https://www.kechwaffles.com/product",
+      "Deux créations d’atelier, à côté du comptoir : le tiramisu en canette et la gaufre salée gratinée.",
+    images: [
+      {
+        url: "/brand/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Logo Kech Waffles, Marrakech",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TiCanMisu et Pizza Waffle · Kech Waffles",
+    description:
+      "Deux créations d’atelier, à côté du comptoir : le tiramisu en canette et la gaufre salée gratinée.",
+    images: ["/brand/og-image.jpg"],
   },
 };
 
-export default function ProductLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ProductLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

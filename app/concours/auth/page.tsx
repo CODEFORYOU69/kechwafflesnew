@@ -30,7 +30,7 @@ function AuthPageContent() {
           console.error("Error checking admin status:", error);
         }
 
-        const redirect = searchParams.get("redirect") || "/concours/pronostics";
+        const redirect = searchParams.get("redirect") || "/loyalty/card";
         router.push(redirect);
       }
     };
@@ -51,7 +51,7 @@ function AuthPageContent() {
         await signIn.email({ email, password });
       }
 
-      const redirect = searchParams.get("redirect") || "/concours/pronostics";
+      const redirect = searchParams.get("redirect") || "/loyalty/card";
       router.push(redirect);
     } catch (err) {
       const error = err as Error;
@@ -68,7 +68,7 @@ function AuthPageContent() {
     try {
       await signIn.social({
         provider: "google",
-        callbackURL: searchParams.get("redirect") || "/concours/pronostics",
+        callbackURL: searchParams.get("redirect") || "/loyalty/card",
       });
     } catch (err) {
       const error = err as Error;
@@ -90,7 +90,7 @@ function AuthPageContent() {
       <Card className="w-full max-w-md border-amber-500/50 bg-black/80 backdrop-blur-md shadow-[0_0_50px_rgba(217,119,6,0.4)]">
         <CardHeader className="text-center space-y-2">
           <CardTitle className="text-3xl font-bold bg-gradient-to-r from-green-500 via-amber-400 to-red-600 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(217,119,6,0.5)]">
-            🏆 Concours CAN 2025
+            Mon compte Kech Waffles
           </CardTitle>
           <CardDescription className="text-white/70">
             Kech Waffles - Marrakech
@@ -290,9 +290,6 @@ function AuthPageContent() {
             </TabsContent>
           </Tabs>
 
-          <p className="mt-6 text-center text-xs text-white/50">
-            En continuant, vous acceptez les conditions d&apos;utilisation et la politique de confidentialité.
-          </p>
         </CardContent>
       </Card>
     </div>

@@ -1,0 +1,407 @@
+/* ---------------------------------------------------------------
+   Hero: the waffle in a door, on the ridges of an iron.
+   --------------------------------------------------------------- */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  overflow: clip;
+  padding-top: calc(var(--nav-h) + 1.5rem);
+  background: hsl(var(--espresso-800));
+}
+
+.heroWaffle {
+  --cell: clamp(4rem, 8.4vw, 7.5rem);
+  --ridge: 0.5rem;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(hsl(var(--gold-400) / 0.04) var(--ridge), transparent var(--ridge)),
+    linear-gradient(90deg, hsl(var(--gold-400) / 0.04) var(--ridge), transparent var(--ridge));
+  background-size: var(--cell) var(--cell);
+  -webkit-mask-image: linear-gradient(115deg, transparent 22%, #000 78%);
+  mask-image: linear-gradient(115deg, transparent 22%, #000 78%);
+}
+
+.heroStage {
+  display: grid;
+  row-gap: 2.5rem;
+}
+
+.heroStage .heroTitle {
+  margin-top: 1.25rem;
+  /* « sur mesure. » fills the column and never wraps: 4.4em wide. */
+  font-size: min(calc((100vw - 2 * var(--gutter)) / 4.4), 7.5rem);
+}
+
+.heroFoot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.heroDoor {
+  position: relative;
+  margin-inline: calc(var(--gutter) * -1);
+  aspect-ratio: 1 / 1.22;
+}
+
+.heroDoor::before {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  background: radial-gradient(closest-side, hsl(var(--gold-400) / 0.16), transparent);
+}
+
+.heroFrame {
+  position: absolute;
+  inset: 0;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .heroStage {
+    flex: 1;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    row-gap: 0;
+  }
+
+  .heroCopy {
+    position: relative;
+    z-index: 1;
+    grid-column: 1 / span 7;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: calc(var(--arch) + 1.75rem);
+  }
+
+  .heroStage .heroTitle {
+    margin-top: clamp(1rem, 3svh, 2rem);
+    font-size: min(11.5vw, 11rem, 20vh);
+    font-size: min(11.5vw, 11rem, 20svh);
+    /* At this size the optical axis already tightens the font: more would close the « rm ». */
+    letter-spacing: -0.018em;
+  }
+
+  .heroFoot {
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+
+  .heroDoor {
+    grid-column: 8 / -1;
+    grid-row: 1;
+    margin-inline: 0;
+    aspect-ratio: auto;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Principle.
+   --------------------------------------------------------------- */
+.principle {
+  display: grid;
+  row-gap: 2rem;
+}
+
+.principleFrame {
+  aspect-ratio: 1 / 1.08;
+}
+
+.principleCopy {
+  display: grid;
+  row-gap: 1.25rem;
+}
+
+.highlights {
+  margin-top: 0.75rem;
+  border-top: 1px solid hsl(var(--espresso-950) / 0.3);
+}
+
+.highlight {
+  display: grid;
+  grid-template-columns: 5.25rem minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 1rem;
+  padding-block: 0.875rem;
+  border-bottom: 1px solid hsl(var(--espresso-950) / 0.16);
+}
+
+.highlightValue {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  text-align: right;
+}
+
+@media (min-width: 1024px) {
+  .principle {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    row-gap: clamp(3rem, 5vw, 5rem);
+    align-items: end;
+  }
+
+  .principleEyebrow {
+    grid-column: 1 / -1;
+    margin-bottom: -2rem;
+  }
+
+  .principleTitle {
+    grid-column: 1 / span 11;
+  }
+
+  .principleDoor {
+    grid-column: 1 / span 6;
+  }
+
+  .principleCopy {
+    grid-column: 8 / -1;
+    row-gap: 1.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Included: the title holds while the list goes by.
+   --------------------------------------------------------------- */
+.included {
+  display: grid;
+  row-gap: 2.5rem;
+}
+
+.includedList {
+  border-top: 1px solid hsl(var(--cream-50) / 0.18);
+}
+
+.includedItem {
+  padding-block: 1.75rem;
+  border-bottom: 1px solid hsl(var(--cream-50) / 0.18);
+}
+
+@media (min-width: 1024px) {
+  .included {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    align-items: start;
+  }
+
+  .includedHead {
+    grid-column: 1 / span 6;
+    position: sticky;
+    top: calc(var(--nav-h) + 2.5rem);
+  }
+
+  .includedList {
+    grid-column: 7 / -1;
+  }
+
+  .includedItem {
+    padding-block: 2.25rem;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Formats, measured in the cells of the iron.
+   --------------------------------------------------------------- */
+.formatsHead {
+  display: grid;
+  row-gap: 1.75rem;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.legendCell {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: hsl(var(--gold-400));
+}
+
+.formats {
+  margin-top: clamp(3rem, 5vw, 5rem);
+  border-top: 1px solid hsl(var(--cream-50) / 0.18);
+}
+
+.format {
+  display: grid;
+  row-gap: 1.75rem;
+  padding-block: 2.25rem;
+  border-bottom: 1px solid hsl(var(--cream-50) / 0.18);
+}
+
+.chart {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.25rem;
+  width: min(100%, 14rem);
+  padding: 0.25rem;
+  background: hsl(var(--espresso-950) / 0.4);
+}
+
+.chartCell {
+  aspect-ratio: 1;
+  background: hsl(var(--cream-50) / 0.05);
+  transition:
+    opacity 0.5s var(--ease-out) calc(var(--order, 0) * 26ms),
+    transform 0.6s var(--ease-out) calc(var(--order, 0) * 26ms);
+}
+
+.chartCell[data-level="solid"] {
+  background: hsl(var(--gold-400));
+}
+
+.chartCell[data-level="reach"] {
+  background: hsl(var(--gold-400) / 0.34);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global(html[data-reveal-ready]) :global([data-reveal]:not([data-visible])) .chartCell {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+}
+
+.formatLine {
+  padding-block: 0.5rem;
+  line-height: 1.35;
+  color: hsl(var(--cream-200));
+  border-bottom: 1px solid hsl(var(--cream-50) / 0.1);
+}
+
+@media (min-width: 1024px) {
+  .formatsHead {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    align-items: end;
+  }
+
+  .formatsHead > :first-child {
+    grid-column: 1 / span 8;
+  }
+
+  .formatsNote {
+    grid-column: 9 / -1;
+    padding-bottom: 0.625rem;
+  }
+
+  .format {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    align-items: start;
+    padding-block: 2.5rem;
+  }
+
+  .formatName {
+    grid-column: 1 / span 5;
+  }
+
+  .formatChart {
+    grid-column: 6 / span 3;
+  }
+
+  .formatLines {
+    grid-column: 9 / -1;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Steps: a staircase, from the message down to the day itself.
+   --------------------------------------------------------------- */
+.steps {
+  display: grid;
+  row-gap: 2rem;
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.step {
+  padding-top: 1.25rem;
+  border-top: 2px solid hsl(var(--espresso-950));
+}
+
+.stepNumber {
+  display: block;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  font-stretch: 75%;
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  color: hsl(var(--terracotta-700));
+}
+
+@media (min-width: 1024px) {
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    align-items: start;
+  }
+
+  .step {
+    margin-top: calc(var(--step, 0) * 4.5rem);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Final: a golden waffle, end to end.
+   --------------------------------------------------------------- */
+.final {
+  isolation: isolate;
+  background: hsl(var(--gold-400));
+  color: hsl(var(--espresso-950));
+}
+
+.finalWaffle {
+  --cell: clamp(4.5rem, 10.5vw, 9.5rem);
+  --ridge: clamp(0.5rem, 1vw, 0.875rem);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(hsl(var(--gold-300) / 0.7) var(--ridge), transparent var(--ridge)),
+    linear-gradient(90deg, hsl(var(--gold-300) / 0.7) var(--ridge), transparent var(--ridge));
+  background-size: var(--cell) var(--cell);
+}
+
+.finalStage .finalTitle {
+  margin-top: 1.5rem;
+  font-size: min(24vw, 15rem);
+  line-height: 0.86;
+}
+
+.finalFoot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .finalFoot {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+}

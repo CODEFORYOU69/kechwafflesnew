@@ -1,119 +1,111 @@
+import { CONTACT, OPENING_HOURS, SITE_URL } from "@/lib/site-content";
+
 export function StructuredData() {
-  const restaurantSchema = {
-    "@context": "https://schema.org",
-    "@type": "Restaurant",
-    name: "Kech Waffles",
-    description:
-      "Restaurant à Marrakech spécialisé en gaufres tiramisu, pancakes, milkshakes, bubble waffles, pizza waffles et boissons gourmandes.",
-    image: "https://www.kechwaffles.com/images/menu-items/TransparentBlack.jpg",
-    "@id": "https://www.kechwaffles.com",
-    url: "https://www.kechwaffles.com",
-    telephone: "+212-XXXXXXXXX", // À mettre à jour
-    priceRange: "$$",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Votre adresse", // À mettre à jour
-      addressLocality: "Marrakech",
-      postalCode: "40000",
-      addressCountry: "MA",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 31.6295, // À mettre à jour avec vos coordonnées
-      longitude: -7.9811,
-    },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        opens: "09:00",
-        closes: "23:00",
-      },
-    ],
-    servesCuisine: ["Desserts", "Gaufres", "Crêpes", "Boissons"],
-    menu: "https://www.kechwaffles.com/menu",
-    acceptsReservations: "False",
-    sameAs: [
-      // Ajoutez vos réseaux sociaux ici
-      // "https://www.facebook.com/kechwaffles",
-      // "https://www.instagram.com/kechwaffles",
-    ],
-  };
-
-  const localBusinessSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "Kech Waffles",
-    image: "https://www.kechwaffles.com/images/menu-items/TransparentBlack.jpg",
-    "@id": "https://www.kechwaffles.com",
-    url: "https://www.kechwaffles.com",
-    telephone: "+212-XXXXXXXXX", // À mettre à jour
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Votre adresse", // À mettre à jour
-      addressLocality: "Marrakech",
-      postalCode: "40000",
-      addressCountry: "MA",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 31.6295, // À mettre à jour
-      longitude: -7.9811,
-    },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        opens: "09:00",
-        closes: "23:00",
-      },
-    ],
-  };
-
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Kech Waffles",
-    url: "https://www.kechwaffles.com",
-    logo: "https://www.kechwaffles.com/images/menu-items/TransparentBlack.jpg",
-    description:
-      "Restaurant à Marrakech spécialisé en gaufres tiramisu, pancakes, milkshakes, bubble waffles et boissons gourmandes.",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Votre adresse", // À mettre à jour
-      addressLocality: "Marrakech",
-      postalCode: "40000",
-      addressCountry: "MA",
-    },
-    contactPoint: {
-      "@type": "ContactPoint",
-      telephone: "+212-XXXXXXXXX", // À mettre à jour
-      contactType: "customer service",
-      areaServed: "MA",
-      availableLanguage: ["French", "Arabic"],
-    },
-  };
-
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(restaurantSchema),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(CAFE_SCHEMA) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(localBusinessSchema),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationSchema),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_SCHEMA) }}
       />
     </>
   );
 }
+
+/** Days left out are closed. `closes` before `opens` means the next morning. */
+function openingHoursSpecification() {
+  return OPENING_HOURS.flatMap((day) =>
+    day.opensAt === null || day.closesAt === null
+      ? []
+      : [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: SCHEMA_DAYS[day.weekday],
+            opens: clockTime(day.opensAt),
+            closes: clockTime(day.closesAt % MINUTES_PER_DAY),
+          },
+        ],
+  );
+}
+
+function clockTime(minutes: number) {
+  const hours = String(Math.floor(minutes / 60)).padStart(2, "0");
+  return `${hours}:${String(minutes % 60).padStart(2, "0")}`;
+}
+
+const MINUTES_PER_DAY = 24 * 60;
+
+/** Indexed like `Date.getDay()`. */
+const SCHEMA_DAYS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const ADDRESS = {
+  "@type": "PostalAddress",
+  streetAddress: CONTACT.addressLine,
+  addressLocality: CONTACT.city,
+  addressCountry: "MA",
+};
+
+const SOCIAL_PROFILES = [
+  CONTACT.instagramUrl,
+  CONTACT.facebookUrl,
+  CONTACT.tiktokUrl,
+  CONTACT.snapchatUrl,
+];
+
+const DESCRIPTION =
+  "Café de spécialité à Marrakech : croffles du jour et pâtisseries maison, mardis et jeudis réservés aux filles (Girls Only), Café IA et service informatique pour les étudiants.";
+
+const CAFE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "CafeOrCoffeeShop",
+  "@id": `${SITE_URL}/#cafe`,
+  name: "Kech Waffles",
+  description: DESCRIPTION,
+  url: SITE_URL,
+  image: `${SITE_URL}/brand/og-image.jpg`,
+  telephone: CONTACT.phoneE164,
+  priceRange: "$$",
+  address: ADDRESS,
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: CONTACT.geo.latitude,
+    longitude: CONTACT.geo.longitude,
+  },
+  hasMap: CONTACT.mapsUrl,
+  openingHoursSpecification: openingHoursSpecification(),
+  servesCuisine: ["Café de spécialité", "Croffles", "Pâtisseries maison"],
+  acceptsReservations: "False",
+  menu: `${SITE_URL}/menu`,
+  sameAs: SOCIAL_PROFILES,
+  parentOrganization: { "@id": `${SITE_URL}/#organization` },
+};
+
+const ORGANIZATION_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: "Kech Waffles",
+  url: SITE_URL,
+  logo: `${SITE_URL}/brand/icons/icon-512.png`,
+  description: DESCRIPTION,
+  address: ADDRESS,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: CONTACT.phoneE164,
+    contactType: "customer service",
+    areaServed: "MA",
+    availableLanguage: ["French", "Arabic"],
+  },
+  sameAs: SOCIAL_PROFILES,
+};

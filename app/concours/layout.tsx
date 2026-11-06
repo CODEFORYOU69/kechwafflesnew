@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Mon compte",
+  robots: { index: false, follow: false },
+};
 
 export default function ConcoursLayout({
   children,
@@ -10,7 +16,7 @@ export default function ConcoursLayout({
       {/* Background Image */}
       <Image
         src="/images/elements/wallpaper.png"
-        alt="Background"
+        alt=""
         fill
         className="object-cover fixed"
         priority

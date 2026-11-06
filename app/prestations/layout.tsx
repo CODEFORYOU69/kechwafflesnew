@@ -1,29 +1,44 @@
-import { Metadata } from "next";
+import { SITE_URL } from "@/lib/site-content";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Prestations - Corner gaufres live pour vos événements",
+  title: "Prestations : les gaufres sur mesure",
   description:
-    "Kech Waffles installe son corner gaufres chez vous à Marrakech. Cuisson à la minute devant vos invités : mariages, anniversaires, soirées privées, événements d'entreprise. Devis sous 48h.",
+    "Les gaufres de Kech Waffles, désormais sur mesure : un corner installé chez vous à Marrakech et sa région, cuisson à la minute devant vos invités, dès 30 personnes.",
   keywords: [
     "corner gaufres Marrakech",
     "traiteur gaufres Marrakech",
     "animation culinaire mariage Marrakech",
     "stand gaufres événement",
     "prestation événementielle Marrakech",
-    "food corner mariage Maroc",
   ],
+  alternates: { canonical: "/prestations" },
   openGraph: {
-    title: "Prestations - Corner gaufres live | Kech Waffles",
+    type: "website",
+    locale: "fr_FR",
+    siteName: "Kech Waffles",
+    url: `${SITE_URL}/prestations`,
+    title: "Les gaufres sur mesure · Kech Waffles",
     description:
-      "On installe l'atelier chez vous. Gaufres cuites à la minute devant vos invités, à Marrakech et sa région.",
-    url: "https://www.kechwaffles.com/prestations",
+      "Les gaufres traditionnelles ont quitté la carte pour vos événements : un corner chez vous, cuisson à la minute devant vos invités, à Marrakech et sa région.",
+    images: [
+      {
+        url: "/brand/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Logo Kech Waffles, Marrakech",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Les gaufres sur mesure · Kech Waffles",
+    description:
+      "Un corner gaufres chez vous, cuisson à la minute devant vos invités, à Marrakech et sa région.",
+    images: ["/brand/og-image.jpg"],
   },
 };
 
-export default function PrestationsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function PrestationsLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
