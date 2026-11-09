@@ -78,6 +78,12 @@ Un seul petit runtime client (`MotionRuntime`, monté dans le layout) : `Reveal`
 - Une view timeline destinée à des éléments internes d'un SVG se déclare sur un conteneur HTML (`view-timeline`) : `view()` posé sur un `<path>` mesure un point de hauteur nulle.
 - Le CSS global vit dans `app/globals.css`. Le CSS propre à une section va dans un `*.module.css` à côté du composant.
 
+## La porte du hero
+
+- La façade se tient dans une arche bordée d'un contour doré (`components/brand/DoorFrame.tsx`, géométrie dans `door-frame-geometry.ts`) : la calligraphie du bas de l'emblème, rangées 11 à 21 de sa grille de 15 modules, reprise telle quelle et répétée en frise entre deux filets d'or. Ne jamais redessiner ni inventer une lettre : c'est le logo.
+- Profondeur `--frame-t` : quinze modules (filet, vide, onze rangées, vide, filet). Desktop : le contour se tient hors de la photo, la porte lui laisse sa place sous la barre. Mobile : il se pose sur le bord de la photo, l'arche garde toute la largeur et l'enseigne reste entière.
+- Au défilement, l'or naît à la clé quand les arcs du logo passent la caméra, descend les montants, puis une lumière le traverse une fois. Seules bougent l'opacité des couches et la position de la lumière. Mouvement réduit : contour entier, sans lumière.
+
 ## Images
 
 - Vraies photos en priorité, dérivés optimisés dans `public/images/site/`. Pour ce qui n'a pas encore de photo, images IA très réalistes, à la demande de l'équipe : fichiers préfixés `ai-`, générés à partir de vraies photos du café (assiette, comptoir), à remplacer dès qu'une vraie photo existe. Jamais de render.

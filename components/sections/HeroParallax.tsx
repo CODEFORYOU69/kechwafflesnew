@@ -6,6 +6,7 @@ import {
   LOGO_ARCH_OPENING,
   LOGO_DOOR_ANCHOR,
 } from "@/components/brand/AnimatedLogo";
+import { DoorFrame } from "@/components/brand/DoorFrame";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { HERO, PILLARS } from "@/lib/site-content";
 import {
@@ -180,11 +181,13 @@ export function HeroParallax() {
                     fill
                     sizes="(min-width: 1024px) 44vw, 100vw"
                     loading="eager"
-                    className="object-cover object-[center_38%]"
+                    // Phones: the sign sits right of centre, the gold frame covers the photo's edge.
+                    className="object-cover object-[62%_38%] lg:object-[center_38%]"
                   />
                 ) : null}
               </m.div>
             </div>
+            <DoorFrame progress={progress} isWanted={isPhotoWanted} />
           </m.div>
 
           <div ref={logoRef} className="hero__logo" role="img" aria-label="Logo Kech Waffles">
