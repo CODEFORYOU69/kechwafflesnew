@@ -1,7 +1,7 @@
 import { SITE_URL } from "@/lib/site-content";
 import type { Metadata } from "next";
 
-const TITLE = "La carte : café, croffles et pâtisseries maison";
+const TITLE = "Menu : café, croffles et pâtisseries à Marrakech";
 const DESCRIPTION =
   "La carte de Kech Waffles à Marrakech : café de spécialité, croffles du jour, pâtisseries maison, boissons glacées et jus pressés. MAG 33, Al Badii.";
 const SOCIAL_IMAGE = "/brand/og-image.jpg";

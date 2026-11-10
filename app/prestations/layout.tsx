@@ -2,7 +2,7 @@ import { SITE_URL } from "@/lib/site-content";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Prestations : les gaufres sur mesure",
+  title: "Corner gaufres pour vos événements à Marrakech",
   description:
     "Les gaufres de Kech Waffles, désormais sur mesure : un corner installé chez vous à Marrakech et sa région, cuisson à la minute devant vos invités, dès 30 personnes.",
   keywords: [

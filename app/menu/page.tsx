@@ -1,16 +1,27 @@
+import { JsonLd } from "@/app/components/JsonLd";
 import { ParallaxLayer } from "@/components/motion/ParallaxLayer";
-import { HERO, MENU_SECTION } from "@/lib/site-content";
+import { formatMenuText } from "@/lib/menu-filter";
+import { tryGetMenuProducts } from "@/lib/menu-products";
+import { HERO, MENU_SECTION, SITE_URL } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { MenuCatalog } from "./MenuCatalog";
+import { MenuCatalog, type MenuProduct } from "./MenuCatalog";
+import { publicMenuSections } from "./menu-tabs";
 import styles from "./menu.module.css";
 
-export default function MenuPage() {
+// The catalogue changes from the back office: the page is rebuilt at most every ten minutes.
+export const revalidate = 600;
+
+export default async function MenuPage() {
+  const catalogue = await tryGetMenuProducts();
+  const products = catalogue ? catalogue.map(toMenuProduct) : null;
+
   return (
     <>
+      {products ? <JsonLd data={menuSchema(products)} /> : null}
       <MenuHero />
-      <MenuCatalog />
+      <MenuCatalog initialProducts={products} />
     </>
   );
 }
@@ -64,6 +75,45 @@ function MenuHero() {
   );
 }
 
+/** Only what the catalogue displays crosses to the browser: no price, no sync fields. */
+function toMenuProduct(product: CatalogueProduct): MenuProduct {
+  return {
+    handle: product.handle,
+    sku: product.sku,
+    name: product.name,
+    category: product.category,
+    description: product.description,
+    image: product.image,
+    outOfStock: product.outOfStock,
+    isActive: product.isActive,
+    variants: product.variants.map(({ option1Value, option2Value }) => ({
+      option1Value,
+      option2Value,
+    })),
+  };
+}
+
+/** The whole menu, every tab included, for the engines that do not click through tabs. */
+function menuSchema(products: MenuProduct[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Menu",
+    "@id": `${SITE_URL}/menu#carte`,
+    name: "La carte de Kech Waffles, Marrakech",
+    url: `${SITE_URL}/menu`,
+    inLanguage: "fr",
+    hasMenuSection: publicMenuSections(products).map(({ name, items }) => ({
+      "@type": "MenuSection",
+      name,
+      hasMenuItem: items.map((item) => ({
+        "@type": "MenuItem",
+        name: formatMenuText(item.name),
+        ...(item.description ? { description: formatMenuText(item.description) } : {}),
+      })),
+    })),
+  };
+}
+
 function introDelay(seconds: number) {
   return { "--intro-delay": `${seconds}s` } as CSSProperties;
 }
@@ -78,3 +128,5 @@ const TITLE_WORDS = ["La", "carte"];
 const TITLE_SUFFIX = " de Kech Waffles, café de spécialité et croffles à Marrakech";
 const PAGE_LEAD =
   "Le sucré, tout ce qui se boit, le salé et les cans à emporter. La carte, à parcourir avant de pousser la porte.";
+
+type CatalogueProduct = NonNullable<Awaited<ReturnType<typeof tryGetMenuProducts>>>[number];

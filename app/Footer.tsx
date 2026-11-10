@@ -165,6 +165,8 @@ const EXPLORE_LINKS = [
   { label: "Prestations", href: "/prestations" },
   { label: "Notre histoire", href: "/notre-histoire" },
   { label: "Nos produits", href: "/product" },
+  { label: "Nous trouver", href: "/location" },
+  { label: "In English", href: "/en" },
   { label: "Fidélité", href: "/loyalty/card" },
 ];
 

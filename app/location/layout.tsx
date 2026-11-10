@@ -2,9 +2,9 @@ import { SITE_URL } from "@/lib/site-content";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Nous trouver",
+  title: "Adresse et horaires du café à Al Badii, Marrakech",
   description:
-    "Kech Waffles, café de spécialité et croffles à Marrakech : MAG 33, Al Badii, à 15 minutes du Jardin Majorelle. Horaires, plan d’accès, Google Maps et Waze.",
+    "Kech Waffles, café de spécialité et croffles à Marrakech : MAG 33, Al Badii, à 15 minutes du Jardin Majorelle. Ouvert du mardi au dimanche jusqu’à 2h. Plan, Google Maps, Waze et questions fréquentes.",
   keywords: [
     "Kech Waffles adresse",
     "café de spécialité Marrakech adresse",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     siteName: "Kech Waffles",
     url: `${SITE_URL}/location`,
-    title: "Nous trouver · Kech Waffles",
+    title: "Adresse et horaires · Kech Waffles, Marrakech",
     description:
       "MAG 33, Al Badii, Marrakech. Du mardi au dimanche, jusqu’à 2h du matin. Horaires, plan d’accès, Google Maps et Waze.",
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nous trouver · Kech Waffles",
+    title: "Adresse et horaires · Kech Waffles, Marrakech",
     description:
       "MAG 33, Al Badii, Marrakech. Du mardi au dimanche, jusqu’à 2h du matin.",
     images: ["/brand/og-image.jpg"],

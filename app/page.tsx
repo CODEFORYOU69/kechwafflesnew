@@ -8,7 +8,11 @@ import { VisitSection } from "@/components/sections/VisitSection";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/" },
+  // The English page is this one translated: Google shows each to its own language.
+  alternates: {
+    canonical: "/",
+    languages: { fr: "/", en: "/en", "x-default": "/" },
+  },
 };
 
 export default function Home() {

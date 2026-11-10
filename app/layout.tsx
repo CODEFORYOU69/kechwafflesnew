@@ -42,9 +42,9 @@ const mono = localFont({
   preload: false,
 });
 
-const SITE_TITLE = "Kech Waffles — Café de spécialité & croffles · Marrakech";
+const SITE_TITLE = "Café de spécialité et croffles à Marrakech · Kech Waffles";
 const SITE_DESCRIPTION =
-  "Café de spécialité, croffles du jour et pâtisseries maison à Marrakech, MAG 33 Al Badii. Mardis et jeudis Girls Only, Café IA et service informatique pour les étudiants.";
+  "Café de spécialité et coffee shop à Marrakech (MAG 33, Al Badii) : croffles du jour, pâtisseries maison, ouvert jusqu’à 2h. Girls Only mardi et jeudi, Café IA étudiants.";
 const SOCIAL_IMAGE = "/brand/og-image.jpg";
 
 export const viewport: Viewport = {
@@ -58,12 +58,15 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   keywords: [
+    "café Marrakech",
     "café de spécialité Marrakech",
     "coffee shop Marrakech",
     "croffles Marrakech",
     "barista Marrakech",
     "iced latte Marrakech",
     "café pour travailler Marrakech",
+    "café ouvert tard Marrakech",
+    "café Al Badii Marrakech",
     "Girls Only Marrakech",
     "Café IA Marrakech",
     "service informatique étudiants Marrakech",

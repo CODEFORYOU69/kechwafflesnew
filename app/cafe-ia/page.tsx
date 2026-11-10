@@ -12,7 +12,7 @@ import Image from "next/image";
 
 // Missing from lib/site-content.ts, listed in the report and to validate with the team.
 // Above `metadata`, which reads them as soon as the module loads.
-const PAGE_TITLE = "Café IA & service informatique";
+const PAGE_TITLE = "Café IA et service informatique étudiant, Marrakech";
 const PAGE_DESCRIPTION =
   "Un cadre pour travailler, coder et échanger autour de l’IA chez Kech Waffles, à Marrakech. Et un service informatique pour les étudiants : le code, les projets d’études, le CV et les dossiers scolaires.";
 

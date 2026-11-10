@@ -12,12 +12,19 @@ import { whatsappUrl, MENU_SECTION } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { TABS, type GroupVariant, type MenuGroup } from "./menu-tabs";
 import styles from "./menu.module.css";
 
-/** The catalogue comes from `/api/products`: the tabs are there first, the products follow. */
-export function MenuCatalog() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+/**
+ * The page renders the catalogue on the server, so search engines and AI crawlers read it
+ * without running a script. That copy can be ten minutes old: the browser refreshes it from
+ * `/api/products`, for the stock above all, and loads it alone when the server had none.
+ */
+export function MenuCatalog({ initialProducts }: { initialProducts: MenuProduct[] | null }) {
+  const [products, setProducts] = useState<MenuProduct[]>(initialProducts ?? []);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">(
+    initialProducts ? "ready" : "loading",
+  );
   const [activeId, setActiveId] = useState(TABS[0].id);
   const lenis = useLenis();
   const railRef = useRef<HTMLDivElement>(null);
@@ -37,18 +44,19 @@ export function MenuCatalog() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
       })
-      .then((data: { products: Product[] }) => {
+      .then((data: { products: MenuProduct[] }) => {
         setProducts(data.products);
         setStatus("ready");
       })
       .catch((error) => {
         if (controller.signal.aborted) return;
         console.error("Erreur chargement produits:", error);
-        setStatus("error");
+        // The server copy stays on screen: only a menu with nothing to show is an error.
+        if (!initialProducts) setStatus("error");
       });
 
     return () => controller.abort();
-  }, []);
+  }, [initialProducts]);
 
   useEffect(() => {
     const rail = railRef.current;
@@ -197,7 +205,7 @@ function FreshGroup() {
   );
 }
 
-function ProductGroup({ group, items }: { group: MenuGroup; items: Product[] }) {
+function ProductGroup({ group, items }: { group: MenuGroup; items: MenuProduct[] }) {
   if (items.length === 0) return null;
   const variant = group.variant ?? "regular";
 
@@ -221,7 +229,7 @@ function ProductGroup({ group, items }: { group: MenuGroup; items: Product[] }) 
   );
 }
 
-function ProductItem({ product, variant }: { product: Product; variant: GroupVariant }) {
+function ProductItem({ product, variant }: { product: MenuProduct; variant: GroupVariant }) {
   const name = formatMenuText(product.name);
   const options = (product.variants ?? [])
     .map((option) =>
@@ -254,7 +262,7 @@ function ProductVisual({
   name,
   variant,
 }: {
-  product: Product;
+  product: MenuProduct;
   name: string;
   variant: GroupVariant;
 }) {
@@ -317,7 +325,7 @@ function CatalogError() {
 }
 
 /** Sorts the visible catalogue once; each group then reads its shelf. */
-function buildShelves(products: Product[]) {
+function buildShelves(products: MenuProduct[]) {
   const visible = products.filter(
     (product) => product.isActive !== false && !isEventOnlyProduct(product),
   );
@@ -414,70 +422,6 @@ const SAVOURY_KEYWORDS = [
   "legume",
 ];
 
-const TABS: MenuTab[] = [
-  {
-    id: "sucrees",
-    label: "Sucrées",
-    sublabel: "Croffles · Pâtisseries · Bubble",
-    title: "Composer son dessert",
-    description: "1. Base · 2. Recette ou libre · 3. Toppings",
-    groups: [
-      { marker: "01", title: "Les bases", category: "Bases Sucrées" },
-      {
-        marker: "02",
-        title: "Créations signatures",
-        category: "Recettes Sucrées - Signatures",
-        variant: "signature",
-      },
-      { marker: "+", title: "Toppings", modifiers: "sweet", variant: "compact" },
-    ],
-  },
-  {
-    id: "boissons",
-    label: "Boissons",
-    sublabel: "Cafés · Shakes · Jus",
-    title: "Tout ce qui se boit",
-    description: "Cafés, shakes, jus frais et shots vitaminés",
-    groups: [
-      { marker: "01", title: "Cafés", category: "Boissons - Cafés" },
-      { marker: "02", title: "Lactées", category: "Boissons - Boissons Lactées" },
-      { marker: "03", title: "Ice lactées", category: "Boissons Ice Lactées" },
-      { marker: "04", title: "Milkshakes", category: "Boissons - Milkshakes" },
-      { marker: "05", title: "Spécialités", category: "Boissons - Spécialisées" },
-      { marker: "06", title: "Jus frais pressés", category: "Jus Frais Pressés" },
-      { marker: "07", title: "Shots vitaminés", category: "Shots Vitaminés" },
-      { marker: "08", title: "Eaux & soft drinks", category: "Eaux & Soft Drinks" },
-      { marker: "+", title: "Options", modifiers: "drink", variant: "compact" },
-    ],
-  },
-  {
-    id: "salees",
-    label: "Salées",
-    sublabel: "Pizza · Potato",
-    title: "Composer son salé",
-    description: "1. Base · 2. Sauce · 3. Recette · 4. Suppléments",
-    groups: [
-      { marker: "01", title: "Les bases", category: "Bases Salées" },
-      { marker: "02", title: "Les sauces", category: "Sauces Salées" },
-      {
-        marker: "03",
-        title: "Recettes signatures",
-        category: "Recettes Salées - Signatures",
-        variant: "signature",
-      },
-      { marker: "04", title: "Recettes classiques", category: "Recettes Salées - Classiques" },
-      { marker: "+", title: "Suppléments salés", modifiers: "savoury", variant: "compact" },
-    ],
-  },
-  {
-    id: "cans",
-    label: "Cans",
-    sublabel: "À emporter",
-    title: "Desserts à emporter",
-    description: "Nos créations en format nomade. Frais, hermétique, prêt à partir",
-    groups: [{ marker: "01", title: "Nos cans", category: "Desserts - Cans" }],
-  },
-];
 
 const VISUAL_SIZES: Record<GroupVariant, string> = {
   regular: "(min-width: 1024px) 8rem, 6rem",
@@ -485,32 +429,12 @@ const VISUAL_SIZES: Record<GroupVariant, string> = {
   compact: "3rem",
 };
 
-type GroupVariant = "regular" | "signature" | "compact";
-
-type MenuGroup = {
-  marker: string;
-  title: string;
-  variant?: GroupVariant;
-  /** A catalogue category, or a share of the modifiers. */
-  category?: string;
-  modifiers?: "savoury" | "sweet" | "drink";
-};
-
-type MenuTab = {
-  id: string;
-  label: string;
-  sublabel: string;
-  title: string;
-  description: string;
-  groups: MenuGroup[];
-};
-
 type ProductVariant = {
   option1Value: string | null;
   option2Value: string | null;
 };
 
-type Product = {
+export type MenuProduct = {
   handle: string;
   sku: string;
   name: string;

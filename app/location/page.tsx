@@ -1,8 +1,10 @@
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { ParallaxLayer } from "@/components/motion/ParallaxLayer";
 import { Reveal, RevealLines } from "@/components/motion/Reveal";
+import { JsonLd } from "@/app/components/JsonLd";
+import { FaqSection, faqSchema } from "@/components/sections/FaqSection";
 import { OpenStatus } from "@/components/sections/OpenStatus";
-import { CONTACT, HERO, VISIT, whatsappUrl } from "@/lib/site-content";
+import { CONTACT, FAQ, HERO, VISIT, whatsappUrl } from "@/lib/site-content";
 import { clsx } from "clsx";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -12,14 +14,16 @@ import styles from "./location.module.css";
 
 /**
  * A page about finding one door: its number, its coordinates, the hours it stays open,
- * and the three ways of reaching it.
+ * the three ways of reaching it, and what people ask before coming.
  */
 export default function LocationPage() {
   return (
     <>
+      <JsonLd data={faqSchema(FAQ.items)} />
       <LocationHero />
       <HoursSection />
       <AccessSection />
+      <FaqSection {...FAQ} />
     </>
   );
 }

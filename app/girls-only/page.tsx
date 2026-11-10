@@ -10,8 +10,11 @@ import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 
+// The searched words first: the page's own heading stays « Girls Only, tous les mardis et jeudis ».
+const PAGE_TITLE = "Café Girls Only à Marrakech, le mardi et le jeudi";
+
 export const metadata: Metadata = {
-  title: GIRLS_ONLY.titleSr,
+  title: PAGE_TITLE,
   description: GIRLS_ONLY.intro,
   alternates: { canonical: "/girls-only" },
   openGraph: {
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     siteName: "Kech Waffles",
     url: "/girls-only",
-    title: `${GIRLS_ONLY.titleSr} · Kech Waffles`,
+    title: `${PAGE_TITLE} · Kech Waffles`,
     description: GIRLS_ONLY.intro,
     images: [
       {
@@ -32,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${GIRLS_ONLY.titleSr} · Kech Waffles`,
+    title: `${PAGE_TITLE} · Kech Waffles`,
     description: GIRLS_ONLY.intro,
     images: ["/brand/og-image.jpg"],
   },

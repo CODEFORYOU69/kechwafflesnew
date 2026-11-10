@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getMenuProducts } from "@/lib/menu-products";
 
 /**
  * GET: Récupère tous les produits actifs (API publique)
@@ -7,22 +7,7 @@ import { prisma } from "@/lib/prisma";
  */
 export async function GET() {
   try {
-    const products = await prisma.product.findMany({
-      where: {
-        isActive: true,
-      },
-      include: {
-        variants: {
-          where: { isActive: true },
-          orderBy: { createdAt: "asc" },
-        },
-      },
-      orderBy: [
-        { category: "asc" },
-        { displayOrder: "asc" },
-        { name: "asc" },
-      ],
-    });
+    const products = await getMenuProducts();
 
     return NextResponse.json({ products });
   } catch (error) {
