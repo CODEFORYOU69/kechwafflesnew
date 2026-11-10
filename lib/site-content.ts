@@ -45,6 +45,26 @@ export type OpeningDay = {
   label: string;
 };
 
+/**
+ * Set while the café is closed for a while, `null` the day the door reopens. The banner,
+ * every « open now », the FAQ, `llms.txt` and the English page read it; `OPENING_HOURS`
+ * keeps the usual hours for the reopening.
+ */
+export const TEMPORARY_CLOSURE: {
+  status: string;
+  notice: string;
+  noticeEn: string;
+  question: string;
+  questionEn: string;
+} | null = {
+  status: "Fermé temporairement",
+  notice: "Le café est fermé temporairement. La date de réouverture sera annoncée sur Instagram (@kech_waffles).",
+  noticeEn:
+    "The café is temporarily closed. The reopening date will be announced on Instagram (@kech_waffles).",
+  question: "Le café est-il ouvert en ce moment ?",
+  questionEn: "Is the café open at the moment?",
+};
+
 const TWO_AM = 26 * 60;
 
 export const OPENING_HOURS: OpeningDay[] = [
@@ -444,6 +464,9 @@ export const FAQ = {
   eyebrow: "03 — Questions",
   titleLines: ["Avant de pousser", "la porte."],
   items: [
+    ...(TEMPORARY_CLOSURE
+      ? [{ id: "fermeture", question: TEMPORARY_CLOSURE.question, answer: TEMPORARY_CLOSURE.notice }]
+      : []),
     {
       id: "cafe",
       question: "Quel café sert Kech Waffles à Marrakech ?",
@@ -459,7 +482,7 @@ export const FAQ = {
     {
       id: "horaires",
       question: "Quels sont les horaires du café ?",
-      answer: `${openingHoursSentence()} ${GIRLS_ONLY.closedNote}`,
+      answer: `${TEMPORARY_CLOSURE ? "En temps normal : " : ""}${openingHoursSentence()} ${GIRLS_ONLY.closedNote}`,
     },
     {
       id: "adresse",
@@ -615,6 +638,9 @@ export const ENGLISH = {
     eyebrow: "06 — Questions",
     titleLines: ["Before you", "push the door."],
     items: [
+      ...(TEMPORARY_CLOSURE
+        ? [{ id: "closure", question: TEMPORARY_CLOSURE.questionEn, answer: TEMPORARY_CLOSURE.noticeEn }]
+        : []),
       {
         id: "coffee",
         question: "What coffee does Kech Waffles serve in Marrakech?",
@@ -630,7 +656,7 @@ export const ENGLISH = {
       {
         id: "hours",
         question: "When is the café open?",
-        answer: `${openingHoursEnglish()} On Tuesdays and Thursdays, the café is for women only.`,
+        answer: `${TEMPORARY_CLOSURE ? "Usual hours: " : ""}${openingHoursEnglish()} On Tuesdays and Thursdays, the café is for women only.`,
       },
       {
         id: "location",

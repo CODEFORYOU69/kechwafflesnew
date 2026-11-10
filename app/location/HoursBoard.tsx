@@ -1,7 +1,7 @@
 "use client";
 
 import { casablancaNow, type CasablancaNow } from "@/lib/casablanca-time";
-import { GIRLS_ONLY, OPENING_HOURS, type OpeningDay } from "@/lib/site-content";
+import { GIRLS_ONLY, OPENING_HOURS, TEMPORARY_CLOSURE, type OpeningDay } from "@/lib/site-content";
 import { useEffect, useState, type CSSProperties } from "react";
 import styles from "./location.module.css";
 
@@ -14,6 +14,8 @@ export function HoursBoard() {
   const [moment, setMoment] = useState<ServiceMoment | null>(null);
 
   useEffect(() => {
+    // Closed for a while: no row in force, no « now » line on hours that do not run.
+    if (TEMPORARY_CLOSURE) return;
     function update() {
       setMoment(serviceMoment(casablancaNow()));
     }

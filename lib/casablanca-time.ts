@@ -1,4 +1,4 @@
-import { GIRLS_ONLY, OPENING_HOURS, type OpeningDay } from "./site-content";
+import { GIRLS_ONLY, OPENING_HOURS, TEMPORARY_CLOSURE, type OpeningDay } from "./site-content";
 
 /**
  * Date logic for the café's own clock. Call these after mount only: the server and
@@ -45,6 +45,7 @@ export type OpenStatus = {
 };
 
 export function getOpenStatus(date: Date = new Date()): OpenStatus {
+  if (TEMPORARY_CLOSURE) return { isOpen: false, label: TEMPORARY_CLOSURE.status };
   const now = casablancaNow(date);
   const today = dayFor(now.weekday);
   const yesterday = dayFor((now.weekday + 6) % 7);

@@ -1,7 +1,7 @@
 "use client";
 
 import { casablancaNow, getOpenStatus } from "@/lib/casablanca-time";
-import { GIRLS_ONLY, OPENING_HOURS } from "@/lib/site-content";
+import { GIRLS_ONLY, OPENING_HOURS, TEMPORARY_CLOSURE } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import { useSyncExternalStore } from "react";
 
@@ -55,7 +55,9 @@ export function OpeningHoursTable({
   className?: string;
 }) {
   const minute = useCafeMinute();
-  const current = minute === null ? null : currentServiceDay(new Date(minute * MINUTE_MS));
+  // Closed for a while, no day is « today »: the table shows the usual week.
+  const current =
+    minute === null || TEMPORARY_CLOSURE ? null : currentServiceDay(new Date(minute * MINUTE_MS));
 
   return (
     <table

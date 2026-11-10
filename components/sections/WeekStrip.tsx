@@ -2,7 +2,7 @@
 
 import { Reveal } from "@/components/motion/Reveal";
 import { casablancaNow, upcomingWeekdays, type UpcomingDay } from "@/lib/casablanca-time";
-import { GIRLS_ONLY, OPENING_HOURS } from "@/lib/site-content";
+import { GIRLS_ONLY, OPENING_HOURS, TEMPORARY_CLOSURE } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import styles from "./GirlsOnlySection.module.css";
@@ -83,6 +83,8 @@ function useCafeCalendar() {
   const [calendar, setCalendar] = useState<CafeCalendar | null>(null);
 
   useEffect(() => {
+    // Closed for a while: no « next date » to promise.
+    if (TEMPORARY_CLOSURE) return;
     function refresh() {
       setCalendar(readCalendar());
     }

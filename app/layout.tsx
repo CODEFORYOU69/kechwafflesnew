@@ -4,6 +4,7 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, Instrument_Serif } from "next/font/google";
 import localFont from "next/font/local";
+import { ClosureNotice } from "./components/ClosureNotice";
 import { Navigation } from "./components/Navigation";
 import { StructuredData } from "./components/StructuredData";
 import { WhatsAppButton } from "./components/WhatsappButton";
@@ -141,6 +142,7 @@ export default function RootLayout({
           Aller au contenu
         </a>
         <Navigation />
+        <ClosureNotice />
         <main id="contenu" tabIndex={-1}>{children}</main>
         <Footer />
         <WhatsAppButton />

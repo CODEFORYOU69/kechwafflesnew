@@ -9,6 +9,7 @@ import {
   GIRLS_ONLY,
   MENU_SECTION,
   SITE_URL,
+  TEMPORARY_CLOSURE,
   openingHoursSentence,
 } from "@/lib/site-content";
 
@@ -31,9 +32,9 @@ function intro() {
 
 > Café de spécialité et croffles à ${CONTACT.city}, au Maroc : ${CONTACT.addressLine}, à 15 minutes du Jardin Majorelle. Pâtisseries maison, Girls Only tous les mardis et jeudis, Café IA et service informatique pour les étudiants.
 
-- Adresse : ${CONTACT.addressLine}, ${CONTACT.city}, ${CONTACT.country}
+${TEMPORARY_CLOSURE ? `**${TEMPORARY_CLOSURE.notice}**\n\n` : ""}- Adresse : ${CONTACT.addressLine}, ${CONTACT.city}, ${CONTACT.country}
 - Coordonnées : ${CONTACT.geo.latitude}, ${CONTACT.geo.longitude}
-- Horaires : ${openingHoursSentence()}
+- Horaires${TEMPORARY_CLOSURE ? " habituels" : ""} : ${openingHoursSentence()}
 - Réservation : non, on pousse la porte
 - Téléphone et WhatsApp : ${CONTACT.phoneDisplay}
 - Livraison : Glovo, ${CONTACT.glovoUrl}

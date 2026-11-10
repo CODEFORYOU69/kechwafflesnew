@@ -794,6 +794,52 @@ html:not([data-reveal-ready]) .line-mask > span {
   }
 }
 
+/* Fermeture temporaire : sur chaque page, à gauche du bouton WhatsApp, sans le couvrir. */
+.closure-notice {
+  position: fixed;
+  z-index: 40;
+  left: max(1rem, env(safe-area-inset-left));
+  right: calc(max(1rem, env(safe-area-inset-right)) + 4rem);
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.125rem 0.75rem;
+  width: fit-content;
+  max-width: 34rem;
+  padding: 0.625rem 1rem;
+  border-radius: 1.25rem;
+  background: hsl(var(--terracotta-700));
+  color: hsl(var(--cream-50));
+  font-size: 0.875rem;
+  line-height: 1.35;
+  box-shadow: 0 10px 28px hsl(var(--espresso-950) / 0.35);
+}
+
+.closure-notice__dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius-full);
+}
+
+.closure-notice__link {
+  display: inline-flex;
+  min-height: 1.5rem;
+  align-items: center;
+  gap: 0.25rem;
+  color: hsl(var(--gold-200));
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media print {
+  .closure-notice {
+    display: none;
+  }
+}
+
 body:has(.hero__stage[data-fab="hide"]) .floating-contact {
   opacity: 0;
   visibility: hidden;

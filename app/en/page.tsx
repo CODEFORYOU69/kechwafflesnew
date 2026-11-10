@@ -8,6 +8,7 @@ import {
   ENGLISH,
   MENU_SECTION,
   SITE_URL,
+  TEMPORARY_CLOSURE,
   englishHourGroups,
   whatsappUrl,
 } from "@/lib/site-content";
@@ -89,7 +90,9 @@ function Hero() {
           </h1>
           <IntroFade delay={0.5} className={styles.heroFoot}>
             <p className="text-subhead max-w-[32rem] text-cream-200">{hero.lead}</p>
-            <p className="text-eyebrow text-gold-400">{hero.note}</p>
+            <p className="text-eyebrow text-gold-400">
+              {TEMPORARY_CLOSURE ? TEMPORARY_CLOSURE.noticeEn : hero.note}
+            </p>
             <div className={styles.actions}>
               <MagneticButton>
                 <a href={CONTACT.mapsUrl} target="_blank" rel="noopener noreferrer" className="cta">
@@ -97,16 +100,19 @@ function Hero() {
                   <ArrowUpRight className="cta__arrow size-4" aria-hidden="true" />
                 </a>
               </MagneticButton>
-              <MagneticButton>
-                <a
-                  href={CONTACT.glovoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cta cta--outline"
-                >
-                  <span className="cta__label">{hero.deliveryCta}</span>
-                </a>
-              </MagneticButton>
+              {/* No delivery while the café is closed. */}
+              {TEMPORARY_CLOSURE ? null : (
+                <MagneticButton>
+                  <a
+                    href={CONTACT.glovoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cta cta--outline"
+                  >
+                    <span className="cta__label">{hero.deliveryCta}</span>
+                  </a>
+                </MagneticButton>
+              )}
             </div>
           </IntroFade>
         </div>
@@ -333,7 +339,9 @@ function Visit() {
             </address>
           </div>
           <div>
-            <h3 className="text-eyebrow text-terracotta-700">{visit.hoursTitle}</h3>
+            <h3 className="text-eyebrow text-terracotta-700">
+              {TEMPORARY_CLOSURE ? USUAL_HOURS_TITLE : visit.hoursTitle}
+            </h3>
             <dl className={styles.hours}>
               {englishHourGroups().map(({ days, hours }) => (
                 <div key={hours} className={styles.hoursRow}>
@@ -357,6 +365,8 @@ function Visit() {
     </section>
   );
 }
+
+const USUAL_HOURS_TITLE = "Usual opening hours";
 
 function lineStyle(index: number) {
   return { "--line": index, "--intro-delay": "0.1s" } as CSSProperties;

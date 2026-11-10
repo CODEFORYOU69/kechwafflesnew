@@ -102,3 +102,14 @@ Ajoute le lien `https://www.kechwaffles.com/en`.
 - Fiche Google, « Performances » : appels, itinéraires, clics vers le site.
 - Nombre d’avis : objectif 100, puis un flux régulier.
 - Demande à ChatGPT et Perplexity « où manger une croffle à Marrakech » et « café pour travailler à Marrakech » : ton café doit finir par sortir.
+
+## Pendant la fermeture temporaire (depuis le 10 novembre 2026)
+
+Le site l’annonce partout : bandeau en bas de chaque page, « Fermé temporairement » à la place de « Ouvert », question en tête de la FAQ, `llms.txt` et page anglaise. Tout dépend de `TEMPORARY_CLOSURE` dans `lib/site-content.ts`.
+
+**Le jour où la date de réouverture est connue :**
+
+1. Annonce-la sur Instagram et dans un post de la fiche Google.
+2. Dis-le à Claude : il mettra la date dans le bandeau. Le jour J, il remet `TEMPORARY_CLOSURE` à `null`.
+3. Le jour J, sur la fiche Google, onglet « Horaires » : repasse en « Ouvert avec horaires principaux ».
+4. Imprime les cartes d’avis, envoie le brouillon Barista Magazine et les messages à la presse : c’est le bon moment, « réouverture » est un angle en soi.
