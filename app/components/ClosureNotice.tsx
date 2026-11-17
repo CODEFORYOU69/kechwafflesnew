@@ -1,18 +1,21 @@
-import { CONTACT, TEMPORARY_CLOSURE } from "@/lib/site-content";
+import { CLOSURE_NOTICE, CONTACT } from "@/lib/site-content";
+import { getSiteSettings } from "@/lib/site-settings.server";
 import { ArrowUpRight } from "lucide-react";
 
 /**
- * On every page while the café is closed for a while: nobody should find out at the door.
- * In both languages from tablet width up, since the same bar sits on `/en`.
+ * On every page while the café is closed for a while, switched in `/admin/site`: nobody
+ * should find out at the door. In both languages from tablet width up, since the same bar
+ * sits on `/en`.
  */
-export function ClosureNotice() {
-  if (!TEMPORARY_CLOSURE) return null;
+export async function ClosureNotice() {
+  const { isTemporarilyClosed } = await getSiteSettings();
+  if (!isTemporarilyClosed) return null;
 
   return (
-    <aside className="closure-notice" aria-label={TEMPORARY_CLOSURE.status}>
+    <aside className="closure-notice" aria-label={CLOSURE_NOTICE.status}>
       <span className="closure-notice__dot" aria-hidden="true" />
       <p>
-        <strong className="font-semibold">{TEMPORARY_CLOSURE.status}</strong>
+        <strong className="font-semibold">{CLOSURE_NOTICE.status}</strong>
         {/* Two lines on a phone: the English words wait for a wider screen. */}
         <span lang="en" className="hidden sm:inline">
           {" "}

@@ -45,18 +45,32 @@ export type OpeningDay = {
   label: string;
 };
 
+/** One day as the admin sets it in `/admin/site`. */
+export type DayHours = {
+  /** 0 is Sunday, as in `Date.getDay()`. */
+  weekday: number;
+  /** Minutes after midnight, `null` when closed. */
+  opensAt: number | null;
+  /** Minutes after midnight; above 1440 means the next day. */
+  closesAt: number | null;
+};
+
 /**
- * Set while the café is closed for a while, `null` the day the door reopens. The banner,
- * every « open now », the FAQ, `llms.txt` and the English page read it; `OPENING_HOURS`
- * keeps the usual hours for the reopening.
+ * The week the site shows, and whether the café is closed for a while. Read from the
+ * admin settings (`lib/site-settings.server.ts`) and handed to the clock islands as a prop.
  */
-export const TEMPORARY_CLOSURE: {
-  status: string;
-  notice: string;
-  noticeEn: string;
-  question: string;
-  questionEn: string;
-} | null = {
+export type CafeSchedule = {
+  /** Monday first. */
+  days: OpeningDay[];
+  isTemporarilyClosed: boolean;
+};
+
+/**
+ * Shown while the café is closed for a while, switched on and off in `/admin/site`. The
+ * banner, every « open now », the FAQ, `llms.txt` and the English page read it; the
+ * opening hours stay the usual ones, for the reopening.
+ */
+export const CLOSURE_NOTICE = {
   status: "Fermé temporairement",
   notice: "Le café est fermé temporairement. La date de réouverture sera annoncée sur Instagram (@kech_waffles).",
   noticeEn:
@@ -65,34 +79,143 @@ export const TEMPORARY_CLOSURE: {
   questionEn: "Is the café open at the moment?",
 };
 
-const TWO_AM = 26 * 60;
-
-export const OPENING_HOURS: OpeningDay[] = [
-  { day: "Lundi", short: "Lun", weekday: 1, opensAt: null, closesAt: null, label: "Fermé" },
-  { day: "Mardi", short: "Mar", weekday: 2, opensAt: 11 * 60, closesAt: TWO_AM, label: "11h – 2h" },
-  { day: "Mercredi", short: "Mer", weekday: 3, opensAt: 11 * 60, closesAt: TWO_AM, label: "11h – 2h" },
-  { day: "Jeudi", short: "Jeu", weekday: 4, opensAt: 11 * 60, closesAt: TWO_AM, label: "11h – 2h" },
-  { day: "Vendredi", short: "Ven", weekday: 5, opensAt: 18 * 60 + 30, closesAt: TWO_AM, label: "18h30 – 2h" },
-  { day: "Samedi", short: "Sam", weekday: 6, opensAt: 11 * 60, closesAt: TWO_AM, label: "11h – 2h" },
-  { day: "Dimanche", short: "Dim", weekday: 0, opensAt: 18 * 60, closesAt: TWO_AM, label: "18h – 2h" },
+/** Monday first: the order of every table of hours on the site. */
+export const WEEK = [
+  { day: "Lundi", short: "Lun", weekday: 1 },
+  { day: "Mardi", short: "Mar", weekday: 2 },
+  { day: "Mercredi", short: "Mer", weekday: 3 },
+  { day: "Jeudi", short: "Jeu", weekday: 4 },
+  { day: "Vendredi", short: "Ven", weekday: 5 },
+  { day: "Samedi", short: "Sam", weekday: 6 },
+  { day: "Dimanche", short: "Dim", weekday: 0 },
 ];
 
-/** « Mardi, mercredi, jeudi et samedi : 11h – 2h. … Lundi : fermé. », read from `OPENING_HOURS`. */
-export function openingHoursSentence() {
+const TWO_AM = 26 * 60;
+
+/** The usual hours, until the admin saves other ones. */
+export const DEFAULT_WEEKLY_HOURS: DayHours[] = [
+  { weekday: 1, opensAt: null, closesAt: null },
+  { weekday: 2, opensAt: 11 * 60, closesAt: TWO_AM },
+  { weekday: 3, opensAt: 11 * 60, closesAt: TWO_AM },
+  { weekday: 4, opensAt: 11 * 60, closesAt: TWO_AM },
+  { weekday: 5, opensAt: 18 * 60 + 30, closesAt: TWO_AM },
+  { weekday: 6, opensAt: 11 * 60, closesAt: TWO_AM },
+  { weekday: 0, opensAt: 18 * 60, closesAt: TWO_AM },
+];
+
+/** The café is closed for a while (2026-11-10), until the admin reopens it. */
+export const DEFAULT_IS_TEMPORARILY_CLOSED = true;
+
+/** The seven days, Monday first, with their names and their « 11h – 2h » label. */
+export function openingDays(hours: DayHours[]): OpeningDay[] {
+  return WEEK.map((entry) => {
+    const set = hours.find((day) => day.weekday === entry.weekday);
+    const opensAt = set?.opensAt ?? null;
+    const closesAt = opensAt === null ? null : (set?.closesAt ?? null);
+    return { ...entry, opensAt, closesAt, label: hoursLabel(opensAt, closesAt) };
+  });
+}
+
+/** « 11h – 2h », « 18h30 – 2h », « Fermé ». */
+export function hoursLabel(opensAt: number | null, closesAt: number | null) {
+  return opensAt === null || closesAt === null
+    ? "Fermé"
+    : `${frenchClock(opensAt)} – ${frenchClock(closesAt)}`;
+}
+
+/** « 11h », « 18h30 »; past midnight counts again from 0h. */
+export function frenchClock(minutes: number) {
+  const time = minutes % MINUTES_PER_DAY;
+  const hours = Math.floor(time / 60);
+  const rest = time % 60;
+  return rest === 0 ? `${hours}h` : `${hours}h${String(rest).padStart(2, "0")}`;
+}
+
+/** « Lundi : fermé. Mardi, mercredi, jeudi et samedi : 11h – 2h. … », Monday first. */
+export function openingHoursSentence(days: OpeningDay[]) {
   const groups = new Map<string, string[]>();
-  for (const { day, label } of OPENING_HOURS) {
+  for (const { day, label } of days) {
     groups.set(label, [...(groups.get(label) ?? []), day]);
   }
 
   return [...groups]
-    .map(([label, days]) => {
-      const names = days.map((day, index) => (index === 0 ? day : day.toLowerCase()));
-      const list =
-        names.length > 1 ? `${names.slice(0, -1).join(", ")} et ${names.at(-1)}` : names[0];
+    .map(([label, names]) => {
+      const list = frenchList(names.map((day, index) => (index === 0 ? day : day.toLowerCase())));
       return `${list} : ${label === "Fermé" ? "fermé" : label}.`;
     })
     .join(" ");
 }
+
+/** « Du mardi au dimanche, jusqu’à 2h du matin. », `null` when no day opens. */
+export function hoursSummary(days: OpeningDay[]) {
+  const open = days.filter((day) => day.opensAt !== null);
+  if (open.length === 0) return null;
+
+  const names = open.map((day) => day.day.toLowerCase());
+  const span =
+    open.length === WEEK.length
+      ? "Tous les jours"
+      : open.length === 1
+        ? `Le ${names[0]}`
+        : isConsecutive(open)
+          ? `Du ${names[0]} au ${names.at(-1)}`
+          : frenchList([capitalize(names[0]), ...names.slice(1)]);
+  const closing = sharedClosing(open);
+  const latest = Math.max(...open.map((day) => day.closesAt as number));
+
+  return closing === null
+    ? `${span}, jusqu’à ${frenchClosing(latest)} au plus tard.`
+    : `${span}, jusqu’à ${frenchClosing(closing)}.`;
+}
+
+/** « 2h », the latest closing of the week, for the short descriptions; `null` when no day opens. */
+export function latestClosing(days: OpeningDay[]) {
+  const closings = days.flatMap((day) => (day.closesAt === null ? [] : [day.closesAt]));
+  return closings.length === 0 ? null : frenchClock(Math.max(...closings));
+}
+
+/** « de 11h à 2h du matin » when every Girls Only day keeps the same hours, `null` otherwise. */
+function girlsOnlyHours(days: OpeningDay[]) {
+  const [first, ...others] = girlsOnlyDays(days);
+  if (!first || first.opensAt === null || first.closesAt === null) return null;
+  const isShared = others.every(
+    (day) => day.opensAt === first.opensAt && day.closesAt === first.closesAt,
+  );
+  return isShared ? `de ${frenchClock(first.opensAt)} à ${frenchClosing(first.closesAt)}` : null;
+}
+
+function girlsOnlyDays(days: OpeningDay[]) {
+  return days.filter((day) => GIRLS_ONLY.days.includes(day.day));
+}
+
+/** « 2h du matin » past midnight, « minuit », or « 23h ». */
+function frenchClosing(minutes: number) {
+  if (minutes === MINUTES_PER_DAY) return "minuit";
+  const isNextMorning = minutes > MINUTES_PER_DAY && minutes % MINUTES_PER_DAY < 12 * 60;
+  return isNextMorning ? `${frenchClock(minutes)} du matin` : frenchClock(minutes);
+}
+
+/** The closing time every open day shares, `null` when they differ. */
+function sharedClosing(open: OpeningDay[]) {
+  const closings = new Set(open.map((day) => day.closesAt));
+  return closings.size === 1 ? open[0].closesAt : null;
+}
+
+/** Open days that follow each other in the week, Monday first, with no gap. */
+function isConsecutive(open: OpeningDay[]) {
+  const positions = open.map((day) => WEEK.findIndex((entry) => entry.weekday === day.weekday));
+  return positions.at(-1)! - positions[0] + 1 === positions.length;
+}
+
+function frenchList(items: string[]) {
+  return items.length > 1 ? `${items.slice(0, -1).join(", ")} et ${items.at(-1)}` : items[0];
+}
+
+function capitalize(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+const MINUTES_PER_DAY = 24 * 60;
 
 export const HERO = {
   eyebrow: "Café de spécialité · Croffles · Marrakech",
@@ -102,17 +225,17 @@ export const HERO = {
   scrollCue: "Défiler",
   finalEyebrow: "MAG 33 · Al Badii, Marrakech",
   finalTitle: "Un comptoir, un four, et des tables où l’on reste.",
-  finalNote: "Du mardi au dimanche, jusqu’à 2h du matin.",
   doorAlt:
     "La façade de Kech Waffles de nuit : enseigne allumée, portes vitrées, mur terracotta et comptoir doré",
 };
 
+/** The hero's index of the home sections: a hidden section drops out, the others renumber. */
 export const PILLARS = [
-  { index: "01", label: "Café de spécialité", short: "Café", href: "/#cafe" },
-  { index: "02", label: "La carte", short: "Carte", href: "/#carte" },
-  { index: "03", label: "Girls Only", short: "Girls Only", href: "/#girls-only" },
-  { index: "04", label: "Café IA", short: "Café IA", href: "/#cafe-ia" },
-];
+  { section: "cafe", label: "Café de spécialité", short: "Café" },
+  { section: "carte", label: "La carte", short: "Carte" },
+  { section: "girls-only", label: "Girls Only", short: "Girls Only" },
+  { section: "cafe-ia", label: "Café IA", short: "Café IA" },
+] as const;
 
 export const MARQUEE_ITEMS = [
   "Café de spécialité",
@@ -123,7 +246,8 @@ export const MARQUEE_ITEMS = [
 ];
 
 export const COFFEE = {
-  eyebrow: "01 — Café de spécialité",
+  /** Numbered by the home page, after the sections it shows: « 01 — Café de spécialité ». */
+  eyebrow: "Café de spécialité",
   titleLines: ["Le café,", "pris au sérieux."],
   intro:
     "Un comptoir, une machine, des baristas qui goûtent avant de servir. Chaque grain demande sa mouture, chaque boisson son dosage. On règle, on goûte, on recommence jusqu’à ce que la tasse soit juste.",
@@ -210,7 +334,7 @@ export const COFFEE = {
 };
 
 export const MENU_SECTION = {
-  eyebrow: "02 — La carte",
+  eyebrow: "La carte",
   titleLines: ["Sorti du four,", "servi sur place."],
   intro:
     "La carte commence par notre produit phare : les croffles, des croissants passés au fer, feuilletés dedans et croustillants dehors.",
@@ -330,7 +454,7 @@ export const MENU_IMAGE_OVERRIDES: Record<string, string> = {
 };
 
 export const GIRLS_ONLY = {
-  eyebrow: "03 — Girls Only",
+  eyebrow: "Girls Only",
   days: ["Mardi", "Jeudi"],
   titleSr: "Girls Only, tous les mardis et jeudis",
   intro:
@@ -344,8 +468,6 @@ export const GIRLS_ONLY = {
   todayLabel: "Aujourd’hui",
   nextLabel: "Prochain rendez-vous",
   accessLines: ["Pas de réservation,", "poussez la porte."],
-  accessText:
-    "Ces jours-là, tout le café est à vous, de 11h à 2h du matin, et toute l’équipe est féminine.",
   accessCta: "Nous trouver",
   /** For every place that shows the opening hours: nobody finds out at the door. */
   closedNote: "Mardi et jeudi, le café est réservé aux filles.",
@@ -356,8 +478,16 @@ export const GIRLS_ONLY = {
     "Chaque rendez-vous a son ambiance. Le programme de la semaine est annoncé sur Instagram, et au comptoir.",
 };
 
+/** « Ces jours-là, tout le café est à vous, de 11h à 2h du matin, et… », from the hours set. */
+export function girlsOnlyAccessText(days: OpeningDay[]) {
+  const hours = girlsOnlyHours(days);
+  return hours
+    ? `Ces jours-là, tout le café est à vous, ${hours}, et toute l’équipe est féminine.`
+    : "Ces jours-là, tout le café est à vous et toute l’équipe est féminine.";
+}
+
 export const AI_CAFE = {
-  eyebrow: "04 — Café IA",
+  eyebrow: "Café IA",
   titleLines: ["Le Café IA,", "et le service informatique."],
   intro:
     "Un cadre pour travailler, coder et échanger autour de l’IA. Et un service informatique pour les étudiants : le code qui résiste, le projet d’études qui coince, le CV et les dossiers scolaires à mettre au propre.",
@@ -463,9 +593,15 @@ export const VISIT = {
 export const FAQ = {
   eyebrow: "03 — Questions",
   titleLines: ["Avant de pousser", "la porte."],
-  items: [
-    ...(TEMPORARY_CLOSURE
-      ? [{ id: "fermeture", question: TEMPORARY_CLOSURE.question, answer: TEMPORARY_CLOSURE.notice }]
+};
+
+/** The questions of `FAQ`, with the hours and the closure the admin has set. */
+export function faqItems({ days, isTemporarilyClosed }: CafeSchedule) {
+  const girlsOnlyTime = girlsOnlyHours(days);
+
+  return [
+    ...(isTemporarilyClosed
+      ? [{ id: "fermeture", question: CLOSURE_NOTICE.question, answer: CLOSURE_NOTICE.notice }]
       : []),
     {
       id: "cafe",
@@ -482,7 +618,7 @@ export const FAQ = {
     {
       id: "horaires",
       question: "Quels sont les horaires du café ?",
-      answer: `${TEMPORARY_CLOSURE ? "En temps normal : " : ""}${openingHoursSentence()} ${GIRLS_ONLY.closedNote}`,
+      answer: `${isTemporarilyClosed ? "En temps normal : " : ""}${openingHoursSentence(days)} ${GIRLS_ONLY.closedNote}`,
     },
     {
       id: "adresse",
@@ -497,7 +633,7 @@ export const FAQ = {
     {
       id: "girls-only",
       question: "Qu’est-ce que le Girls Only ?",
-      answer: `${GIRLS_ONLY.intro} De 11h à 2h du matin, sans réservation.`,
+      answer: `${GIRLS_ONLY.intro} ${girlsOnlyTime ? `${capitalize(girlsOnlyTime)}, sans réservation.` : "Sans réservation."}`,
     },
     {
       id: "travailler",
@@ -515,20 +651,20 @@ export const FAQ = {
       question: "Servez-vous encore des gaufres ?",
       answer: `${MENU_SECTION.waffleNote} Un corner installé chez vous, cuisson à la minute devant vos invités, dès 30 personnes, à Marrakech et sa région.`,
     },
-  ],
-};
+  ];
+}
 
-/** « Tuesday, Wednesday, Thursday and Saturday: 11am – 2am. … », read from `OPENING_HOURS`. */
-export function openingHoursEnglish() {
-  return englishHourGroups()
-    .map(({ days, hours }) => `${listInEnglish(days)}: ${hours}.`)
+/** « Tuesday, Wednesday, Thursday and Saturday: 11am – 2am. … » */
+export function openingHoursEnglish(days: OpeningDay[]) {
+  return englishHourGroups(days)
+    .map(({ days: names, hours }) => `${listInEnglish(names)}: ${hours}.`)
     .join(" ");
 }
 
 /** Days sharing the same hours, closed days last: the rows of the English hours table. */
-export function englishHourGroups() {
+export function englishHourGroups(days: OpeningDay[]) {
   const groups = new Map<string, string[]>();
-  for (const day of OPENING_HOURS) {
+  for (const day of days) {
     const hours =
       day.opensAt === null || day.closesAt === null
         ? "closed"
@@ -553,6 +689,48 @@ function listInEnglish(items: string[]) {
   return items.length > 1 ? `${items.slice(0, -1).join(", ")} and ${items.at(-1)}` : items[0];
 }
 
+/** « Tuesday to Sunday, until 2am. », `null` when no day opens. */
+export function hoursSummaryEnglish(days: OpeningDay[]) {
+  const open = days.filter((day) => day.opensAt !== null);
+  if (open.length === 0) return null;
+
+  const names = open.map((day) => ENGLISH_DAYS[day.weekday]);
+  const span =
+    open.length === WEEK.length
+      ? "Every day"
+      : open.length === 1
+        ? names[0]
+        : isConsecutive(open)
+          ? `${names[0]} to ${names.at(-1)}`
+          : listInEnglish(names);
+  const closing = sharedClosing(open);
+  const latest = Math.max(...open.map((day) => day.closesAt as number));
+
+  return closing === null
+    ? `${span}, until ${englishClosing(latest)} at the latest.`
+    : `${span}, until ${englishClosing(closing)}.`;
+}
+
+/** « 2am », the latest closing of the week, for the short descriptions; `null` when no day opens. */
+export function latestClosingEnglish(days: OpeningDay[]) {
+  const closings = days.flatMap((day) => (day.closesAt === null ? [] : [day.closesAt]));
+  return closings.length === 0 ? null : englishClosing(Math.max(...closings));
+}
+
+/** « from 11am to 2am » when every Girls Only day keeps the same hours, `null` otherwise. */
+function girlsOnlyHoursEnglish(days: OpeningDay[]) {
+  const [first, ...others] = girlsOnlyDays(days);
+  if (!first || first.opensAt === null || first.closesAt === null) return null;
+  const isShared = others.every(
+    (day) => day.opensAt === first.opensAt && day.closesAt === first.closesAt,
+  );
+  return isShared ? `from ${englishClock(first.opensAt)} to ${englishClosing(first.closesAt)}` : null;
+}
+
+function englishClosing(minutes: number) {
+  return minutes % MINUTES_PER_DAY === 0 ? "midnight" : englishClock(minutes);
+}
+
 /** Indexed like `Date.getDay()`. */
 const ENGLISH_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -562,15 +740,12 @@ const ENGLISH_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "F
  */
 export const ENGLISH = {
   title: "Specialty coffee and croffles in Marrakech",
-  description:
-    "Specialty coffee shop in Marrakech (MAG 33, Al Badii), 15 minutes from the Jardin Majorelle: croffles made to order, homemade pastries, open until 2am. Girls Only on Tuesdays and Thursdays.",
   hero: {
     eyebrow: "Specialty coffee · Croffles · Marrakech",
     meta: "MAG 33 · Al Badii, Marrakech",
     titleLines: ["Push", "the door."],
     titleSuffix: " Kech Waffles, specialty coffee and croffles in Marrakech",
     lead: "Coffee taken seriously, croffles of the day, Girls Only on Tuesdays and Thursdays, and an AI Café for students.",
-    note: "Tuesday to Sunday, until 2am.",
     directionsCta: "Get directions",
     deliveryCta: "Order on Glovo",
     imageAlt:
@@ -608,8 +783,6 @@ export const ENGLISH = {
   girlsOnly: {
     eyebrow: "03 — Girls Only",
     titleLines: ["Tuesdays and Thursdays,", "women only."],
-    intro:
-      "Every Tuesday and Thursday, Kech Waffles is reserved for women only, staff included. A safe space to meet up, work or unwind, from 11am to 2am. No booking: just push the door.",
   },
   aiCafe: {
     eyebrow: "04 — AI Café",
@@ -637,54 +810,69 @@ export const ENGLISH = {
   faq: {
     eyebrow: "06 — Questions",
     titleLines: ["Before you", "push the door."],
-    items: [
-      ...(TEMPORARY_CLOSURE
-        ? [{ id: "closure", question: TEMPORARY_CLOSURE.questionEn, answer: TEMPORARY_CLOSURE.noticeEn }]
-        : []),
-      {
-        id: "coffee",
-        question: "What coffee does Kech Waffles serve in Marrakech?",
-        answer:
-          "Specialty coffee, made at the counter in front of you: espresso and ristretto, cortado, flat white, cappuccino and latte, cold brew, and signature iced drinks such as the Ice White Mocha or the Ice Latte Caramel.",
-      },
-      {
-        id: "croffle",
-        question: "What is a croffle?",
-        answer:
-          "A croissant pressed in a waffle iron: flaky inside, crisp outside. It is the house speciality, made to order, plain or topped: caramel speculoos, chocolate strawberry, triple chocolate, coconut, Oreo.",
-      },
-      {
-        id: "hours",
-        question: "When is the café open?",
-        answer: `${TEMPORARY_CLOSURE ? "Usual hours: " : ""}${openingHoursEnglish()} On Tuesdays and Thursdays, the café is for women only.`,
-      },
-      {
-        id: "location",
-        question: "Where is the café?",
-        answer: `At ${CONTACT.addressLine}, ${CONTACT.city}, 15 minutes from the Jardin Majorelle. Free parking nearby, and bus line 17 stops at Al Badii.`,
-      },
-      {
-        id: "booking",
-        question: "Do I need to book?",
-        answer: "No, the café does not take bookings, Girls Only included: just push the door.",
-      },
-      {
-        id: "work",
-        question: "Can I work or study there?",
-        answer:
-          "Yes. The AI Café is a place to work, code and talk about AI, and an IT help service supports students with code, study projects, CVs and school paperwork.",
-      },
-      {
-        id: "delivery",
-        question: "Do you deliver?",
-        answer: "Yes, the menu is available for delivery on Glovo, in Marrakech.",
-      },
-      {
-        id: "waffles",
-        question: "Do you still serve waffles?",
-        answer:
-          "Traditional waffles have left the menu and are kept for events: a waffle corner set up at your venue, cooked to order in front of your guests, from 30 guests, in Marrakech and the region.",
-      },
-    ],
   },
 };
+
+/** The meta description of `/en`, with the latest closing of the week. */
+export function englishDescription(days: OpeningDay[]) {
+  const until = latestClosingEnglish(days);
+  return `Specialty coffee shop in Marrakech (MAG 33, Al Badii), 15 minutes from the Jardin Majorelle: croffles made to order, homemade pastries${until ? `, open until ${until}` : ""}. Girls Only on Tuesdays and Thursdays.`;
+}
+
+export function englishGirlsOnlyIntro(days: OpeningDay[]) {
+  const hours = girlsOnlyHoursEnglish(days);
+  return `Every Tuesday and Thursday, Kech Waffles is reserved for women only, staff included. A safe space to meet up, work or unwind${hours ? `, ${hours}` : ""}. No booking: just push the door.`;
+}
+
+/** The questions of `ENGLISH.faq`, with the hours and the closure the admin has set. */
+export function englishFaqItems({ days, isTemporarilyClosed }: CafeSchedule) {
+  return [
+    ...(isTemporarilyClosed
+      ? [{ id: "closure", question: CLOSURE_NOTICE.questionEn, answer: CLOSURE_NOTICE.noticeEn }]
+      : []),
+    {
+      id: "coffee",
+      question: "What coffee does Kech Waffles serve in Marrakech?",
+      answer:
+        "Specialty coffee, made at the counter in front of you: espresso and ristretto, cortado, flat white, cappuccino and latte, cold brew, and signature iced drinks such as the Ice White Mocha or the Ice Latte Caramel.",
+    },
+    {
+      id: "croffle",
+      question: "What is a croffle?",
+      answer:
+        "A croissant pressed in a waffle iron: flaky inside, crisp outside. It is the house speciality, made to order, plain or topped: caramel speculoos, chocolate strawberry, triple chocolate, coconut, Oreo.",
+    },
+    {
+      id: "hours",
+      question: "When is the café open?",
+      answer: `${isTemporarilyClosed ? "Usual hours: " : ""}${openingHoursEnglish(days)} On Tuesdays and Thursdays, the café is for women only.`,
+    },
+    {
+      id: "location",
+      question: "Where is the café?",
+      answer: `At ${CONTACT.addressLine}, ${CONTACT.city}, 15 minutes from the Jardin Majorelle. Free parking nearby, and bus line 17 stops at Al Badii.`,
+    },
+    {
+      id: "booking",
+      question: "Do I need to book?",
+      answer: "No, the café does not take bookings, Girls Only included: just push the door.",
+    },
+    {
+      id: "work",
+      question: "Can I work or study there?",
+      answer:
+        "Yes. The AI Café is a place to work, code and talk about AI, and an IT help service supports students with code, study projects, CVs and school paperwork.",
+    },
+    {
+      id: "delivery",
+      question: "Do you deliver?",
+      answer: "Yes, the menu is available for delivery on Glovo, in Marrakech.",
+    },
+    {
+      id: "waffles",
+      question: "Do you still serve waffles?",
+      answer:
+        "Traditional waffles have left the menu and are kept for events: a waffle corner set up at your venue, cooked to order in front of your guests, from 30 guests, in Marrakech and the region.",
+    },
+  ];
+}

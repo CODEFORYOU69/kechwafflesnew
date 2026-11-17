@@ -8,7 +8,7 @@ import {
 } from "@/components/brand/AnimatedLogo";
 import { DoorFrame } from "@/components/brand/DoorFrame";
 import { MagneticButton } from "@/components/motion/MagneticButton";
-import { HERO, PILLARS } from "@/lib/site-content";
+import { HERO } from "@/lib/site-content";
 import {
   LazyMotion,
   cubicBezier,
@@ -31,8 +31,17 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
  * the café behind. Nothing moves relative to the scroll, so it stays fluid with
  * native touch scrolling. The title and logo entrance are CSS and never wait for
  * hydration.
+ *
+ * `pillars`: the home sections shown, numbered like their labels. `hoursNote`: the week in
+ * one line, from the hours set in the admin.
  */
-export function HeroParallax() {
+export function HeroParallax({
+  pillars,
+  hoursNote,
+}: {
+  pillars: HeroPillar[];
+  hoursNote: string | null;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
@@ -227,7 +236,9 @@ export function HeroParallax() {
             <div className="hero__final-text">
               <p className="text-eyebrow text-gold-400">{HERO.finalEyebrow}</p>
               <p className="text-headline mt-4 text-balance text-cream-50">{HERO.finalTitle}</p>
-              <p className="mt-3 hidden text-cream-200 lg:block">{HERO.finalNote}</p>
+              {hoursNote ? (
+                <p className="mt-3 hidden text-cream-200 lg:block">{hoursNote}</p>
+              ) : null}
               <div className="mt-6 flex flex-wrap gap-3">
                 <MagneticButton>
                   <Link href="/menu" className="cta">
@@ -243,25 +254,27 @@ export function HeroParallax() {
               </div>
             </div>
 
-            <nav className="hero__index" aria-label="Au programme">
-              <ol>
-                {PILLARS.map((pillar) => (
-                  <li key={pillar.href}>
-                    <Link href={pillar.href} className="hero__index-link group">
-                      <span className="hero__index-number text-eyebrow text-gold-400">
-                        {pillar.index}
-                      </span>
-                      <span className="hero__index-label hidden lg:inline">{pillar.label}</span>
-                      <span className="hero__index-label lg:hidden">{pillar.short}</span>
-                      <ArrowDownRight
-                        className="hero__index-arrow size-4 text-gold-400 transition-transform duration-300 ease-soft group-hover:translate-x-0.5 group-hover:translate-y-0.5"
-                        aria-hidden="true"
-                      />
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            {pillars.length > 0 ? (
+              <nav className="hero__index" aria-label="Au programme">
+                <ol>
+                  {pillars.map((pillar) => (
+                    <li key={pillar.href}>
+                      <Link href={pillar.href} className="hero__index-link group">
+                        <span className="hero__index-number text-eyebrow text-gold-400">
+                          {pillar.index}
+                        </span>
+                        <span className="hero__index-label hidden lg:inline">{pillar.label}</span>
+                        <span className="hero__index-label lg:hidden">{pillar.short}</span>
+                        <ArrowDownRight
+                          className="hero__index-arrow size-4 text-gold-400 transition-transform duration-300 ease-soft group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+                          aria-hidden="true"
+                        />
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            ) : null}
           </m.div>
         </div>
       </section>
@@ -288,3 +301,5 @@ function lineStyle(index: number) {
 }
 
 const CAMERA_EASE = cubicBezier(0.5, 0, 0.3, 1);
+
+export type HeroPillar = { index: string; label: string; short: string; href: string };

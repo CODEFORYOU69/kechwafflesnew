@@ -128,6 +128,24 @@ export default function AdminDashboard() {
 
         {/* Actions rapides */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <Link href="/admin/site">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-amber-200 hover:border-amber-400">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-amber-100 rounded-lg">
+                    <svg className="w-6 h-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Site vitrine</h3>
+                    <p className="text-sm text-gray-600">Sections, horaires, fermeture</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
           <Link href="/admin/matches">
             <Card className="cursor-pointer hover:shadow-lg transition-shadow border-green-200 hover:border-green-400">
               <CardContent className="pt-6">

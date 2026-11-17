@@ -1,7 +1,7 @@
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { ParallaxLayer } from "@/components/motion/ParallaxLayer";
 import { Reveal, RevealLines } from "@/components/motion/Reveal";
-import { CONTACT, VISIT, whatsappUrl, GIRLS_ONLY } from "@/lib/site-content";
+import { CONTACT, GIRLS_ONLY, VISIT, whatsappUrl, type CafeSchedule } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -13,7 +13,7 @@ import styles from "./VisitSection.module.css";
  * A street plate, with its screws, and its house number right above the door it belongs
  * to. Everything that depends on the clock lives in `OpenStatus`, after mount.
  */
-export function VisitSection() {
+export function VisitSection({ index, schedule }: { index: string; schedule: CafeSchedule }) {
   const [houseLabel, houseNumber] = CONTACT.addressLine.split(",")[0].split(" ");
 
   return (
@@ -24,7 +24,7 @@ export function VisitSection() {
     >
       <div className={cn("page-x", styles.stage)}>
         <p className={`text-eyebrow text-terracotta-700 ${styles.eyebrow}`}>
-          {SECTION_INDEX} — {VISIT.eyebrow}
+          {index} — {VISIT.eyebrow}
         </p>
 
         <div className={styles.plate}>
@@ -115,9 +115,9 @@ export function VisitSection() {
             <h3 id="visite-horaires" className="text-eyebrow text-terracotta-700">
               {VISIT.hoursTitle}
             </h3>
-            <OpenStatus className="justify-end" />
+            <OpenStatus schedule={schedule} className="justify-end" />
           </div>
-          <OpeningHoursTable labelledBy="visite-horaires" />
+          <OpeningHoursTable schedule={schedule} labelledBy="visite-horaires" />
           <p className="mt-4 font-medium text-terracotta-700">{GIRLS_ONLY.closedNote}</p>
         </Reveal>
 
@@ -146,9 +146,6 @@ function formatLatitude(latitude: number) {
 function formatLongitude(longitude: number) {
   return `${Math.abs(longitude).toFixed(4)}° ${longitude >= 0 ? "E" : "O"}`;
 }
-
-/** Not in `VISIT`: follows on from the numbered labels of the sections before. */
-const SECTION_INDEX = "06";
 
 /** Not in `VISIT`: the photo and its description, to move to the content file. */
 const PHOTO = {

@@ -14,7 +14,8 @@ import styles from "./EventsSection.module.css";
  * arch while a smaller arch climbs the other way: photo, door frame and small arch each
  * move on their own plane, in CSS, off the main thread.
  */
-export function EventsSection() {
+/** `index`: its number among the home sections shown, « 05 ». */
+export function EventsSection({ index }: { index: string }) {
   const { eyebrow, titleLines, intro, highlights, images, primaryCta, secondaryCta, quoteMessage } =
     EVENTS_SECTION;
 
@@ -26,7 +27,7 @@ export function EventsSection() {
     >
       <div className={cn("page-x", styles.stage)}>
         <p className={`text-eyebrow text-gold-400 ${styles.eyebrow}`}>
-          {SECTION_INDEX} — {eyebrow}
+          {index} — {eyebrow}
         </p>
 
         <RevealLines
@@ -122,9 +123,6 @@ function keepWordsWhole(line: string) {
     </Fragment>
   ));
 }
-
-/** Not in `EVENTS_SECTION`: follows on from the numbered labels of the sections before. */
-const SECTION_INDEX = "05";
 
 const MAIN_PHOTO_DRIFT = 7;
 const DOOR_FRAME_DRIFT = 3;

@@ -2,7 +2,7 @@
 
 import { Reveal } from "@/components/motion/Reveal";
 import { casablancaNow, upcomingWeekdays, type UpcomingDay } from "@/lib/casablanca-time";
-import { GIRLS_ONLY, OPENING_HOURS, TEMPORARY_CLOSURE } from "@/lib/site-content";
+import { GIRLS_ONLY, WEEK, type CafeSchedule, type OpeningDay } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import styles from "./GirlsOnlySection.module.css";
@@ -12,8 +12,8 @@ import styles from "./GirlsOnlySection.module.css";
  * the server HTML. Today and the next date wait for mount, in space already reserved,
  * so nothing shifts and nothing mismatches.
  */
-export function WeekStrip() {
-  const calendar = useCafeCalendar();
+export function WeekStrip({ schedule }: { schedule: CafeSchedule }) {
+  const calendar = useCafeCalendar(schedule);
   const next = calendar?.rendezVous[0];
   const [nextWeekday, nextDate] = next ? splitDayLabel(next.label) : [NBSP, NBSP];
 
@@ -33,7 +33,7 @@ export function WeekStrip() {
 
       <Reveal y={24} className={styles.arcadeWrap}>
         <ol className={styles.arcade} aria-label={WEEK_LIST_LABEL}>
-          {OPENING_HOURS.map((entry, index) => {
+          {schedule.days.map((entry, index) => {
             const isLit = GIRLS_ONLY.days.includes(entry.day);
             const isToday = calendar?.todayWeekday === entry.weekday;
 
@@ -79,33 +79,33 @@ export function WeekStrip() {
 }
 
 /** The café's clock, read after mount only. `null` on the server and during hydration. */
-function useCafeCalendar() {
+function useCafeCalendar({ days, isTemporarilyClosed }: CafeSchedule) {
   const [calendar, setCalendar] = useState<CafeCalendar | null>(null);
 
   useEffect(() => {
     // Closed for a while: no « next date » to promise.
-    if (TEMPORARY_CLOSURE) return;
+    if (isTemporarilyClosed) return;
     function refresh() {
-      setCalendar(readCalendar());
+      setCalendar(readCalendar(days));
     }
 
     refresh();
     // A tab left open overnight would otherwise keep offering a date that has passed.
     document.addEventListener("visibilitychange", refresh);
     return () => document.removeEventListener("visibilitychange", refresh);
-  }, []);
+  }, [days, isTemporarilyClosed]);
 
   return calendar;
 }
 
-function readCalendar(): CafeCalendar {
+function readCalendar(days: OpeningDay[]): CafeCalendar {
   const now = casablancaNow();
-  // Before 2 a.m. the library still counts yesterday as the café's day.
-  const todayWeekday = upcomingWeekdays(ALL_WEEKDAYS)[0].weekday;
+  // Before closing time the library still counts yesterday as the café's day.
+  const todayWeekday = upcomingWeekdays(days, ALL_WEEKDAYS)[0].weekday;
   const isStillYesterday = todayWeekday !== now.weekday;
 
   return {
-    rendezVous: upcomingWeekdays(GIRLS_WEEKDAYS),
+    rendezVous: upcomingWeekdays(days, GIRLS_WEEKDAYS),
     todayWeekday,
     minutes: isStillYesterday ? now.minutes + MINUTES_PER_DAY : now.minutes,
   };
@@ -122,9 +122,11 @@ const MINUTES_PER_DAY = 24 * 60;
 const GIRLS_ONLY_NAME = "Girls Only";
 const WEEK_LIST_LABEL = "La semaine, du lundi au dimanche";
 
-const GIRLS_DAYS = OPENING_HOURS.filter((entry) => GIRLS_ONLY.days.includes(entry.day));
-const GIRLS_WEEKDAYS = GIRLS_DAYS.map((entry) => entry.weekday);
-const ALL_WEEKDAYS = OPENING_HOURS.map((entry) => entry.weekday);
+// Girls Only days are fixed copy, whatever the hours: Tuesday and Thursday.
+const GIRLS_WEEKDAYS = WEEK.filter((entry) => GIRLS_ONLY.days.includes(entry.day)).map(
+  (entry) => entry.weekday,
+);
+const ALL_WEEKDAYS = WEEK.map((entry) => entry.weekday);
 
 type CafeCalendar = {
   /** The Girls Only days, soonest first. */

@@ -6,7 +6,8 @@ import Image from "next/image";
 import styles from "./CoffeeSection.module.css";
 import { RoastExplorer } from "./RoastExplorer";
 
-export function CoffeeSection() {
+/** `index`: its number among the home sections shown, « 01 ». */
+export function CoffeeSection({ index }: { index: string }) {
   return (
     <section
       id="cafe"
@@ -14,7 +15,7 @@ export function CoffeeSection() {
       className={cn("section-rise section-pad bg-espresso-900 pt-0 text-cream-50", styles.section)}
     >
       <Marquee />
-      <Header />
+      <Header index={index} />
       <RoastExplorer />
       <Extractions />
       <Station />
@@ -42,13 +43,15 @@ function Marquee() {
   );
 }
 
-function Header() {
+function Header({ index }: { index: string }) {
   const [firstLine, secondLine] = COFFEE.titleLines;
 
   return (
     <header className={cn("page-x grid grid-cols-12 gap-x-3 lg:gap-x-6", styles.header)}>
       <Reveal className="col-span-12 lg:col-span-3 lg:pt-4" y={16}>
-        <p className="text-eyebrow text-gold-400">{COFFEE.eyebrow}</p>
+        <p className="text-eyebrow text-gold-400">
+          {index} — {COFFEE.eyebrow}
+        </p>
       </Reveal>
       <RevealLines
         id="cafe-title"

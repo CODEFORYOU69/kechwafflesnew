@@ -7,11 +7,18 @@ import {
   CONTACT,
   ENGLISH,
   MENU_SECTION,
+  CLOSURE_NOTICE,
   SITE_URL,
-  TEMPORARY_CLOSURE,
+  englishDescription,
+  englishFaqItems,
+  englishGirlsOnlyIntro,
   englishHourGroups,
+  hoursSummaryEnglish,
   whatsappUrl,
+  type CafeSchedule,
 } from "@/lib/site-content";
+import { cafeSchedule } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site-settings.server";
 import { clsx } from "clsx";
 import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
@@ -20,53 +27,62 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import styles from "./en.module.css";
 
-export const metadata: Metadata = {
-  title: ENGLISH.title,
-  description: ENGLISH.description,
-  alternates: {
-    canonical: "/en",
-    languages: { fr: "/", en: "/en", "x-default": "/" },
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    alternateLocale: ["fr_FR"],
-    siteName: "Kech Waffles",
-    url: `${SITE_URL}/en`,
-    title: `${ENGLISH.title} · Kech Waffles`,
-    description: ENGLISH.description,
-    images: [
-      { url: "/brand/og-image.jpg", width: 1200, height: 630, alt: "Kech Waffles logo, Marrakech" },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${ENGLISH.title} · Kech Waffles`,
-    description: ENGLISH.description,
-    images: ["/brand/og-image.jpg"],
-  },
-};
+/** The description carries the latest closing of the week, as set in `/admin/site`. */
+export async function generateMetadata(): Promise<Metadata> {
+  const { days } = cafeSchedule(await getSiteSettings());
+  const description = englishDescription(days);
+
+  return {
+    title: ENGLISH.title,
+    description,
+    alternates: {
+      canonical: "/en",
+      languages: { fr: "/", en: "/en", "x-default": "/" },
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      alternateLocale: ["fr_FR"],
+      siteName: "Kech Waffles",
+      url: `${SITE_URL}/en`,
+      title: `${ENGLISH.title} · Kech Waffles`,
+      description,
+      images: [
+        { url: "/brand/og-image.jpg", width: 1200, height: 630, alt: "Kech Waffles logo, Marrakech" },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${ENGLISH.title} · Kech Waffles`,
+      description,
+      images: ["/brand/og-image.jpg"],
+    },
+  };
+}
 
 /**
  * One page in English for the visitors who search in English, mostly travellers. The root
  * layout says `fr`: the page marks its own language, the navigation stays French.
  */
-export default function EnglishPage() {
+export default async function EnglishPage() {
+  const schedule = cafeSchedule(await getSiteSettings());
+  const questions = englishFaqItems(schedule);
+
   return (
     <div lang="en">
-      <JsonLd data={faqSchema(ENGLISH.faq.items)} />
-      <Hero />
+      <JsonLd data={faqSchema(questions)} />
+      <Hero schedule={schedule} />
       <Coffee />
       <Croffles />
-      <GirlsOnly />
+      <GirlsOnly schedule={schedule} />
       <AiCafe />
-      <Visit />
-      <FaqSection {...ENGLISH.faq} />
+      <Visit schedule={schedule} />
+      <FaqSection {...ENGLISH.faq} items={questions} />
     </div>
   );
 }
 
-function Hero() {
+function Hero({ schedule }: { schedule: CafeSchedule }) {
   const { hero } = ENGLISH;
 
   return (
@@ -91,7 +107,9 @@ function Hero() {
           <IntroFade delay={0.5} className={styles.heroFoot}>
             <p className="text-subhead max-w-[32rem] text-cream-200">{hero.lead}</p>
             <p className="text-eyebrow text-gold-400">
-              {TEMPORARY_CLOSURE ? TEMPORARY_CLOSURE.noticeEn : hero.note}
+              {schedule.isTemporarilyClosed
+                ? CLOSURE_NOTICE.noticeEn
+                : hoursSummaryEnglish(schedule.days)}
             </p>
             <div className={styles.actions}>
               <MagneticButton>
@@ -101,7 +119,7 @@ function Hero() {
                 </a>
               </MagneticButton>
               {/* No delivery while the café is closed. */}
-              {TEMPORARY_CLOSURE ? null : (
+              {schedule.isTemporarilyClosed ? null : (
                 <MagneticButton>
                   <a
                     href={CONTACT.glovoUrl}
@@ -234,7 +252,7 @@ function Croffles() {
   );
 }
 
-function GirlsOnly() {
+function GirlsOnly({ schedule }: { schedule: CafeSchedule }) {
   const { girlsOnly } = ENGLISH;
 
   return (
@@ -250,7 +268,7 @@ function GirlsOnly() {
           <RevealLines id="en-girls-only" lines={girlsOnly.titleLines} className="text-section mt-6" />
         </div>
         <Reveal delay={0.1} className={styles.splitBody}>
-          <p className="text-subhead max-w-[34rem] text-cream-50">{girlsOnly.intro}</p>
+          <p className="text-subhead max-w-[34rem] text-cream-50">{englishGirlsOnlyIntro(schedule.days)}</p>
         </Reveal>
       </div>
     </section>
@@ -291,7 +309,7 @@ function AiCafe() {
   );
 }
 
-function Visit() {
+function Visit({ schedule }: { schedule: CafeSchedule }) {
   const { visit } = ENGLISH;
 
   return (
@@ -340,10 +358,10 @@ function Visit() {
           </div>
           <div>
             <h3 className="text-eyebrow text-terracotta-700">
-              {TEMPORARY_CLOSURE ? USUAL_HOURS_TITLE : visit.hoursTitle}
+              {schedule.isTemporarilyClosed ? USUAL_HOURS_TITLE : visit.hoursTitle}
             </h3>
             <dl className={styles.hours}>
-              {englishHourGroups().map(({ days, hours }) => (
+              {englishHourGroups(schedule.days).map(({ days, hours }) => (
                 <div key={hours} className={styles.hoursRow}>
                   <dt>{days.join(", ")}</dt>
                   <dd>{hours}</dd>

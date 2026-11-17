@@ -1,7 +1,7 @@
 "use client";
 
 import { casablancaNow, getOpenStatus } from "@/lib/casablanca-time";
-import { GIRLS_ONLY, OPENING_HOURS, TEMPORARY_CLOSURE } from "@/lib/site-content";
+import { GIRLS_ONLY, type CafeSchedule, type OpeningDay } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import { useSyncExternalStore } from "react";
 
@@ -11,15 +11,17 @@ import { useSyncExternalStore } from "react";
  * already exists when the label lands in it.
  */
 export function OpenStatus({
+  schedule,
   tone = "light",
   className,
 }: {
+  schedule: CafeSchedule;
   /** The background it sits on. */
   tone?: "light" | "dark";
   className?: string;
 }) {
   const minute = useCafeMinute();
-  const status = minute === null ? null : getOpenStatus(new Date(minute * MINUTE_MS));
+  const status = minute === null ? null : getOpenStatus(schedule, new Date(minute * MINUTE_MS));
   const colors = PILL_COLORS[tone];
 
   return (
@@ -48,16 +50,20 @@ export function OpenStatus({
  * Fixed row heights and a column of spare room: picking it out shifts nothing.
  */
 export function OpeningHoursTable({
+  schedule,
   labelledBy,
   className,
 }: {
+  schedule: CafeSchedule;
   labelledBy?: string;
   className?: string;
 }) {
   const minute = useCafeMinute();
   // Closed for a while, no day is « today »: the table shows the usual week.
   const current =
-    minute === null || TEMPORARY_CLOSURE ? null : currentServiceDay(new Date(minute * MINUTE_MS));
+    minute === null || schedule.isTemporarilyClosed
+      ? null
+      : currentServiceDay(schedule.days, new Date(minute * MINUTE_MS));
 
   return (
     <table
@@ -68,7 +74,7 @@ export function OpeningHoursTable({
       )}
     >
       <tbody>
-        {OPENING_HOURS.map((entry) => {
+        {schedule.days.map((entry) => {
           const isCurrent = current?.weekday === entry.weekday;
           const isClosed = entry.opensAt === null;
 
@@ -175,9 +181,9 @@ function serverMinute() {
  * The night belongs to the day it started on: at 1h on a Monday the Sunday row is the
  * one in force, the same answer `getOpenStatus` gives. Only then is the label not « today ».
  */
-function currentServiceDay(date: Date) {
+function currentServiceDay(days: OpeningDay[], date: Date) {
   const now = casablancaNow(date);
-  const yesterday = OPENING_HOURS.find((entry) => entry.weekday === (now.weekday + 6) % 7);
+  const yesterday = days.find((entry) => entry.weekday === (now.weekday + 6) % 7);
   const isNightOfYesterday =
     yesterday?.closesAt != null && now.minutes < yesterday.closesAt - MINUTES_PER_DAY;
 

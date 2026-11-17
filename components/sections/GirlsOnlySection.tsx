@@ -1,6 +1,6 @@
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { IntroFade, IntroLines, Reveal, RevealLines } from "@/components/motion/Reveal";
-import { GIRLS_ONLY } from "@/lib/site-content";
+import { GIRLS_ONLY, girlsOnlyAccessText, type CafeSchedule } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -11,9 +11,7 @@ import { WeekStrip } from "./WeekStrip";
  * The terracotta wall of the café, as a poster: two days, too big for the frame.
  * Then what happens on those days, the arcade of the week, and how to come: just come.
  */
-export function GirlsOnlySection() {
-  const sectionNumber = GIRLS_ONLY.eyebrow.split(" ")[0];
-
+export function GirlsOnlySection({ index, schedule }: { index: string; schedule: CafeSchedule }) {
   return (
     <section
       id="girls-only"
@@ -24,15 +22,15 @@ export function GirlsOnlySection() {
         {GIRLS_ONLY.titleSr}
       </h2>
 
-      <GirlsOnlyPoster />
+      <GirlsOnlyPoster eyebrow={`${index} — ${GIRLS_ONLY.eyebrow}`} />
 
       <div className="page-x">
         <ul className={styles.moments}>
-          {GIRLS_ONLY.moments.map((moment, index) => (
+          {GIRLS_ONLY.moments.map((moment, position) => (
             <li key={moment.id} className={styles.moment}>
-              <Reveal delay={index * 0.08}>
+              <Reveal delay={position * 0.08}>
                 <p className={cn("text-eyebrow", styles.momentIndex)}>
-                  {`${sectionNumber}.${index + 1}`}
+                  {`${index}.${position + 1}`}
                 </p>
                 <h3 className={styles.momentName}>{moment.name}</h3>
                 <p className={styles.momentDetail}>{moment.detail}</p>
@@ -41,9 +39,10 @@ export function GirlsOnlySection() {
           ))}
         </ul>
 
-        <WeekStrip />
+        <WeekStrip schedule={schedule} />
 
         <GirlsOnlyAccess
+          schedule={schedule}
           secondaryAction={
             <MagneticButton className={styles.actionWrap}>
               <Link href="/girls-only#programme" className={cn("cta cta--outline", styles.actionLink)}>
@@ -58,7 +57,13 @@ export function GirlsOnlySection() {
 }
 
 /** No booking on those days: the café simply belongs to them. */
-export function GirlsOnlyAccess({ secondaryAction }: { secondaryAction?: ReactNode }) {
+export function GirlsOnlyAccess({
+  schedule,
+  secondaryAction,
+}: {
+  schedule: CafeSchedule;
+  secondaryAction?: ReactNode;
+}) {
   return (
     <div className={styles.access}>
       <RevealLines
@@ -67,7 +72,7 @@ export function GirlsOnlyAccess({ secondaryAction }: { secondaryAction?: ReactNo
         className={cn("text-section", styles.accessTitle)}
       />
       <Reveal delay={0.1} className={styles.accessBody}>
-        <p className="text-subhead">{GIRLS_ONLY.accessText}</p>
+        <p className="text-subhead">{girlsOnlyAccessText(schedule.days)}</p>
         <div className={styles.actions}>
           <MagneticButton className={styles.actionWrap}>
             <Link href="/location" className={cn("cta cta--cream", styles.actionLink)}>
@@ -86,9 +91,12 @@ export function GirlsOnlyAccess({ secondaryAction }: { secondaryAction?: ReactNo
  * `isPageOpening`: on the first screen, the entrance must not wait for the script.
  */
 export function GirlsOnlyPoster({
+  eyebrow = GIRLS_ONLY_NAME,
   children,
   isPageOpening = false,
 }: {
+  /** « 03 — Girls Only » on the home page, where the sections are numbered. */
+  eyebrow?: string;
   children?: ReactNode;
   isPageOpening?: boolean;
 }) {
@@ -98,7 +106,7 @@ export function GirlsOnlyPoster({
   return (
     <div className={styles.poster}>
       <p className={cn("text-eyebrow", styles.posterEyebrow)}>
-        {isPageOpening ? GIRLS_ONLY_NAME : GIRLS_ONLY.eyebrow}
+        {eyebrow}
       </p>
 
       <div className={styles.dayMardi} aria-hidden="true">

@@ -5,6 +5,8 @@ import { GirlsOnlyAccess, GirlsOnlyPoster } from "@/components/sections/GirlsOnl
 import styles from "@/components/sections/GirlsOnlySection.module.css";
 import { WeekStrip } from "@/components/sections/WeekStrip";
 import { CONTACT, GIRLS_ONLY, MENU_SECTION } from "@/lib/site-content";
+import { cafeSchedule } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site-settings.server";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
@@ -41,7 +43,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GirlsOnlyPage() {
+export default async function GirlsOnlyPage() {
+  const schedule = cafeSchedule(await getSiteSettings());
+
   return (
     <>
       <section
@@ -112,8 +116,8 @@ export default function GirlsOnlyPage() {
           <h2 id="girls-only-venir-title" className="sr-only">
             {COME_CTA}
           </h2>
-          <WeekStrip />
-          <GirlsOnlyAccess />
+          <WeekStrip schedule={schedule} />
+          <GirlsOnlyAccess schedule={schedule} />
         </div>
       </section>
 

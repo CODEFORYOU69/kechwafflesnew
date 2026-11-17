@@ -1,10 +1,13 @@
-import { CONTACT, OPENING_HOURS, SITE_URL } from "@/lib/site-content";
+import { CONTACT, SITE_URL, openingDays, type OpeningDay } from "@/lib/site-content";
+import { getSiteSettings } from "@/lib/site-settings.server";
 import { JsonLd } from "./JsonLd";
 
-export function StructuredData() {
+export async function StructuredData() {
+  const { hours } = await getSiteSettings();
+
   return (
     <>
-      <JsonLd data={CAFE_SCHEMA} />
+      <JsonLd data={cafeSchema(openingDays(hours))} />
       <JsonLd data={ORGANIZATION_SCHEMA} />
       <JsonLd data={WEBSITE_SCHEMA} />
     </>
@@ -12,8 +15,8 @@ export function StructuredData() {
 }
 
 /** Days left out are closed. `closes` before `opens` means the next morning. */
-function openingHoursSpecification() {
-  return OPENING_HOURS.flatMap((day) =>
+function openingHoursSpecification(days: OpeningDay[]) {
+  return days.flatMap((day) =>
     day.opensAt === null || day.closesAt === null
       ? []
       : [
@@ -71,34 +74,37 @@ const PHOTOS = [
 const DESCRIPTION =
   "Café de spécialité à Marrakech : croffles du jour et pâtisseries maison, mardis et jeudis réservés aux filles (Girls Only), Café IA et service informatique pour les étudiants.";
 
-const CAFE_SCHEMA = {
-  "@context": "https://schema.org",
-  "@type": "CafeOrCoffeeShop",
-  "@id": `${SITE_URL}/#cafe`,
-  name: "Kech Waffles",
-  alternateName: "Kech Waffles Marrakech",
-  description: DESCRIPTION,
-  url: SITE_URL,
-  image: PHOTOS,
-  logo: `${SITE_URL}/brand/icons/icon-512.png`,
-  telephone: CONTACT.phoneE164,
-  priceRange: "$$",
-  currenciesAccepted: "MAD",
-  address: ADDRESS,
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: CONTACT.geo.latitude,
-    longitude: CONTACT.geo.longitude,
-  },
-  hasMap: CONTACT.mapsUrl,
-  openingHoursSpecification: openingHoursSpecification(),
-  servesCuisine: ["Café", "Café de spécialité", "Croffles", "Pâtisseries maison"],
-  acceptsReservations: "False",
-  hasMenu: `${SITE_URL}/menu`,
-  // The Google Maps listing and the Glovo store tie this entity to the same place elsewhere.
-  sameAs: [...SOCIAL_PROFILES, CONTACT.mapsUrl, CONTACT.glovoUrl],
-  parentOrganization: { "@id": `${SITE_URL}/#organization` },
-};
+/** The hours are the ones set in `/admin/site`. */
+function cafeSchema(days: OpeningDay[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CafeOrCoffeeShop",
+    "@id": `${SITE_URL}/#cafe`,
+    name: "Kech Waffles",
+    alternateName: "Kech Waffles Marrakech",
+    description: DESCRIPTION,
+    url: SITE_URL,
+    image: PHOTOS,
+    logo: `${SITE_URL}/brand/icons/icon-512.png`,
+    telephone: CONTACT.phoneE164,
+    priceRange: "$$",
+    currenciesAccepted: "MAD",
+    address: ADDRESS,
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: CONTACT.geo.latitude,
+      longitude: CONTACT.geo.longitude,
+    },
+    hasMap: CONTACT.mapsUrl,
+    openingHoursSpecification: openingHoursSpecification(days),
+    servesCuisine: ["Café", "Café de spécialité", "Croffles", "Pâtisseries maison"],
+    acceptsReservations: "False",
+    hasMenu: `${SITE_URL}/menu`,
+    // The Google Maps listing and the Glovo store tie this entity to the same place elsewhere.
+    sameAs: [...SOCIAL_PROFILES, CONTACT.mapsUrl, CONTACT.glovoUrl],
+    parentOrganization: { "@id": `${SITE_URL}/#organization` },
+  };
+}
 
 const ORGANIZATION_SCHEMA = {
   "@context": "https://schema.org",

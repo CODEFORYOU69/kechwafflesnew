@@ -12,7 +12,8 @@ import { ServiceTerminal } from "./ServiceTerminal";
  * Pillar D. One current runs through the section: the logo's kufic turns into wiring,
  * plugs into the terminal, and comes out again towards the three pillars.
  */
-export function AICafeSection() {
+/** `index`: its number among the home sections shown, « 04 ». */
+export function AICafeSection({ index }: { index: string }) {
   return (
     <section
       id="cafe-ia"
@@ -22,7 +23,9 @@ export function AICafeSection() {
       <div className={cn("page-x", styles.stage)}>
         <div className={styles.lead}>
           <div className={styles.leadText}>
-            <p className="text-eyebrow text-zellige-400">{AI_CAFE.eyebrow}</p>
+            <p className="text-eyebrow text-zellige-400">
+              {index} — {AI_CAFE.eyebrow}
+            </p>
             <RevealLines
               id="cafe-ia-title"
               lines={[

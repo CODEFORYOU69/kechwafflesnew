@@ -1,4 +1,6 @@
-import { CONTACT, GIRLS_ONLY, OPENING_HOURS, VISIT, whatsappUrl } from "@/lib/site-content";
+import { CONTACT, GIRLS_ONLY, VISIT, openingDays, whatsappUrl } from "@/lib/site-content";
+import { isLinkShown } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site-settings.server";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +11,11 @@ import type { ReactNode } from "react";
  * what comes before it: pages not built from those sections (back office, contest,
  * loyalty) never reserved that room, so there the footer stays below their content.
  */
-export default function Footer() {
+export default async function Footer() {
+  const settings = await getSiteSettings();
+  const days = openingDays(settings.hours);
+  const exploreLinks = EXPLORE_LINKS.filter((link) => isLinkShown(link.href, settings.sections));
+
   return (
     <footer
       aria-labelledby="footer-title"
@@ -71,7 +77,7 @@ export default function Footer() {
 
           <Column title="Horaires" className="col-span-12 md:col-span-6 lg:col-span-3">
             <dl className="font-mono text-[0.8125rem] leading-none">
-              {OPENING_HOURS.map((opening) => (
+              {days.map((opening) => (
                 <div
                   key={opening.weekday}
                   className="flex items-baseline justify-between gap-4 border-b border-cream-50/10 py-2 first:pt-0"
@@ -88,7 +94,7 @@ export default function Footer() {
 
           <Column title="Explorer" className="col-span-6 lg:col-span-2">
             <ul>
-              {EXPLORE_LINKS.map((link) => (
+              {exploreLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className={LIST_LINK}>
                     <Underlined>{link.label}</Underlined>

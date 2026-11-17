@@ -536,3 +536,15 @@ model SocialPost {
   monthPlanId      String
   createdAt        DateTime  @default(now())
 }
+
+/// Settings of the public site, edited in /admin/site. A single row, id "site": while it
+/// does not exist, the site reads the defaults of `lib/site-settings.ts`.
+model SiteSettings {
+  id                  String   @id @default("site")
+  /// `{ "cafe": true, "cafe-ia": false, … }`, home sections shown or hidden.
+  sections            Json
+  /// Seven `{ weekday, opensAt, closesAt }`, minutes after midnight, `null` when closed.
+  openingHours        Json
+  isTemporarilyClosed Boolean  @default(false)
+  updatedAt           DateTime @updatedAt
+}

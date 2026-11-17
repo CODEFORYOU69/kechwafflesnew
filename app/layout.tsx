@@ -1,6 +1,8 @@
 import { MotionRuntime } from "@/components/motion/MotionRuntime";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { hoursSummary, latestClosing, openingDays } from "@/lib/site-content";
+import { getSiteSettings } from "@/lib/site-settings.server";
 import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, Instrument_Serif } from "next/font/google";
 import localFont from "next/font/local";
@@ -44,20 +46,26 @@ const mono = localFont({
 });
 
 const SITE_TITLE = "Café de spécialité et croffles à Marrakech · Kech Waffles";
-const SITE_DESCRIPTION =
-  "Café de spécialité et coffee shop à Marrakech (MAG 33, Al Badii) : croffles du jour, pâtisseries maison, ouvert jusqu’à 2h. Girls Only mardi et jeudi, Café IA étudiants.";
+/** With the latest closing of the week, as set in `/admin/site`: « ouvert jusqu’à 2h ». */
+function siteDescription(until: string | null) {
+  return `Café de spécialité et coffee shop à Marrakech (MAG 33, Al Badii) : croffles du jour, pâtisseries maison${until ? `, ouvert jusqu’à ${until}` : ""}. Girls Only mardi et jeudi, Café IA étudiants.`;
+}
 const SOCIAL_IMAGE = "/brand/og-image.jpg";
 
 export const viewport: Viewport = {
   themeColor: "#0F0B08",
 };
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const { hours } = await getSiteSettings();
+  return { ...METADATA, description: siteDescription(latestClosing(openingDays(hours))) };
+}
+
+const METADATA: Metadata = {
   title: {
     default: SITE_TITLE,
     template: "%s · Kech Waffles",
   },
-  description: SITE_DESCRIPTION,
   keywords: [
     "café Marrakech",
     "café de spécialité Marrakech",
@@ -121,11 +129,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { sections, hours } = await getSiteSettings();
+
   return (
     <html
       lang="fr"
@@ -141,7 +151,7 @@ export default function RootLayout({
         <a href="#contenu" className="skip-link" data-no-transition>
           Aller au contenu
         </a>
-        <Navigation />
+        <Navigation homeSections={sections} hoursNote={hoursSummary(openingDays(hours))} />
         <ClosureNotice />
         <main id="contenu" tabIndex={-1}>{children}</main>
         <Footer />

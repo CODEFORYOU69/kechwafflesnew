@@ -1,4 +1,10 @@
-import { GIRLS_ONLY, OPENING_HOURS, TEMPORARY_CLOSURE, type OpeningDay } from "./site-content";
+import {
+  CLOSURE_NOTICE,
+  GIRLS_ONLY,
+  frenchClock,
+  type CafeSchedule,
+  type OpeningDay,
+} from "./site-content";
 
 /**
  * Date logic for the café's own clock. Call these after mount only: the server and
@@ -44,11 +50,11 @@ export type OpenStatus = {
   label: string;
 };
 
-export function getOpenStatus(date: Date = new Date()): OpenStatus {
-  if (TEMPORARY_CLOSURE) return { isOpen: false, label: TEMPORARY_CLOSURE.status };
+export function getOpenStatus(schedule: CafeSchedule, date: Date = new Date()): OpenStatus {
+  if (schedule.isTemporarilyClosed) return { isOpen: false, label: CLOSURE_NOTICE.status };
   const now = casablancaNow(date);
-  const today = dayFor(now.weekday);
-  const yesterday = dayFor((now.weekday + 6) % 7);
+  const today = dayFor(schedule.days, now.weekday);
+  const yesterday = dayFor(schedule.days, (now.weekday + 6) % 7);
 
   const isOpenFromYesterday =
     yesterday.closesAt !== null && now.minutes < yesterday.closesAt - MINUTES_PER_DAY;
@@ -63,23 +69,23 @@ export function getOpenStatus(date: Date = new Date()): OpenStatus {
     return {
       isOpen: true,
       label: withGirlsOnly(
-        `Ouvert · jusqu’à ${formatTime((closing.closesAt as number) % MINUTES_PER_DAY)}`,
+        `Ouvert · jusqu’à ${frenchClock(closing.closesAt as number)}`,
         closing,
       ),
     };
   }
 
   if (today.opensAt !== null && now.minutes < today.opensAt) {
-    return { isOpen: false, label: withGirlsOnly(`Fermé · ouvre à ${formatTime(today.opensAt)}`, today) };
+    return { isOpen: false, label: withGirlsOnly(`Fermé · ouvre à ${frenchClock(today.opensAt)}`, today) };
   }
 
   for (let offset = 1; offset <= 7; offset += 1) {
-    const next = dayFor((now.weekday + offset) % 7);
+    const next = dayFor(schedule.days, (now.weekday + offset) % 7);
     if (next.opensAt !== null) {
       const when = offset === 1 ? "demain" : next.day.toLowerCase();
       return {
         isOpen: false,
-        label: withGirlsOnly(`Fermé · ouvre ${when} à ${formatTime(next.opensAt)}`, next),
+        label: withGirlsOnly(`Fermé · ouvre ${when} à ${frenchClock(next.opensAt)}`, next),
       };
     }
   }
@@ -95,10 +101,14 @@ export type UpcomingDay = {
 };
 
 /** The next date of each weekday, today included until the café closes. */
-export function upcomingWeekdays(weekdays: number[], date: Date = new Date()): UpcomingDay[] {
+export function upcomingWeekdays(
+  days: OpeningDay[],
+  weekdays: number[],
+  date: Date = new Date(),
+): UpcomingDay[] {
   const now = casablancaNow(date);
   // Before closing time the café is still running yesterday's evening, if there was one.
-  const yesterday = dayFor((now.weekday + 6) % 7);
+  const yesterday = dayFor(days, (now.weekday + 6) % 7);
   const isStillYesterday =
     yesterday.closesAt !== null && now.minutes < yesterday.closesAt - MINUTES_PER_DAY;
   const startWeekday = isStillYesterday ? (now.weekday + 6) % 7 : now.weekday;
@@ -125,14 +135,8 @@ function withGirlsOnly(label: string, day: OpeningDay) {
   return GIRLS_ONLY.days.includes(day.day) ? `${label} · Girls Only` : label;
 }
 
-function dayFor(weekday: number): OpeningDay {
-  return OPENING_HOURS.find((entry) => entry.weekday === weekday) as OpeningDay;
-}
-
-function formatTime(minutes: number) {
-  const hours = Math.floor(minutes / 60);
-  const rest = minutes % 60;
-  return rest === 0 ? `${hours}h` : `${hours}h${String(rest).padStart(2, "0")}`;
+function dayFor(days: OpeningDay[], weekday: number): OpeningDay {
+  return days.find((entry) => entry.weekday === weekday) as OpeningDay;
 }
 
 const MINUTES_PER_DAY = 24 * 60;

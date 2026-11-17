@@ -9,7 +9,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { CONTACT, HERO, whatsappUrl } from "@/lib/site-content";
+import { CONTACT, whatsappUrl } from "@/lib/site-content";
+import { isLinkShown, type HomeSections } from "@/lib/site-settings";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -30,7 +31,17 @@ const NavAccount = dynamic(
   { ssr: false },
 );
 
-export function Navigation() {
+/**
+ * `homeSections`: a link to a home section the admin hides goes with it. `hoursNote`: the
+ * week in one line, from the hours set in the admin.
+ */
+export function Navigation({
+  homeSections,
+  hoursNote,
+}: {
+  homeSections: HomeSections;
+  hoursNote: string | null;
+}) {
   const pathname = usePathname() ?? "";
   const isDesktop = useIsDesktop();
   const { isPastTop, isHeadingDown } = useScrollState();
@@ -67,7 +78,8 @@ export function Navigation() {
     setMobileOpen(false);
   }
 
-  const links = concoursActive ? [...NAV_LINKS, CONCOURS_LINK] : NAV_LINKS;
+  const siteLinks = NAV_LINKS.filter((link) => isLinkShown(link.href, homeSections));
+  const links = concoursActive ? [...siteLinks, CONCOURS_LINK] : siteLinks;
 
   return (
     <header
@@ -144,7 +156,12 @@ export function Navigation() {
                 "h-dvh w-full overflow-y-auto overscroll-contain border-l-0 bg-espresso-950 p-0 shadow-none sm:max-w-none",
               )}
             >
-              <MobileMenu links={links} pathname={pathname} onNavigate={closeFromLink} />
+              <MobileMenu
+                links={links}
+                hoursNote={hoursNote}
+                pathname={pathname}
+                onNavigate={closeFromLink}
+              />
             </SheetContent>
           </Sheet>
         </div>
@@ -195,10 +212,12 @@ function BarLink({ link, isCurrent }: { link: NavLink; isCurrent: boolean }) {
 
 function MobileMenu({
   links,
+  hoursNote,
   pathname,
   onNavigate,
 }: {
   links: NavLink[];
+  hoursNote: string | null;
   pathname: string;
   onNavigate: () => void;
 }) {
@@ -277,7 +296,7 @@ function MobileMenu({
               <br />
               <span className="text-cream-300">{CONTACT.city}</span>
             </p>
-            <p className="text-cream-300">{HERO.finalNote}</p>
+            {hoursNote ? <p className="text-cream-300">{hoursNote}</p> : null}
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-5">
             <SheetExternalLink href={CONTACT.instagramUrl} label="Instagram" />

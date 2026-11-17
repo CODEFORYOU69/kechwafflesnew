@@ -1,7 +1,7 @@
 "use client";
 
 import { casablancaNow, type CasablancaNow } from "@/lib/casablanca-time";
-import { GIRLS_ONLY, OPENING_HOURS, TEMPORARY_CLOSURE, type OpeningDay } from "@/lib/site-content";
+import { GIRLS_ONLY, type CafeSchedule, type OpeningDay } from "@/lib/site-content";
 import { useEffect, useState, type CSSProperties } from "react";
 import styles from "./location.module.css";
 
@@ -10,27 +10,33 @@ import styles from "./location.module.css";
  * clock on the server: the row in force and the « now » line land after mount, in the
  * café's own time zone.
  */
-export function HoursBoard() {
+export function HoursBoard({ schedule }: { schedule: CafeSchedule }) {
+  const { days, isTemporarilyClosed } = schedule;
   const [moment, setMoment] = useState<ServiceMoment | null>(null);
+  const track = boardTrack(days);
 
   useEffect(() => {
     // Closed for a while: no row in force, no « now » line on hours that do not run.
-    if (TEMPORARY_CLOSURE) return;
+    if (isTemporarilyClosed) return;
+    const { start, end } = boardTrack(days);
     function update() {
-      setMoment(serviceMoment(casablancaNow()));
+      setMoment(serviceMoment(days, casablancaNow(), start, end));
     }
 
     update();
     const timer = setInterval(update, MINUTE_MS);
     return () => clearInterval(timer);
-  }, []);
+  }, [days, isTemporarilyClosed]);
 
   return (
-    <div style={{ "--track-columns": HOUR_STARTS.length } as CSSProperties}>
+    <div style={{ "--track-columns": track.hourStarts.length } as CSSProperties}>
       <div className={styles.scale} aria-hidden="true">
         <div className={styles.scaleTrack}>
-          {SCALE_MARKS.map((minutes) => (
-            <span key={minutes} style={{ left: `${trackPosition(minutes) * 100}%` }}>
+          {track.scaleMarks.map((minutes) => (
+            <span
+              key={minutes}
+              style={{ left: `${trackPosition(minutes, track.start, track.end) * 100}%` }}
+            >
               {(minutes / 60) % 24}h
             </span>
           ))}
@@ -38,7 +44,7 @@ export function HoursBoard() {
       </div>
 
       <dl>
-        {OPENING_HOURS.map((day, row) => {
+        {days.map((day, row) => {
           const isCurrent = moment?.weekday === day.weekday;
 
           return (
@@ -60,7 +66,7 @@ export function HoursBoard() {
               </dt>
               <dd className={styles.hours}>{day.label}</dd>
               <dd className={styles.track} aria-hidden="true">
-                {HOUR_STARTS.map((start, column) => (
+                {track.hourStarts.map((start, column) => (
                   <span
                     key={start}
                     className={styles.cell}
@@ -86,21 +92,45 @@ export function HoursBoard() {
 }
 
 /** The night belongs to the day it started on: at 1h on a Wednesday, Tuesday is still running. */
-function serviceMoment(now: CasablancaNow): ServiceMoment {
+function serviceMoment(
+  days: OpeningDay[],
+  now: CasablancaNow,
+  start: number,
+  end: number,
+): ServiceMoment {
   const yesterdayWeekday = (now.weekday + 6) % 7;
-  const yesterday = OPENING_HOURS.find((day) => day.weekday === yesterdayWeekday);
+  const yesterday = days.find((day) => day.weekday === yesterdayWeekday);
   const isNight = yesterday?.closesAt != null && now.minutes < yesterday.closesAt - MINUTES_PER_DAY;
   const minutes = isNight ? now.minutes + MINUTES_PER_DAY : now.minutes;
 
   return {
     weekday: isNight ? yesterdayWeekday : now.weekday,
     isNight,
-    position: minutes >= TRACK_START && minutes <= TRACK_END ? trackPosition(minutes) : null,
+    position: minutes >= start && minutes <= end ? trackPosition(minutes, start, end) : null,
   };
 }
 
-function trackPosition(minutes: number) {
-  return (minutes - TRACK_START) / (TRACK_END - TRACK_START);
+function trackPosition(minutes: number, start: number, end: number) {
+  return (minutes - start) / (end - start);
+}
+
+/**
+ * The earliest opening to the latest closing, on whole hours, so the wall follows the real
+ * hours. A week with no open day keeps the usual span, 11h to 2h.
+ */
+function boardTrack(days: OpeningDay[]) {
+  const open = days.filter((day) => day.opensAt !== null && day.closesAt !== null);
+  const start = open.length
+    ? Math.floor(Math.min(...open.map((day) => day.opensAt as number)) / 60) * 60
+    : DEFAULT_TRACK_START;
+  const end = open.length
+    ? Math.ceil(Math.max(...open.map((day) => day.closesAt as number)) / 60) * 60
+    : DEFAULT_TRACK_END;
+  const hourStarts = Array.from({ length: (end - start) / 60 }, (_, index) => start + index * 60);
+  // Every four hours from 14h, inside the wall, between its two ends.
+  const between = SCALE_STEPS.filter((minutes) => minutes > start + 60 && minutes < end - 60);
+
+  return { start, end, hourStarts, scaleMarks: [start, ...between, end] };
 }
 
 /** Share of that hour the café is open, 0 to 1. Friday opens at 18h30: half a module. */
@@ -113,18 +143,9 @@ function hourCoverage(day: OpeningDay, start: number) {
 const MINUTE_MS = 60_000;
 const MINUTES_PER_DAY = 24 * 60;
 
-const OPEN_DAYS = OPENING_HOURS.filter((day) => day.opensAt !== null);
-
-// The earliest opening to the latest closing, so the wall follows the real hours.
-const TRACK_START = Math.min(...OPEN_DAYS.map((day) => day.opensAt as number));
-const TRACK_END = Math.max(...OPEN_DAYS.map((day) => day.closesAt as number));
-
-const HOUR_STARTS = Array.from(
-  { length: (TRACK_END - TRACK_START) / 60 },
-  (_, index) => TRACK_START + index * 60,
-);
-
-const SCALE_MARKS = [TRACK_START, 14 * 60, 18 * 60, 22 * 60, TRACK_END];
+const DEFAULT_TRACK_START = 11 * 60;
+const DEFAULT_TRACK_END = 26 * 60;
+const SCALE_STEPS = [14 * 60, 18 * 60, 22 * 60, 26 * 60, 30 * 60, 34 * 60, 38 * 60];
 
 const TONIGHT_LABEL = "Cette nuit";
 

@@ -14,7 +14,8 @@ import styles from "./MenuGrid.module.css";
  * croffles stand on a single floor line, each behind its own arch, and the giant title
  * shares that floor with them. The rail scrolls sideways on a pinned stage, or natively.
  */
-export function MenuGrid() {
+/** `index`: its number among the home sections shown, « 02 ». */
+export function MenuGrid({ index }: { index: string }) {
   const { crofflesTitle, croffles } = MENU_SECTION;
 
   return (
@@ -23,7 +24,7 @@ export function MenuGrid() {
       aria-labelledby="carte-title"
       className={cn("section-rise section-pad bg-cream-100 text-espresso-950", styles.section)}
     >
-      <MenuHeader />
+      <MenuHeader index={index} />
 
       <CroffleRail intro={<CroffleIntro />} label={`${crofflesTitle}${RAIL_LABEL_SUFFIX}`}>
         <ul className={styles.cards}>
@@ -39,13 +40,15 @@ export function MenuGrid() {
   );
 }
 
-function MenuHeader() {
+function MenuHeader({ index }: { index: string }) {
   const { eyebrow, titleLines, intro } = MENU_SECTION;
 
   return (
     <header className={cn("page-x", styles.header)}>
       <Reveal className={styles.headerEyebrow}>
-        <p className="text-eyebrow text-terracotta-700">{eyebrow}</p>
+        <p className="text-eyebrow text-terracotta-700">
+          {index} — {eyebrow}
+        </p>
       </Reveal>
       <RevealLines
         id="carte-title"

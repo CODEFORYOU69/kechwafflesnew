@@ -3,15 +3,18 @@ import { formatMenuText } from "@/lib/menu-filter";
 import { tryGetMenuProducts } from "@/lib/menu-products";
 import {
   AI_CAFE,
+  CLOSURE_NOTICE,
   CONTACT,
   EVENTS_SECTION,
-  FAQ,
   GIRLS_ONLY,
   MENU_SECTION,
   SITE_URL,
-  TEMPORARY_CLOSURE,
+  faqItems,
   openingHoursSentence,
+  type CafeSchedule,
 } from "@/lib/site-content";
+import { cafeSchedule } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site-settings.server";
 
 /**
  * `/llms.txt`: the café in plain Markdown for AI assistants and answer engines, which
@@ -20,21 +23,23 @@ import {
 export const revalidate = 3600;
 
 export async function GET() {
-  const catalogue = await tryGetMenuProducts();
+  const [catalogue, settings] = await Promise.all([tryGetMenuProducts(), getSiteSettings()]);
+  const schedule = cafeSchedule(settings);
+  const sections = [intro(schedule), pages(), menu(catalogue), faq(schedule)];
 
-  return new Response([intro(), pages(), menu(catalogue), faq()].filter(Boolean).join("\n\n"), {
+  return new Response(sections.filter(Boolean).join("\n\n"), {
     headers: { "Content-Type": "text/markdown; charset=utf-8" },
   });
 }
 
-function intro() {
+function intro({ days, isTemporarilyClosed }: CafeSchedule) {
   return `# Kech Waffles
 
 > Café de spécialité et croffles à ${CONTACT.city}, au Maroc : ${CONTACT.addressLine}, à 15 minutes du Jardin Majorelle. Pâtisseries maison, Girls Only tous les mardis et jeudis, Café IA et service informatique pour les étudiants.
 
-${TEMPORARY_CLOSURE ? `**${TEMPORARY_CLOSURE.notice}**\n\n` : ""}- Adresse : ${CONTACT.addressLine}, ${CONTACT.city}, ${CONTACT.country}
+${isTemporarilyClosed ? `**${CLOSURE_NOTICE.notice}**\n\n` : ""}- Adresse : ${CONTACT.addressLine}, ${CONTACT.city}, ${CONTACT.country}
 - Coordonnées : ${CONTACT.geo.latitude}, ${CONTACT.geo.longitude}
-- Horaires${TEMPORARY_CLOSURE ? " habituels" : ""} : ${openingHoursSentence()}
+- Horaires${isTemporarilyClosed ? " habituels" : ""} : ${openingHoursSentence(days)}
 - Réservation : non, on pousse la porte
 - Téléphone et WhatsApp : ${CONTACT.phoneDisplay}
 - Livraison : Glovo, ${CONTACT.glovoUrl}
@@ -66,10 +71,10 @@ function menu(catalogue: Awaited<ReturnType<typeof tryGetMenuProducts>>) {
   return `## La carte\n\n${lines.join("\n")}`;
 }
 
-function faq() {
+function faq(schedule: CafeSchedule) {
   return `## Questions fréquentes
 
-${FAQ.items.map((item) => `### ${item.question}\n\n${item.answer}`).join("\n\n")}`;
+${faqItems(schedule).map((item) => `### ${item.question}\n\n${item.answer}`).join("\n\n")}`;
 }
 
 const MENU_SIGNATURES = ["Ice White Mocha", "Ice Latte Caramel", "Ice Matcha Latte"].join(", ");

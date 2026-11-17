@@ -4,7 +4,18 @@ import { Reveal, RevealLines } from "@/components/motion/Reveal";
 import { JsonLd } from "@/app/components/JsonLd";
 import { FaqSection, faqSchema } from "@/components/sections/FaqSection";
 import { OpenStatus } from "@/components/sections/OpenStatus";
-import { CONTACT, FAQ, HERO, VISIT, whatsappUrl } from "@/lib/site-content";
+import {
+  CONTACT,
+  FAQ,
+  HERO,
+  VISIT,
+  faqItems,
+  hoursSummary,
+  whatsappUrl,
+  type CafeSchedule,
+} from "@/lib/site-content";
+import { cafeSchedule } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site-settings.server";
 import { clsx } from "clsx";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -16,19 +27,22 @@ import styles from "./location.module.css";
  * A page about finding one door: its number, its coordinates, the hours it stays open,
  * the three ways of reaching it, and what people ask before coming.
  */
-export default function LocationPage() {
+export default async function LocationPage() {
+  const schedule = cafeSchedule(await getSiteSettings());
+  const questions = faqItems(schedule);
+
   return (
     <>
-      <JsonLd data={faqSchema(FAQ.items)} />
-      <LocationHero />
-      <HoursSection />
+      <JsonLd data={faqSchema(questions)} />
+      <LocationHero schedule={schedule} />
+      <HoursSection schedule={schedule} />
       <AccessSection />
-      <FaqSection {...FAQ} />
+      <FaqSection {...FAQ} items={questions} />
     </>
   );
 }
 
-function LocationHero() {
+function LocationHero({ schedule }: { schedule: CafeSchedule }) {
   return (
     <section className={styles.hero} aria-labelledby="location-title">
       <div className={clsx("kufic-grid", styles.heroGrid)} aria-hidden="true" />
@@ -61,7 +75,7 @@ function LocationHero() {
 
           <div className={clsx("intro-fade", styles.heroFoot)} style={introDelay(0.55)}>
             <p className="text-subhead max-w-[30rem] text-cream-200">{VISIT.intro}</p>
-            <OpenStatus tone="dark" />
+            <OpenStatus schedule={schedule} tone="dark" />
             <div className={styles.actions}>
               <MagneticButton>
                 <a href={CONTACT.mapsUrl} target="_blank" rel="noopener noreferrer" className="cta">
@@ -103,7 +117,7 @@ function LocationHero() {
   );
 }
 
-function HoursSection() {
+function HoursSection({ schedule }: { schedule: CafeSchedule }) {
   return (
     <section
       aria-labelledby="hours-title"
@@ -116,13 +130,13 @@ function HoursSection() {
           </Reveal>
           <RevealLines
             id="hours-title"
-            lines={[HERO.finalNote]}
+            lines={[hoursSummary(schedule.days) ?? VISIT.hoursTitle]}
             className={clsx("text-section", styles.hoursTitle)}
           />
         </div>
 
         <Reveal y={24} className="mt-12 lg:mt-20">
-          <HoursBoard />
+          <HoursBoard schedule={schedule} />
         </Reveal>
       </div>
     </section>
